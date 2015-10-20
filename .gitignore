@@ -120,3 +120,6 @@ gen-external-apklibs
 *.vrb
 *.xdy
 *.tdo
+
+## VIM ##
+*.swp
