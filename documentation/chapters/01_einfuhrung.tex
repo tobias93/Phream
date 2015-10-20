@@ -1,0 +1,44 @@
+\chapter{Einführung}
+
+Bei gemeinsamen Freizeitaktivitäten mit Freunden entstehen oft viele Fotos. Diese werden dann entweder gar nicht oder erst Wochen später miteinander geteilt.
+
+Unser Ziel ist es, die Benutzererfahrung beim Teilen der Bilder zu verbessern. Das soll mit einer eigenen Foto-App passieren. Anstatt die gesammelten Bilder erst nach der Veranstaltung auszuwählen und dann an die entsprechenden Kontakte zu schicken, sollen die geschossenen Bilder bereits während der Veranstaltung automatisch mit den anderen anwesenden Freunden geteilt werden.
+
+\section{Funktionen}
+
+\subsection{Organisation der Fotos}
+Die Fotos werden in sogenannten \enquote{Streams} gruppiert. Jeder Stream repräsentiert dabei ein gemeinsames Erlebnis mit Freunden. Streams können umbenannt oder gelöscht werden. Beim Löschen eines Streams werden alle enthaltenen Bilder ebenfalls gelöscht.
+
+Um einen Stream mit Fotos zu befüllen, kann entweder die Gerätekamera genutzt werden, oder es werden Fotos aus der Android-Galerie importiert. Die Fotos werden mit Name und Vorschaubild im Stream angezeigt. Außerdem existiert eine Detailansicht, in der man das Foto vergrößert betrachten kann. Fotos können umbenannt oder gelöscht werden. Ausgewählte Fotos können wieder zurück in die Android-Galerie exportiert, oder über die Teilen-Funktion anderen Apps zugänglich gemacht werden.
+
+\subsection{Teilen von Fotos}
+Zu einem Stream können mehrere Benutzer hinzugefügt werden. Die Fotos in einem Stream werden live zwischen allen Teilnehmern synchronisiert.
+
+Alle Teilnehmer in einem Stream sind gleichberechtigt. Es gibt also keinen \enquote{Streamadministrator} mit besonderen Rechten. Jeder Teilnehmer eines Streams kann Bilder hinzufügen, Bilder löschen und die Teilnehmerliste verwalten. Insbesondere ist jeder Teilnehmer auch dazu berechtigt, weitere Teilnehmer hinzuzufügen.
+
+Entfernt ein Benutzer einen Stream, so bleibt der Stream bei den anderen Teilnehmern noch vorhanden. Bei diesen wird lediglich der Benutzer aus der Teilnehmerliste entfernt.
+
+Wird ein Benutzer nachträglich zu einem Stream hinzugefügt, so erhält er nicht nur neuen Bilder, sondern bekommt auch automatisch Zugriff auf alle Bilder, die bereits vor seinem Eintritt im Stream vorhanden waren.
+
+\subsection{Nutzung alternativer Methoden zur Datenübertragung}
+Wenn man gezwungen ist, das Mobilfunknetz zu benutzen, ist die Internetverbindung oft schlecht. Außerdem haben viele Smartphone-Nutzer ein begrenztes Datenvolumen. Daher sollen die Daten nicht über das Internet, sondern über alternative Verbindungen übertragen werden.Diese beinhalten:
+
+\begin{enumerate}
+	\item Bluetoth
+	\item Bluetoth Low Energy (eventuell, falls technisch machbar)
+	\item Wi-Fi Direct
+\end{enumerate}
+
+\section{Projektumfang}
+
+Die Anwendung, die im Rahmen dieses Projektes entwickelt wurde, stellt lediglich einen Prototyp dar. Es werden also nicht alle beschriebenen Funktionen umgesetzt. Bei der Architektur wurde jedoch darauf geachtet, dass die Anwendung um die beeschriebenen Funktionalitäten erweiterbar ist. Die Folgenden Funktionalitäten wurden im Prototyp umgesetzt:
+
+\begin{enumerate}
+	\item Streams anlegen
+	\item Streams auflisten
+	\item Streams umbenennen
+	\item Streams löschen
+	\item Streams mit Vorschaubildern, Bildtiteln und Aufnahmedatum anzeigen.
+	\item Fotos aus der Galerie in einen Stream importieren.
+	\item Fotos mit der Gerätekamera aufnehmen und in einen Stream importieren.
+\end{enumerate}
