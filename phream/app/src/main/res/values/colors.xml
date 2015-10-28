@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- Colors taken from: https://www.google.com/design/spec/style/color.html#color-color-palette -->
+    <color name="primary">#2196f3</color>
+    <color name="primary_dark">#1976d2</color>
+    <color name="primary_light">#bbdefb</color>
+    <color name="accent">#ff3d00</color>
+    <color name="primary_background">#ffffff</color>
+</resources>

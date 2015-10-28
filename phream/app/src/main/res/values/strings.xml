@@ -1,6 +1,12 @@
 <resources>
-    <string name="app_name">Phream</string>
 
-    <string name="hello_world">Hello world!</string>
+    <!-- General -->
+    <string name="app_name">Phream</string>
     <string name="action_settings">Settings</string>
+
+    <!-- Main activity :: AppDrawer -->
+    <string name="main_drawer_streams">Streams</string>
+    <string name="main_drawer_add">Hinzufügen</string>
+    <string name="main_drawer_settings">Einstellungen</string>
+
 </resources>
