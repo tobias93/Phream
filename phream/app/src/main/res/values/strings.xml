@@ -9,4 +9,10 @@
     <string name="main_drawer_add">Hinzufügen</string>
     <string name="main_drawer_settings">Einstellungen</string>
 
+    <!-- Main activity :: Add Stream Dialog -->
+    <string name="main_addstream_title">Stream anlegen</string>
+    <string name="main_addstream_name">Name</string>
+    <string name="main_addstream_ok">OK</string>
+    <string name="main_addstream_cancel">Abbrechen</string>
+
 </resources>

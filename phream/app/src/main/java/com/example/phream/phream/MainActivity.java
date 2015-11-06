@@ -1,22 +1,28 @@
 package com.example.phream.phream;
 
+
 import android.content.Intent;
-import android.content.pm.PackageManager;
-import android.content.pm.ResolveInfo;
 import android.graphics.Bitmap;
-import android.graphics.Color;
+
+import android.support.v7.app.AlertDialog;
+import android.content.DialogInterface;
+
 import android.os.Bundle;
 import android.provider.MediaStore;
 import android.support.design.widget.NavigationView;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
+
 import android.view.KeyEvent;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Toast;
 
-import com.tr4android.support.extension.widget.FloatingActionMenu;
+
+import android.util.Log;
+import android.widget.EditText;
+
 
 public class MainActivity extends AppCompatActivity {
 
@@ -41,6 +47,22 @@ public class MainActivity extends AppCompatActivity {
         getSupportActionBar().setHomeButtonEnabled(true);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         mDrawerToggle.syncState();
+
+        // handle click events in the navigation
+        mNavigation.setNavigationItemSelectedListener(new NavigationView.OnNavigationItemSelectedListener() {
+            @Override
+            public boolean onNavigationItemSelected(MenuItem menuItem) {
+                switch (menuItem.getItemId()) {
+                    case R.id.menu_main_drawer_add_stream:
+                        addStream();
+                        return false;
+                    default:
+                        // do nothing
+                        return false;
+                }
+            }
+        });
+
     }
 
     @Override
@@ -87,6 +109,7 @@ public class MainActivity extends AppCompatActivity {
 
     }
 
+
     public void openCamera(View v){
         Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
         startActivityForResult(intent, PICK_PHOTO_REQUEST);
@@ -94,15 +117,38 @@ public class MainActivity extends AppCompatActivity {
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-        if(requestCode == PICK_PHOTO_REQUEST){
-            if(resultCode == RESULT_OK){
+        if (requestCode == PICK_PHOTO_REQUEST) {
+            if (resultCode == RESULT_OK) {
                 Bitmap photo = (Bitmap) data.getExtras().get("data");
 
-                if(photo != null){
+                if (photo != null) {
                     Toast toast = Toast.makeText(this, "Klappt", Toast.LENGTH_LONG);
                     toast.show();
                 }
             }
         }
+    }
+
+    public void addStream() {
+        // ask for the stream name
+
+        // - Input field for the name of the stream
+        final EditText streamNameEditText = new EditText(this);
+        streamNameEditText.setHint(R.string.main_addstream_name);
+        streamNameEditText.setSingleLine(true);
+
+        // - Dialog that shows the input text.
+        AlertDialog.Builder dialogBuilder = new AlertDialog.Builder(this, R.style.AlertDialogTheme);
+        dialogBuilder.setTitle(R.string.main_addstream_title);
+        dialogBuilder.setPositiveButton(R.string.main_addstream_ok, new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                mDrawerLayout.closeDrawer(mNavigation);
+                Log.i("#PHREAM", "added stream " + streamNameEditText.getText());
+            }
+        });
+        dialogBuilder.setView(streamNameEditText);
+        dialogBuilder.show();
+
     }
 }
