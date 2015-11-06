@@ -8,7 +8,7 @@ import java.util.HashMap;
 /**
  * Created by Philipp Pütz on 23.10.2015.
  */
-public class model {
+public class Model {
 
     private ArrayList<Stream> streamList = new ArrayList<>();
 
@@ -24,6 +24,5 @@ public class model {
 
         return this.streamList;
     }
-
 
 }

@@ -6,30 +6,30 @@
                 android:checkableBehavior="single"
                 android:id="@+id/main_drawer_streams"
                 >
-            <!-- DEMO CONTENT -->
-                <item
-                    android:checked="true"
-                    android:title="Party mit Freunden"
-                    android:icon="@drawable/ic_folder_open_black_24dp"/>
-                <item
-                    android:checked="false"
-                    android:title="Hochzeit"
-                    android:icon="@drawable/ic_folder_open_black_24dp"
-                    />
-                <item
-                    android:checked="false"
-                    android:title="Mein Geburtstag"
-                    android:icon="@drawable/ic_folder_open_black_24dp"
-                    />
+                    <!-- DEMO CONTENT -->
+                    <item
+                        android:checked="true"
+                        android:title="Party mit Freunden"
+                        android:icon="@drawable/ic_folder_open_black_24dp"/>
+                    <item
+                        android:checked="false"
+                        android:title="Hochzeit"
+                        android:icon="@drawable/ic_folder_open_black_24dp"
+                        />
+                    <item
+                        android:checked="false"
+                        android:title="Mein Geburtstag"
+                        android:icon="@drawable/ic_folder_open_black_24dp"
+                        />
 
-            <item
-                android:title="@string/main_drawer_add"
-                android:icon="@drawable/ic_add_black_24dp"
-                />
-</group>
+                <item
+                    android:title="@string/main_drawer_add"
+                    android:icon="@drawable/ic_add_black_24dp"
+                    android:id="@+id/menu_main_drawer_add_stream"
+                    />
+            </group>
         </menu>
-    </item>-
-
+    </item>
     <item
         android:id="@+id/main_drawer_settings"
         android:title="@string/main_drawer_settings"

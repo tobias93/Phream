@@ -4,6 +4,6 @@
     <color name="primary">#2196f3</color>
     <color name="primary_dark">#1976d2</color>
     <color name="primary_light">#bbdefb</color>
-    <color name="accent">#ff3d00</color>
-    <color name="primary_background">#ffffff</color>
+    <color name="accent">#ff6d00</color>
+    <color name="primary_background">#fafafa</color>
 </resources>

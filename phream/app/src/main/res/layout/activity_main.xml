@@ -48,6 +48,15 @@
                     <Button
                         android:layout_width="fill_parent"
                         android:layout_height="wrap_content" />
+                    <EditText
+                        android:layout_width="fill_parent"
+                        android:layout_height="wrap_content" />
+                    <EditText
+                        android:layout_width="fill_parent"
+                        android:layout_height="wrap_content" />
+                    <EditText
+                        android:layout_width="fill_parent"
+                        android:layout_height="wrap_content" />
                 </LinearLayout>
             </ScrollView>
 
