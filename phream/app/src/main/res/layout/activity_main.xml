@@ -1,9 +1,8 @@
 <android.support.v4.widget.DrawerLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_height="match_parent"
-    android:layout_width="match_parent"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:id="@+id/activity_main_drawer"
-    >
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
 
 
     <LinearLayout
@@ -14,7 +13,7 @@
         <FrameLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:foreground="?android:windowContentOverlay"/>
+            android:foreground="?android:windowContentOverlay" />
 
         <FrameLayout
             android:layout_width="match_parent"
@@ -23,54 +22,87 @@
             <ScrollView
                 android:layout_width="match_parent"
                 android:layout_height="match_parent">
+
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:orientation="vertical">
+
                     <Button
                         android:layout_width="fill_parent"
                         android:layout_height="wrap_content" />
+
                     <Button
                         android:layout_width="fill_parent"
                         android:layout_height="wrap_content" />
+
                     <Button
                         android:layout_width="fill_parent"
                         android:layout_height="wrap_content" />
+
                     <Button
                         android:layout_width="fill_parent"
                         android:layout_height="wrap_content" />
+
                     <Button
                         android:layout_width="fill_parent"
                         android:layout_height="wrap_content" />
+
                     <Button
                         android:layout_width="fill_parent"
                         android:layout_height="wrap_content" />
+
                     <Button
                         android:layout_width="fill_parent"
                         android:layout_height="wrap_content" />
                 </LinearLayout>
             </ScrollView>
 
-            <android.support.design.widget.FloatingActionButton
+            <com.tr4android.support.extension.widget.FloatingActionMenu
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_gravity="bottom|end"
-                android:layout_margin="20dp"
-                android:src="@drawable/ic_add_white_24dp"
-                app:pressedTranslationZ="12dp"
-                />
+                android:layout_gravity="end|bottom"
+                app:fabMenuCloseIconAngle="135"
+                app:fabMenuLabelStyle="@style/label_style_dark">
+
+                <android.support.design.widget.FloatingActionButton
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="bottom|end"
+                    android:layout_margin="20dp"
+                    android:src="@drawable/ic_add_white_24dp"
+                    app:pressedTranslationZ="12dp" />
+
+                <android.support.design.widget.FloatingActionButton
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="20dp"
+                    android:src="@drawable/ic_insert_photo_white_24dp"
+                    app:fabSize="mini"
+                    app:pressedTranslationZ="12dp" />
+
+                <android.support.design.widget.FloatingActionButton
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="20dp"
+                    android:onClick="openCamera"
+                    android:src="@drawable/ic_photo_camera_white_24dp"
+                    app:fabSize="mini"
+                    app:pressedTranslationZ="12dp" />
+
+            </com.tr4android.support.extension.widget.FloatingActionMenu>
+
         </FrameLayout>
 
 
     </LinearLayout>
 
     <android.support.design.widget.NavigationView
+        android:id="@+id/activity_main_navigation"
         android:layout_width="wrap_content"
         android:layout_height="match_parent"
         android:layout_gravity="start"
-        app:menu="@menu/menu_main_drawer"
-        android:id="@+id/activity_main_navigation"
-        />
+        app:menu="@menu/menu_main_drawer" />
 
 
 </android.support.v4.widget.DrawerLayout>

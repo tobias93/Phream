@@ -11,9 +11,10 @@ import android.database.sqlite.SQLiteOpenHelper;
 import android.content.Context;
 import android.content.ContentValues;
 
+import com.example.phream.phream.model.Pictures;
+import com.example.phream.phream.model.Stream;
+
 import java.util.ArrayList;
-import java.util.Dictionary;
-import java.util.HashMap;
 
 public class DBHandler extends SQLiteOpenHelper {
 
@@ -141,43 +142,40 @@ public class DBHandler extends SQLiteOpenHelper {
 
 
     // Update / Rename - Methods
-    public void renamePicture(int id, String picturename){
+    public void renamePicture(int id, String picturename) {
         SQLiteDatabase db = this.getWritableDatabase();
         ContentValues values = new ContentValues();
 
         values.put(PICTURE_COLUMN_PICTURENAME, picturename);
 
-        db.update(TABLE_PICTURE, values, PICTURE_COLUMN_ID + "= ?", new String[] { String.valueOf(id) });
+        db.update(TABLE_PICTURE, values, PICTURE_COLUMN_ID + "= ?", new String[]{String.valueOf(id)});
         db.close();
     }
 
     // Update / Rename - Methods
-    public void renameStream(int id, String streamname){
+    public void renameStream(int id, String streamname) {
         SQLiteDatabase db = this.getWritableDatabase();
         ContentValues values = new ContentValues();
 
         values.put(STREAM_COLUMN_STREAMNAME, streamname);
 
-        db.update(TABLE_STREAM, values, STREAM_COLUMN_ID + "= ?", new String[] { String.valueOf(id) });
+        db.update(TABLE_STREAM, values, STREAM_COLUMN_ID + "= ?", new String[]{String.valueOf(id)});
         db.close();
     }
 
-    public ArrayList<HashMap<String, String>> getAllStreams(){
+    public ArrayList<Stream> getAllStreams() {
         String query = "Select * FROM " + TABLE_STREAM;
 
         SQLiteDatabase db = this.getReadableDatabase();
 
         Cursor cursor = db.rawQuery(query, null);
 
-        ArrayList<HashMap<String, String>> streamList = new ArrayList<HashMap<String, String>>();
+        ArrayList<Stream> streamList = new ArrayList<Stream>();
 
         if (cursor.moveToFirst()) {
             do {
-                HashMap<String, String> streams = new HashMap<String, String>();
-                streams.put("id", cursor.getString(cursor.getColumnIndex(STREAM_COLUMN_ID)));
-                streams.put("name", cursor.getString(cursor.getColumnIndex(STREAM_COLUMN_STREAMNAME)));
-                streams.put("created", cursor.getString(cursor.getColumnIndex(STREAM_COLUMN_CREATED)));
-                streamList.add(streams);
+                streamList.add(new Stream(cursor.getInt(cursor.getColumnIndex(STREAM_COLUMN_ID)), cursor.getString(cursor.getColumnIndex(STREAM_COLUMN_STREAMNAME)),
+                        cursor.getLong(cursor.getColumnIndex(STREAM_COLUMN_CREATED))));
 
             } while (cursor.moveToNext());
         }
@@ -186,6 +184,29 @@ public class DBHandler extends SQLiteOpenHelper {
         db.close();
 
         return streamList;
+    }
+
+    public Pictures getNextPicture(int streamId, int currentPictureId){
+
+        String query = "Select * FROM " + TABLE_PICTURE + " WHERE " + PICTURE_COLUMN_STREAM + " = " + streamId + " and " + PICTURE_COLUMN_ID + " > " + currentPictureId;
+
+        SQLiteDatabase db = this.getReadableDatabase();
+
+        Cursor cursor = db.rawQuery(query, null);
+
+        Pictures picture = null;
+
+        if (cursor.moveToFirst()) {
+           picture = new Pictures(cursor.getString(cursor.getColumnIndex(PICTURE_COLUMN_FILENAME)), null);
+            picture.setId(cursor.getInt(cursor.getColumnIndex(PICTURE_COLUMN_ID)));
+            picture.setStored();
+            picture.setName(cursor.getString(cursor.getColumnIndex(PICTURE_COLUMN_PICTURENAME)));
+        }
+
+        cursor.close();
+        db.close();
+
+        return picture;
     }
 
 }
