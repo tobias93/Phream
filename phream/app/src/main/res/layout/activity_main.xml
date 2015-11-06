@@ -88,6 +88,7 @@
                     android:layout_margin="20dp"
                     android:src="@drawable/ic_insert_photo_white_24dp"
                     app:fabSize="mini"
+                    android:onClick="openGallery"
                     app:pressedTranslationZ="12dp" />
 
                 <android.support.design.widget.FloatingActionButton

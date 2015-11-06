@@ -1,9 +1,16 @@
 package com.example.phream.phream;
 
 
+import android.annotation.SuppressLint;
+import android.content.Context;
 import android.content.Intent;
+import android.database.Cursor;
+import android.database.DatabaseUtils;
 import android.graphics.Bitmap;
 
+import android.net.Uri;
+import android.os.Build;
+import android.os.Environment;
 import android.support.v7.app.AlertDialog;
 import android.content.DialogInterface;
 
@@ -23,19 +30,50 @@ import android.widget.Toast;
 import android.util.Log;
 import android.widget.EditText;
 
+import java.io.File;
+import java.io.IOException;
+
+@SuppressLint("NewApi")
 
 public class MainActivity extends AppCompatActivity {
 
-    static final int PICK_PHOTO_REQUEST = 1;
+    static final int PICK_CAMERA_REQUEST = 1;
+    static final int GALLERY_INTENT_CALLED = 2;
+    static final int GALLERY_KITKAT_INTENT_CALLED = 3;
 
     private DrawerLayout mDrawerLayout;
     private ActionBarDrawerToggle mDrawerToggle;
     private NavigationView mNavigation;
 
+    private File directory = new File(Environment.getExternalStorageDirectory() + File.separator + "Phream" + File.separator);
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
+        // Create App dir
+        if (!Environment.getExternalStorageState().equals(Environment.MEDIA_MOUNTED)) {
+            Log.d("Phream", "No SDCARD");
+            //Creating an internal dir
+            directory = this.getDir("Phream", Context.MODE_PRIVATE);
+            if (!directory.isDirectory()) {
+                directory.mkdirs();
+            }
+        } else {
+            if (!directory.isDirectory()) {
+                directory.mkdirs();
+            }
+        }
+
+        File nomedia = new File(directory.getAbsolutePath() + File.separator + ".nomedia");
+        if (!nomedia.exists()) {
+            try {
+                nomedia.createNewFile();
+            } catch (IOException e) {
+                Log.d("Phream", "Couldn't create .nomedia file!");
+            }
+        }
 
         // Find views
         mNavigation = (NavigationView) findViewById(R.id.activity_main_navigation);
@@ -68,7 +106,7 @@ public class MainActivity extends AppCompatActivity {
     @Override
     public void onBackPressed() {
         // if the navigation drawer is opened: close it! if not: exit!
-        if (mDrawerLayout.isDrawerOpen(mNavigation)){
+        if (mDrawerLayout.isDrawerOpen(mNavigation)) {
             mDrawerLayout.closeDrawer(mNavigation);
         } else {
             super.onBackPressed();
@@ -82,8 +120,7 @@ public class MainActivity extends AppCompatActivity {
 
             if (!mDrawerLayout.isDrawerOpen(mNavigation)) {
                 mDrawerLayout.openDrawer(mNavigation);
-            }
-            else{
+            } else {
                 mDrawerLayout.closeDrawer(mNavigation);
             }
             return true;
@@ -93,11 +130,10 @@ public class MainActivity extends AppCompatActivity {
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        switch (item.getItemId())
-        {
+        switch (item.getItemId()) {
             case android.R.id.home:
                 // Toggle navigation drawer
-                if (mDrawerLayout.isDrawerOpen(mNavigation)){
+                if (mDrawerLayout.isDrawerOpen(mNavigation)) {
                     mDrawerLayout.closeDrawer(mNavigation);
                 } else {
                     mDrawerLayout.openDrawer(mNavigation);
@@ -109,25 +145,92 @@ public class MainActivity extends AppCompatActivity {
 
     }
 
+    public void openGallery(View v) {
+        if (Build.VERSION.SDK_INT < 19) {
+            Intent intent = new Intent();
+            intent.setType("image/*");
+            intent.setAction(Intent.ACTION_GET_CONTENT);
+            startActivityForResult(Intent.createChooser(intent, getResources().getString(R.string.main_select_image_gallery)), GALLERY_INTENT_CALLED);
+        } else {
+            Intent intent = new Intent(Intent.ACTION_OPEN_DOCUMENT);
+            intent.addCategory(Intent.CATEGORY_OPENABLE);
+            intent.setType("image/*");
+            startActivityForResult(intent, GALLERY_KITKAT_INTENT_CALLED);
+        }
+    }
 
-    public void openCamera(View v){
+
+    public void openCamera(View v) {
         Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
-        startActivityForResult(intent, PICK_PHOTO_REQUEST);
+        startActivityForResult(intent, PICK_CAMERA_REQUEST);
     }
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-        if (requestCode == PICK_PHOTO_REQUEST) {
-            if (resultCode == RESULT_OK) {
-                Bitmap photo = (Bitmap) data.getExtras().get("data");
+        if (resultCode != RESULT_OK) return;
+        if (null == data) return;
 
-                if (photo != null) {
-                    Toast toast = Toast.makeText(this, "Klappt", Toast.LENGTH_LONG);
-                    toast.show();
-                }
+        if (requestCode == PICK_CAMERA_REQUEST) {
+            Bitmap photo = (Bitmap) data.getExtras().get("data");
+
+            if (photo != null) {
+                Toast toast = Toast.makeText(this, "Klappt", Toast.LENGTH_LONG);
+                toast.show();
             }
         }
+        if (requestCode == GALLERY_INTENT_CALLED || requestCode == GALLERY_KITKAT_INTENT_CALLED) {
+            Uri originalUri = data.getData();
+            if (requestCode == GALLERY_KITKAT_INTENT_CALLED) {
+                final int takeFlags = data.getFlags()
+                        & (Intent.FLAG_GRANT_READ_URI_PERMISSION
+                        | Intent.FLAG_GRANT_WRITE_URI_PERMISSION);
+                // Check for the freshest data.
+                getContentResolver().takePersistableUriPermission(originalUri, takeFlags);
+
+               /* Extract ID from Uri path using getLastPathSegment() and then split with ":"
+                then call get Uri to for Internal storage or External storage for media I have used getUri()
+                 */
+
+                String id = originalUri.getLastPathSegment().split(":")[1];
+                final String[] imageColumns = {MediaStore.Images.Media.DATA};
+                final String imageOrderBy = null;
+
+                Uri uri = getUri();
+                String selectedImagePath = "path";
+
+                Cursor imageCursor = managedQuery(uri, imageColumns,
+                        MediaStore.Images.Media._ID + "=" + id, null, imageOrderBy);
+
+                if (imageCursor.moveToFirst()) {
+                    selectedImagePath = imageCursor.getString(imageCursor.getColumnIndex(MediaStore.Images.Media.DATA));
+                }
+                Log.e("Photopath KITKAT", selectedImagePath);
+                imageCursor.close();
+            } else {
+                String[] projection = { MediaStore.Images.Media.DATA };
+
+                Cursor imageCursor = getContentResolver().query(originalUri, projection, null, null, null);
+                imageCursor.moveToFirst();
+
+                int columnIndex = imageCursor.getColumnIndex(projection[0]);
+                String selectedImagePath = imageCursor.getString(columnIndex);
+                imageCursor.close();
+
+                Log.e("Photopath pre KITKAT", selectedImagePath);
+            }
+
+        }
     }
+
+    // Get the Uri of Internal/External Storage for Media
+    private Uri getUri() {
+        String state = Environment.getExternalStorageState();
+        if (!state.equalsIgnoreCase(Environment.MEDIA_MOUNTED))
+            return MediaStore.Images.Media.INTERNAL_CONTENT_URI;
+
+        return MediaStore.Images.Media.EXTERNAL_CONTENT_URI;
+    }
+
 
     public void addStream() {
         // ask for the stream name

@@ -15,4 +15,7 @@
     <string name="main_addstream_ok">OK</string>
     <string name="main_addstream_cancel">Abbrechen</string>
 
+    <!-- Main activity :: Select image from gallery -->
+    <string name="main_select_image_gallery">Wähle ein Bild aus</string>
+
 </resources>
