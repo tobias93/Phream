@@ -6,4 +6,7 @@
     <color name="primary_light">#bbdefb</color>
     <color name="accent">#ff6d00</color>
     <color name="primary_background">#fafafa</color>
-</resources>
+
+    <color name="image_detail_view_overlay">#66000000</color>
+    <color name="image_detail_view_bg">#000000</color>
+    </resources>

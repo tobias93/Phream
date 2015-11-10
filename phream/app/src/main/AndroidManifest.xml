@@ -19,7 +19,11 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".ImageDetailView" >
+        <activity
+            android:name=".ImageDetailView"
+            android:configChanges="orientation|keyboardHidden|screenSize"
+            android:label="@string/title_activity_image_detail_view"
+            android:theme="@style/DetailViewTheme" >
         </activity>
     </application>
 
