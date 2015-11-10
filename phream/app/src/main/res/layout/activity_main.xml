@@ -29,41 +29,12 @@
                     android:orientation="vertical">
 
                     <Button
+                        android:id="@+id/image_view_button"
+                        android:text="Start Image View"
                         android:layout_width="fill_parent"
-                        android:layout_height="wrap_content" />
+                        android:layout_height="wrap_content"
+                        android:onClick="startImageView"/>
 
-                    <Button
-                        android:layout_width="fill_parent"
-                        android:layout_height="wrap_content" />
-
-                    <Button
-                        android:layout_width="fill_parent"
-                        android:layout_height="wrap_content" />
-
-                    <Button
-                        android:layout_width="fill_parent"
-                        android:layout_height="wrap_content" />
-
-                    <Button
-                        android:layout_width="fill_parent"
-                        android:layout_height="wrap_content" />
-
-                    <Button
-                        android:layout_width="fill_parent"
-                        android:layout_height="wrap_content" />
-
-                    <Button
-                        android:layout_width="fill_parent"
-                        android:layout_height="wrap_content" />
-                    <EditText
-                        android:layout_width="fill_parent"
-                        android:layout_height="wrap_content" />
-                    <EditText
-                        android:layout_width="fill_parent"
-                        android:layout_height="wrap_content" />
-                    <EditText
-                        android:layout_width="fill_parent"
-                        android:layout_height="wrap_content" />
                 </LinearLayout>
             </ScrollView>
 

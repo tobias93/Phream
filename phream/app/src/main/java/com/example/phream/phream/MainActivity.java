@@ -31,7 +31,12 @@ import android.util.Log;
 import android.widget.EditText;
 
 import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileOutputStream;
 import java.io.IOException;
+import java.io.InputStream;
+import java.io.OutputStream;
+import java.util.Random;
 
 @SuppressLint("NewApi")
 
@@ -101,6 +106,12 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
+    }
+
+    public void startImageView(View view){
+        Intent intent = new Intent(this, ImageDetailView.class);
+        intent.putExtra("ImagePath", "/storage/sdcard0/DCIM/Camera/IMG_20151106_155106.jpg");
+        startActivity(intent);
     }
 
     @Override
@@ -180,6 +191,7 @@ public class MainActivity extends AppCompatActivity {
         }
         if (requestCode == GALLERY_INTENT_CALLED || requestCode == GALLERY_KITKAT_INTENT_CALLED) {
             Uri originalUri = data.getData();
+            String selectedImagePath = "";
             if (requestCode == GALLERY_KITKAT_INTENT_CALLED) {
                 final int takeFlags = data.getFlags()
                         & (Intent.FLAG_GRANT_READ_URI_PERMISSION
@@ -188,18 +200,17 @@ public class MainActivity extends AppCompatActivity {
                 getContentResolver().takePersistableUriPermission(originalUri, takeFlags);
 
                /* Extract ID from Uri path using getLastPathSegment() and then split with ":"
-                then call get Uri to for Internal storage or External storage for media I have used getUri()
-                 */
+                then call get Uri to for Internal storawage or External storage for media I have used getUri()
+               */
 
                 String id = originalUri.getLastPathSegment().split(":")[1];
                 final String[] imageColumns = {MediaStore.Images.Media.DATA};
-                final String imageOrderBy = null;
 
                 Uri uri = getUri();
-                String selectedImagePath = "path";
+                selectedImagePath = "";
 
-                Cursor imageCursor = managedQuery(uri, imageColumns,
-                        MediaStore.Images.Media._ID + "=" + id, null, imageOrderBy);
+                Cursor imageCursor = getContentResolver().query(uri, imageColumns,
+                        MediaStore.Images.Media._ID + "=" + id, null, null);
 
                 if (imageCursor.moveToFirst()) {
                     selectedImagePath = imageCursor.getString(imageCursor.getColumnIndex(MediaStore.Images.Media.DATA));
@@ -213,13 +224,39 @@ public class MainActivity extends AppCompatActivity {
                 imageCursor.moveToFirst();
 
                 int columnIndex = imageCursor.getColumnIndex(projection[0]);
-                String selectedImagePath = imageCursor.getString(columnIndex);
+                selectedImagePath = imageCursor.getString(columnIndex);
                 imageCursor.close();
 
                 Log.e("Photopath pre KITKAT", selectedImagePath);
             }
 
+            // Copy Image
+            try{
+                // random int for the syncronisation feature
+                Random r = new Random();
+                copy(new File(selectedImagePath), new File(directory.getAbsolutePath() + File.separator + "image_" + System.currentTimeMillis()/1000 + "_" + r.nextInt(1000)));
+            }
+            catch (IOException e){
+
+            }
+
+
+
         }
+    }
+
+    public void copy(File src, File dst) throws IOException {
+        InputStream in = new FileInputStream(src);
+        OutputStream out = new FileOutputStream(dst);
+
+        // Transfer bytes from in to out
+        byte[] buf = new byte[1024];
+        int len;
+        while ((len = in.read(buf)) > 0) {
+            out.write(buf, 0, len);
+        }
+        in.close();
+        out.close();
     }
 
     // Get the Uri of Internal/External Storage for Media
