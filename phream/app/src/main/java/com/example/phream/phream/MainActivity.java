@@ -1,15 +1,12 @@
 package com.example.phream.phream;
 
 
-import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.Intent;
 import android.database.Cursor;
-import android.database.DatabaseUtils;
 import android.graphics.Bitmap;
 
 import android.net.Uri;
-import android.os.Build;
 import android.os.Environment;
 import android.support.v7.app.AlertDialog;
 import android.content.DialogInterface;
@@ -38,13 +35,10 @@ import java.io.InputStream;
 import java.io.OutputStream;
 import java.util.Random;
 
-@SuppressLint("NewApi")
-
 public class MainActivity extends AppCompatActivity {
 
     static final int PICK_CAMERA_REQUEST = 1;
     static final int GALLERY_INTENT_CALLED = 2;
-    static final int GALLERY_KITKAT_INTENT_CALLED = 3;
 
     private DrawerLayout mDrawerLayout;
     private ActionBarDrawerToggle mDrawerToggle;
@@ -108,9 +102,9 @@ public class MainActivity extends AppCompatActivity {
 
     }
 
-    public void startImageView(View view){
+    public void startImageView(View view) {
         Intent intent = new Intent(this, ImageDetailView.class);
-        intent.putExtra("ImagePath", "/storage/sdcard0/DCIM/Camera/IMG_20151106_155106.jpg");
+        intent.putExtra("ImagePath", "/storage/emulated/0/DCIM/Camera/20150614_121020.jpg");
         startActivity(intent);
     }
 
@@ -157,17 +151,10 @@ public class MainActivity extends AppCompatActivity {
     }
 
     public void openGallery(View v) {
-        if (Build.VERSION.SDK_INT < 19) {
-            Intent intent = new Intent();
-            intent.setType("image/*");
-            intent.setAction(Intent.ACTION_GET_CONTENT);
-            startActivityForResult(Intent.createChooser(intent, getResources().getString(R.string.main_select_image_gallery)), GALLERY_INTENT_CALLED);
-        } else {
-            Intent intent = new Intent(Intent.ACTION_OPEN_DOCUMENT);
-            intent.addCategory(Intent.CATEGORY_OPENABLE);
-            intent.setType("image/*");
-            startActivityForResult(intent, GALLERY_KITKAT_INTENT_CALLED);
-        }
+        Intent intent = new Intent();
+        intent.setType("image/*");
+        intent.setAction(Intent.ACTION_GET_CONTENT);
+        startActivityForResult(Intent.createChooser(intent, getResources().getString(R.string.main_select_image_gallery)), GALLERY_INTENT_CALLED);
     }
 
 
@@ -189,61 +176,31 @@ public class MainActivity extends AppCompatActivity {
                 toast.show();
             }
         }
-        if (requestCode == GALLERY_INTENT_CALLED || requestCode == GALLERY_KITKAT_INTENT_CALLED) {
+        if (requestCode == GALLERY_INTENT_CALLED) {
             Uri originalUri = data.getData();
             String selectedImagePath = "";
-            if (requestCode == GALLERY_KITKAT_INTENT_CALLED) {
-                final int takeFlags = data.getFlags()
-                        & (Intent.FLAG_GRANT_READ_URI_PERMISSION
-                        | Intent.FLAG_GRANT_WRITE_URI_PERMISSION);
-                // Check for the freshest data.
-                getContentResolver().takePersistableUriPermission(originalUri, takeFlags);
 
-               /* Extract ID from Uri path using getLastPathSegment() and then split with ":"
-                then call get Uri to for Internal storawage or External storage for media I have used getUri()
-               */
+            String[] projection = {MediaStore.Images.Media.DATA};
 
-                String id = originalUri.getLastPathSegment().split(":")[1];
-                final String[] imageColumns = {MediaStore.Images.Media.DATA};
+            Cursor imageCursor = getContentResolver().query(originalUri, projection, null, null, null);
+            imageCursor.moveToFirst();
 
-                Uri uri = getUri();
-                selectedImagePath = "";
+            int columnIndex = imageCursor.getColumnIndex(projection[0]);
+            selectedImagePath = imageCursor.getString(columnIndex);
+            imageCursor.close();
 
-                Cursor imageCursor = getContentResolver().query(uri, imageColumns,
-                        MediaStore.Images.Media._ID + "=" + id, null, null);
-
-                if (imageCursor.moveToFirst()) {
-                    selectedImagePath = imageCursor.getString(imageCursor.getColumnIndex(MediaStore.Images.Media.DATA));
-                }
-                Log.e("Photopath KITKAT", selectedImagePath);
-                imageCursor.close();
-            } else {
-                String[] projection = { MediaStore.Images.Media.DATA };
-
-                Cursor imageCursor = getContentResolver().query(originalUri, projection, null, null, null);
-                imageCursor.moveToFirst();
-
-                int columnIndex = imageCursor.getColumnIndex(projection[0]);
-                selectedImagePath = imageCursor.getString(columnIndex);
-                imageCursor.close();
-
-                Log.e("Photopath pre KITKAT", selectedImagePath);
-            }
+            Log.e("Photopath:", selectedImagePath);
 
             // Copy Image
-            try{
+            try {
                 // random int for the syncronisation feature
                 Random r = new Random();
-                copy(new File(selectedImagePath), new File(directory.getAbsolutePath() + File.separator + "image_" + System.currentTimeMillis()/1000 + "_" + r.nextInt(1000)));
+                copy(new File(selectedImagePath), new File(directory.getAbsolutePath() + File.separator + "image_" + System.currentTimeMillis() / 1000 + "_" + r.nextInt(1000) + ".jpg"));
+            } catch (IOException e) {
             }
-            catch (IOException e){
-
-            }
-
-
-
         }
     }
+
 
     public void copy(File src, File dst) throws IOException {
         InputStream in = new FileInputStream(src);

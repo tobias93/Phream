@@ -3,13 +3,21 @@ package com.example.phream.phream;
 import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.graphics.BitmapFactory;
+import android.net.Uri;
+import android.support.v4.view.MenuItemCompat;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.os.Handler;
+import android.support.v7.widget.ShareActionProvider;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.MotionEvent;
 import android.view.View;
+import android.view.WindowManager;
 import android.widget.ImageView;
+
+import java.io.File;
 
 /**
  * An example full-screen activity that shows and hides the system UI (i.e.
@@ -41,7 +49,6 @@ public class ImageDetailView extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
         setContentView(R.layout.activity_image_detail_view);
 
         mVisible = true;
@@ -63,17 +70,22 @@ public class ImageDetailView extends AppCompatActivity {
 
         ImageView imageView = (ImageView) findViewById(R.id.fullscreen_content);
 
-        BitmapFactory.Options options = new BitmapFactory.Options();
-        options.inJustDecodeBounds = true;
-        BitmapFactory.decodeFile(uri);
-        int imageHeight = options.outHeight;
-        int imageWidth = options.outWidth;
-        String imageType = options.outMimeType;
-
         BitmapWorkerTask task = new BitmapWorkerTask(imageView, 256, 256);
         task.execute(uri);
 
 
+    }
+
+   @Override
+    public boolean onCreateOptionsMenu (Menu menu){
+        MenuItem shareItem = menu.findItem(R.id.action_share);
+        ShareActionProvider myShareActionProvider =
+                (ShareActionProvider) MenuItemCompat.getActionProvider(shareItem);
+        Intent myShareIntent = new Intent(Intent.ACTION_SEND);
+        myShareIntent.setType("image/*");
+        myShareIntent.putExtra(Intent.EXTRA_STREAM, Uri.fromFile(new File("/storage/emulated/0/DCIM/Camera/20150614_121020.jpg")));
+       // myShareActionProvider.setShareIntent(myShareIntent);
+        return true;
     }
 
     @Override
