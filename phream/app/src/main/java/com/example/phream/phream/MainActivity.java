@@ -15,6 +15,7 @@ import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
 
 import android.view.KeyEvent;
+import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Toast;
@@ -23,15 +24,28 @@ import android.widget.Toast;
 import android.util.Log;
 import android.widget.EditText;
 
+import com.example.phream.phream.model.IStreamsCallback;
+import com.example.phream.phream.model.Stream;
+import com.example.phream.phream.model.StreamManager;
 
-public class MainActivity extends AppCompatActivity {
 
+public class MainActivity extends AppCompatActivity implements IStreamsCallback {
+
+    // Constants
     static final int PICK_PHOTO_REQUEST = 1;
 
+    // UI
     private DrawerLayout mDrawerLayout;
     private ActionBarDrawerToggle mDrawerToggle;
     private NavigationView mNavigation;
 
+    // Model
+    StreamManager streamManager;
+
+    /**
+     * Setup the Activity
+     * @param savedInstanceState
+     */
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -48,6 +62,13 @@ public class MainActivity extends AppCompatActivity {
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         mDrawerToggle.syncState();
 
+        // Init streamManager
+        streamManager = new StreamManager(this);
+        streamManager.setCallback(this);
+
+        // Request all streams from the database.
+        streamManager.findAllStreams();
+
         // handle click events in the navigation
         mNavigation.setNavigationItemSelectedListener(new NavigationView.OnNavigationItemSelectedListener() {
             @Override
@@ -62,9 +83,11 @@ public class MainActivity extends AppCompatActivity {
                 }
             }
         });
-
     }
 
+    /**
+     * Handle back button presses
+     */
     @Override
     public void onBackPressed() {
         // if the navigation drawer is opened: close it! if not: exit!
@@ -75,11 +98,12 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
+    /**
+     * Handle menu button presses
+     */
     @Override
     public boolean onKeyDown(int keyCode, KeyEvent e) {
         if (keyCode == KeyEvent.KEYCODE_MENU) {
-            // your action...
-
             if (!mDrawerLayout.isDrawerOpen(mNavigation)) {
                 mDrawerLayout.openDrawer(mNavigation);
             }
@@ -91,6 +115,11 @@ public class MainActivity extends AppCompatActivity {
         return super.onKeyDown(keyCode, e);
     }
 
+    /**
+     * Handle button presses for the menu button in the action bar.
+     * @param item
+     * @return
+     */
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId())
@@ -109,12 +138,21 @@ public class MainActivity extends AppCompatActivity {
 
     }
 
-
+    /**
+     * Start the camera intent
+     * @param v
+     */
     public void openCamera(View v){
         Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
         startActivityForResult(intent, PICK_PHOTO_REQUEST);
     }
 
+    /**
+     * Get back the camera intent's result.
+     * @param requestCode
+     * @param resultCode
+     * @param data
+     */
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         if (requestCode == PICK_PHOTO_REQUEST) {
@@ -129,26 +167,70 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
+    /**
+     * Creates a new stream
+     */
     public void addStream() {
-        // ask for the stream name
-
-        // - Input field for the name of the stream
+        // Input field for the name of the stream
         final EditText streamNameEditText = new EditText(this);
         streamNameEditText.setHint(R.string.main_addstream_name);
         streamNameEditText.setSingleLine(true);
 
-        // - Dialog that shows the input text.
+        // Dialog that shows the input text.
         AlertDialog.Builder dialogBuilder = new AlertDialog.Builder(this, R.style.AlertDialogTheme);
         dialogBuilder.setTitle(R.string.main_addstream_title);
         dialogBuilder.setPositiveButton(R.string.main_addstream_ok, new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
                 mDrawerLayout.closeDrawer(mNavigation);
+                
                 Log.i("#PHREAM", "added stream " + streamNameEditText.getText());
             }
         });
         dialogBuilder.setView(streamNameEditText);
         dialogBuilder.show();
+    }
+
+    @Override
+    public void onStreamCreated(Stream stream) {
+
+    }
+
+    @Override
+    public void onStreamUpdated(Stream stream) {
+
+    }
+
+    @Override
+    public void onStreamDeleted(Stream stream) {
+
+    }
+
+    @Override
+    public void onStreamListAviable(Stream[] streams) {
+        Menu menu = mNavigation.getMenu().findItem(R.id.main_drawer_streams).getSubMenu();
+        menu.clear();
+        for (Stream stream : streams) {
+            menu.add(stream.getName());
+        }
+
+        //reinflate the menu to make the changes visible.
+        //mNavigation.getMenu().clear();
+        //mNavigation.inflateMenu(R.menu.menu_main_drawer);
+    }
+
+    @Override
+    public void onStreamCreationError(Stream stream) {
+
+    }
+
+    @Override
+    public void onStreamUpdateError(Stream stream) {
+
+    }
+
+    @Override
+    public void onStreamDeletionError(Stream stream) {
 
     }
 }
