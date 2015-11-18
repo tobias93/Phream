@@ -20,4 +20,27 @@
         <item name="android:background">@color/primary_background</item>
     </style>
 
+    <!-- Detail view Theme -->
+    <style name="DetailViewTheme" parent="AppTheme">
+        <item name="android:actionBarStyle">@style/FullscreenActionBarStyle</item>
+        <item name="actionBarStyle">@style/FullscreenActionBarStyle</item>
+        <item name="android:windowActionBarOverlay">true</item>
+        <item name="windowActionBarOverlay">true</item>
+        <!--
+        <item name="metaButtonBarStyle">?android:attr/buttonBarStyle</item>
+        <item name="metaButtonBarButtonStyle">?android:attr/buttonBarButtonStyle</item>
+        <item name="android:windowBackground">@null</item>-->
+    </style>
+
+    <!-- Detail view Style -->
+    <style name="DetailView">
+        <item name="android:background">@color/image_detail_view_bg</item>
+        <item name="background">@color/image_detail_view_bg</item>
+    </style>
+
+    <!-- Style for the action bar in fullscreen mode -->
+    <style name="FullscreenActionBarStyle" parent="Widget.AppCompat.ActionBar">
+        <item name="android:background">@color/image_detail_view_overlay</item>
+    </style>
+
 </resources>
