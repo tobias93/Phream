@@ -21,22 +21,31 @@
 
             <ScrollView
                 android:layout_width="match_parent"
-                android:layout_height="match_parent">
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:fillViewport="true">
 
-                <LinearLayout
+                <ListView
+                    android:id="@+id/imageList"
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:orientation="vertical">
-
-                    <Button
-                        android:id="@+id/image_view_button"
-                        android:layout_width="fill_parent"
-                        android:layout_height="wrap_content"
-                        android:onClick="startImageView"
-                        android:text="Start Image View" />
-
-                </LinearLayout>
+                    android:layout_height="match_parent"
+                    android:divider="@null" />
             </ScrollView>
+
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical">
+
+                <Button
+                    android:id="@+id/image_view_button"
+                    android:layout_width="fill_parent"
+                    android:layout_height="wrap_content"
+                    android:onClick="startImageView"
+                    android:text="Start Image View" />
+
+            </LinearLayout>
 
             <com.tr4android.support.extension.widget.FloatingActionMenu
                 android:layout_width="wrap_content"

@@ -18,6 +18,7 @@ import android.view.MotionEvent;
 import android.view.View;
 import android.view.WindowManager;
 import android.widget.ImageView;
+import android.widget.Toast;
 
 import java.io.File;
 import java.io.FileInputStream;
@@ -143,7 +144,13 @@ public class ImageDetailView extends AppCompatActivity {
             case R.id.export_gallery:
                 // Copy Image
                 try {
-                    copyImage(new File(imageUri), new File(Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES) + File.separator + imageUri.substring(imageUri.lastIndexOf("/") + 1)));
+                    File destination = new File(Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES) + File.separator + imageUri.substring(imageUri.lastIndexOf("/") + 1));
+                    if (!destination.exists()) {
+                        copyImage(new File(imageUri), destination);
+                        Toast.makeText(this, R.string.exported_image_to_gallery, Toast.LENGTH_SHORT).show();
+                    } else {
+                        Toast.makeText(this, R.string.exported_image_to_gallery_failed, Toast.LENGTH_SHORT).show();
+                    }
                 } catch (IOException e) {
                 }
                 return true;

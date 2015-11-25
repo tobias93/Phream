@@ -24,5 +24,7 @@
     <!-- Main activity :: menu image detail view -->
     <string name="share">Teilen</string>
     <string name="options">Optionen</string>
-    <string name="export_gallery">Gallery export</string>
+    <string name="export_gallery">Gallerie export</string>
+    <string name="exported_image_to_gallery">Bild wurde zur Gallerie hinzugefügt</string>
+    <string name="exported_image_to_gallery_failed">Bild ist bereits in der Gallerie vorhanden</string>
 </resources>
