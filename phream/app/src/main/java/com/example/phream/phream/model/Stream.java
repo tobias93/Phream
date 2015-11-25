@@ -1,11 +1,5 @@
 package com.example.phream.phream.model;
 
-
-import com.example.phream.phream.model.database.DBHandler;
-
-/**
- * Created by Philipp Pütz on 23.10.2015.
- */
 public class Stream {
     private int id;
     private String name;
@@ -21,17 +15,17 @@ public class Stream {
         this.name = name;
         created = System.currentTimeMillis();
     }
-
+/*
     public void addPicture(Pictures picture){
         DBHandler dbHandler = new DBHandler(null, null, null, 1); // Todo Set Context
         dbHandler.insertPicture(picture.getName(), picture.getCreated(), picture.getFilename(), id);
         picture.setStored();
-    }
+    }*/
 
     public Pictures getPicture(){
      return null;
     }
-
+/*
     public void delete(Pictures picture){
         if (picture.getStored() == true){
             DBHandler dbHandler = new DBHandler(null, null, null, 1); // Todo Set Context
@@ -39,11 +33,11 @@ public class Stream {
             picture.setNotStored();
         }
 
-    }
-
+    }*/
+/*
     public void renamePicture(Pictures picture){
 
-    }
+    }*/
 
 
     // Getter & Setter
@@ -59,7 +53,11 @@ public class Stream {
         this.name = name;
     }
 
+    public long getCreated() {
+        return created;
+    }
 
-
-
+    public void setCreated(long created) {
+        this.created = created;
+    }
 }

@@ -30,10 +30,10 @@
 
                     <Button
                         android:id="@+id/image_view_button"
-                        android:text="Start Image View"
                         android:layout_width="fill_parent"
                         android:layout_height="wrap_content"
-                        android:onClick="startImageView"/>
+                        android:onClick="startImageView"
+                        android:text="Start Image View" />
 
                 </LinearLayout>
             </ScrollView>
@@ -57,9 +57,9 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_margin="20dp"
+                    android:onClick="openGallery"
                     android:src="@drawable/ic_insert_photo_white_24dp"
                     app:fabSize="mini"
-                    android:onClick="openGallery"
                     app:pressedTranslationZ="12dp" />
 
                 <android.support.design.widget.FloatingActionButton

@@ -1,10 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 <menu xmlns:android="http://schemas.android.com/apk/res/android">
-    <item android:title="@string/main_drawer_streams">
+    <item android:title="@string/main_drawer_streams"
+        android:id="@+id/main_drawer_streams">
         <menu>
             <group
                 android:checkableBehavior="single"
-                android:id="@+id/main_drawer_streams"
                 >
                     <!-- DEMO CONTENT -->
                     <item

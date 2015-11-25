@@ -11,13 +11,16 @@ import java.util.HashMap;
 public class Model {
 
     private ArrayList<Stream> streamList = new ArrayList<>();
-
+/*
     // Create Streamobjects
-    public ArrayList<Stream> getAllStreams() {
+    public ArrayList<TblStream> getAllStreams() {
         DBHandler dbHandler = new DBHandler(null, null, null, 1); // Todo Set Context
-        ArrayList<Stream> streamList = dbHandler.getAllStreams();
+        ArrayList<TblStream> streamList = dbHandler.getAllStreams();
 
         return streamList;
-    }
+    }*/
 
+    public void addStream(Stream stream) {
+
+    }
 }
