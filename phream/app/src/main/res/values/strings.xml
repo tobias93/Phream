@@ -19,7 +19,7 @@
     <string name="main_select_image_gallery">Wähle ein Bild aus</string>
 
     <!-- Main activity :: image detail view -->
-    <string name="title_activity_image_detail_view">ImageDetailView</string>
+    <string name="title_activity_image_detail_view">Phream</string>
 
     <!-- Main activity :: menu image detail view -->
     <string name="share">teilen</string>

@@ -104,7 +104,7 @@ public class MainActivity extends AppCompatActivity {
 
     public void startImageView(View view) {
         Intent intent = new Intent(this, ImageDetailView.class);
-        intent.putExtra("ImagePath", "/storage/emulated/0/DCIM/Camera/20150614_121020.jpg");
+        intent.putExtra("ImagePath", "/storage/extSdCard/DCIM/Camera/20150101_113305_Richtone(HDR).jpg");
         startActivity(intent);
     }
 

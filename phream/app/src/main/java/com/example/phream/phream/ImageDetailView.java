@@ -11,6 +11,7 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.support.v7.widget.ShareActionProvider;
 import android.view.Menu;
+import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.MotionEvent;
 import android.view.View;
@@ -45,6 +46,7 @@ public class ImageDetailView extends AppCompatActivity {
     private View mContentView;
     private View mControlsView;
     private boolean mVisible;
+    private String imageUri;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -66,25 +68,27 @@ public class ImageDetailView extends AppCompatActivity {
 
 
         Intent intent = getIntent();
-        String uri = intent.getStringExtra("ImagePath");
+        imageUri = intent.getStringExtra("ImagePath");
 
         ImageView imageView = (ImageView) findViewById(R.id.fullscreen_content);
 
         BitmapWorkerTask task = new BitmapWorkerTask(imageView, 256, 256);
-        task.execute(uri);
-
-
+        task.execute(imageUri);
     }
 
-   @Override
-    public boolean onCreateOptionsMenu (Menu menu){
-        MenuItem shareItem = menu.findItem(R.id.action_share);
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+
+        MenuInflater inflater = getMenuInflater();
+        inflater.inflate(R.menu.menu_image_detail_view, menu);
+
+         MenuItem shareItem = menu.findItem(R.id.action_share);
         ShareActionProvider myShareActionProvider =
                 (ShareActionProvider) MenuItemCompat.getActionProvider(shareItem);
         Intent myShareIntent = new Intent(Intent.ACTION_SEND);
         myShareIntent.setType("image/*");
-        myShareIntent.putExtra(Intent.EXTRA_STREAM, Uri.fromFile(new File("/storage/emulated/0/DCIM/Camera/20150614_121020.jpg")));
-       // myShareActionProvider.setShareIntent(myShareIntent);
+        myShareIntent.putExtra(Intent.EXTRA_STREAM, Uri.fromFile(new File(imageUri)));
+        myShareActionProvider.setShareIntent(myShareIntent);
         return true;
     }
 
