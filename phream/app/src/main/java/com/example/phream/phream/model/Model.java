@@ -2,6 +2,12 @@ package com.example.phream.phream.model;
 
 import com.example.phream.phream.model.database.DBHandler;
 
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.OutputStream;
 import java.util.ArrayList;
 import java.util.HashMap;
 
@@ -23,4 +29,5 @@ public class Model {
     public void addStream(Stream stream) {
 
     }
+
 }

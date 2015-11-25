@@ -22,5 +22,7 @@
     <string name="title_activity_image_detail_view">Phream</string>
 
     <!-- Main activity :: menu image detail view -->
-    <string name="share">teilen</string>
+    <string name="share">Teilen</string>
+    <string name="options">Optionen</string>
+    <string name="export_gallery">Gallery export</string>
 </resources>
