@@ -7,7 +7,7 @@ public interface IStreamsCallback {
     void onStreamCreated(Stream stream);
     void onStreamUpdated(Stream stream);
     void onStreamDeleted(Stream stream);
-    void onStreamListAviable(Stream[] streams);
+    void onStreamListAvailable(Stream[] streams);
     void onStreamCreationError(Stream stream);
     void onStreamUpdateError(Stream stream);
     void onStreamDeletionError(Stream stream);

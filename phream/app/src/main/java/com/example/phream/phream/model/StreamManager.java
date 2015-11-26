@@ -3,6 +3,8 @@ package com.example.phream.phream.model;
 import android.content.Context;
 import android.database.sqlite.SQLiteDatabase;
 import android.os.AsyncTask;
+import android.os.Debug;
+import android.util.Log;
 
 import com.example.phream.phream.model.database.DBManager;
 import com.example.phream.phream.model.database.Tables.TblStream;
@@ -10,16 +12,6 @@ import com.example.phream.phream.model.database.Tables.TblStream;
 public class StreamManager {
 
     private IStreamsCallback callback = null;
-    private Context context;
-
-    /**
-     * Constructor
-     * @param c
-     */
-    public StreamManager(Context c) {
-        this.context = c;
-        DBManager.init(c);
-    }
 
     /**
      * Sets the object on which the callback methods will be called.
@@ -53,7 +45,7 @@ public class StreamManager {
 
             @Override
             protected void onPostExecute(Stream[] streams) {
-                callback.onStreamListAviable(streams);
+                callback.onStreamListAvailable(streams);
             }
         };
 
@@ -68,7 +60,6 @@ public class StreamManager {
         AsyncTask<com.example.phream.phream.model.Stream, Integer, Boolean> inserter = new AsyncTask<com.example.phream.phream.model.Stream, Integer, Boolean>() {
             @Override
             protected Boolean doInBackground(com.example.phream.phream.model.Stream... params) {
-                assert(params.length == 1);
                 SQLiteDatabase db = DBManager.getDB();
                 try {
                     TblStream.insert(db, params[0]);
@@ -82,14 +73,14 @@ public class StreamManager {
             @Override
             protected void onPostExecute(Boolean result) {
                 if (result) {
-                    StreamManager.this.callback.onStreamCreated(stream);
+                    callback.onStreamCreated(stream);
                 } else {
-                    StreamManager.this.callback.onStreamCreationError(stream);
+                    callback.onStreamCreationError(stream);
                 }
             }
         };
 
-        inserter.execute();
+        inserter.execute(stream);
 
     }
 

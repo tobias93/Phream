@@ -34,6 +34,8 @@ import com.example.phream.phream.model.IStreamsCallback;
 import com.example.phream.phream.model.RecyclerViewAdapter;
 import com.example.phream.phream.model.Stream;
 import com.example.phream.phream.model.StreamManager;
+import com.example.phream.phream.model.database.DBManager;
+
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
@@ -61,9 +63,11 @@ public class MainActivity extends AppCompatActivity implements IStreamsCallback 
     // Model
     StreamManager streamManager;
 
+    // The current status
+    Stream activeStream;
+
     /**
      * Setup the Activity
-     * @param savedInstanceState
      */
     private File directory = new File(Environment.getExternalStorageDirectory() + File.separator + "Phream" + File.separator);
 
@@ -106,8 +110,11 @@ public class MainActivity extends AppCompatActivity implements IStreamsCallback 
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         mDrawerToggle.syncState();
 
+        // Init database
+        DBManager.init(this);
+
         // Init streamManager
-        streamManager = new StreamManager(this);
+        streamManager = new StreamManager();
         streamManager.setCallback(this);
 
         // Request all streams from the database.
@@ -154,6 +161,10 @@ public class MainActivity extends AppCompatActivity implements IStreamsCallback 
         startActivity(intent);
     }
 
+    public void startStreamFragment(Stream stream) {
+        Toast.makeText(MainActivity.this, "selected stream " + stream.getName(), Toast.LENGTH_LONG).show();
+    }
+
     /**
      * Handle back button presses
      */
@@ -185,8 +196,6 @@ public class MainActivity extends AppCompatActivity implements IStreamsCallback 
 
     /**
      * Handle button presses for the menu button in the action bar.
-     * @param item
-     * @return
      */
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
@@ -214,7 +223,6 @@ public class MainActivity extends AppCompatActivity implements IStreamsCallback 
 
     /**
      * Start the camera intent
-     * @param v
      */
     public void openCamera(View v){
         Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
@@ -223,9 +231,6 @@ public class MainActivity extends AppCompatActivity implements IStreamsCallback 
 
     /**
      * Get back the camera intent's result.
-     * @param requestCode
-     * @param resultCode
-     * @param data
      */
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
@@ -304,9 +309,14 @@ public class MainActivity extends AppCompatActivity implements IStreamsCallback 
         dialogBuilder.setPositiveButton(R.string.main_addstream_ok, new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
+
+                // Close the navigation drawer
                 mDrawerLayout.closeDrawer(mNavigation);
-                
-                Log.i("#PHREAM", "added stream " + streamNameEditText.getText());
+
+                // Add the stream
+                String streamName = streamNameEditText.getText().toString();
+                Stream stream = new Stream(streamName);
+                streamManager.insertStream(stream);
             }
         });
         dialogBuilder.setView(streamNameEditText);
@@ -315,7 +325,8 @@ public class MainActivity extends AppCompatActivity implements IStreamsCallback 
 
     @Override
     public void onStreamCreated(Stream stream) {
-
+        // refresh the list of streams.
+        streamManager.findAllStreams();
     }
 
     @Override
@@ -329,21 +340,39 @@ public class MainActivity extends AppCompatActivity implements IStreamsCallback 
     }
 
     @Override
-    public void onStreamListAviable(Stream[] streams) {
-        Menu menu = mNavigation.getMenu().findItem(R.id.main_drawer_streams).getSubMenu();
-        menu.clear();
-        for (Stream stream : streams) {
-            menu.add(stream.getName());
+    public void onStreamListAvailable(Stream[] streams) {
+
+        // Rebuild the menu
+        Menu navigationMenu =  mNavigation.getMenu();
+        Menu streamsMenu = navigationMenu.findItem(R.id.main_drawer_streams).getSubMenu();
+        streamsMenu.clear();
+        for (final Stream stream : streams) {
+            MenuItem item = streamsMenu.add(stream.getName());
+            item.setIcon(R.drawable.ic_folder_open_black_24dp);
+            item.setCheckable(true);
+            if (stream == activeStream) {
+                item.setChecked(true);
+            }
+            item.setOnMenuItemClickListener(new MenuItem.OnMenuItemClickListener() {
+                @Override
+                public boolean onMenuItemClick(MenuItem item) {
+                    startStreamFragment(stream);
+                    return true;
+                }
+            });
         }
 
-        //reinflate the menu to make the changes visible.
-        //mNavigation.getMenu().clear();
-        //mNavigation.inflateMenu(R.menu.menu_main_drawer);
+        // Temporary workaround for a bug in the android support library
+        // grrrrr...
+        // look here for further information:
+        // http://stackoverflow.com/a/30706233/5440981
+        MenuItem mi = navigationMenu.getItem(navigationMenu.size() - 1);
+        mi.setTitle(mi.getTitle());
     }
 
     @Override
     public void onStreamCreationError(Stream stream) {
-
+        Log.i("#PHREAM", "stream creation error.");
     }
 
     @Override
