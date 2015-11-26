@@ -12,16 +12,6 @@ import com.example.phream.phream.model.database.Tables.TblStream;
 public class StreamManager {
 
     private IStreamsCallback callback = null;
-    private Context context;
-
-    /**
-     * Constructor
-     * @param c
-     */
-    public StreamManager(Context c) {
-        this.context = c;
-        DBManager.init(c);
-    }
 
     /**
      * Sets the object on which the callback methods will be called.
@@ -76,7 +66,6 @@ public class StreamManager {
                     return true;
                 } catch (Exception e)
                 {
-                    Log.e("#PHREAM error", e.toString());
                     return false;
                 }
             }
@@ -84,9 +73,9 @@ public class StreamManager {
             @Override
             protected void onPostExecute(Boolean result) {
                 if (result) {
-                    StreamManager.this.callback.onStreamCreated(stream);
+                    callback.onStreamCreated(stream);
                 } else {
-                    StreamManager.this.callback.onStreamCreationError(stream);
+                    callback.onStreamCreationError(stream);
                 }
             }
         };

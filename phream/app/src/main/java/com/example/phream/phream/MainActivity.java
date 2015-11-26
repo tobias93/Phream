@@ -31,6 +31,8 @@ import android.widget.EditText;
 import com.example.phream.phream.model.IStreamsCallback;
 import com.example.phream.phream.model.Stream;
 import com.example.phream.phream.model.StreamManager;
+import com.example.phream.phream.model.database.DBManager;
+
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
@@ -55,9 +57,11 @@ public class MainActivity extends AppCompatActivity implements IStreamsCallback 
     // Model
     StreamManager streamManager;
 
+    // The current status
+    Stream activeStream;
+
     /**
      * Setup the Activity
-     * @param savedInstanceState
      */
     private File directory = new File(Environment.getExternalStorageDirectory() + File.separator + "Phream" + File.separator);
 
@@ -100,8 +104,11 @@ public class MainActivity extends AppCompatActivity implements IStreamsCallback 
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         mDrawerToggle.syncState();
 
+        // Init database
+        DBManager.init(this);
+
         // Init streamManager
-        streamManager = new StreamManager(this);
+        streamManager = new StreamManager();
         streamManager.setCallback(this);
 
         // Request all streams from the database.
@@ -127,6 +134,10 @@ public class MainActivity extends AppCompatActivity implements IStreamsCallback 
         Intent intent = new Intent(this, ImageDetailView.class);
         intent.putExtra("ImagePath", "/storage/extSdCard/DCIM/Camera/20150101_113305_Richtone(HDR).jpg");
         startActivity(intent);
+    }
+
+    public void startStreamFragment(Stream stream) {
+        Toast.makeText(MainActivity.this, "selected stream " + stream.getName(), Toast.LENGTH_LONG).show();
     }
 
     /**
@@ -160,8 +171,6 @@ public class MainActivity extends AppCompatActivity implements IStreamsCallback 
 
     /**
      * Handle button presses for the menu button in the action bar.
-     * @param item
-     * @return
      */
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
@@ -189,7 +198,6 @@ public class MainActivity extends AppCompatActivity implements IStreamsCallback 
 
     /**
      * Start the camera intent
-     * @param v
      */
     public void openCamera(View v){
         Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
@@ -198,9 +206,6 @@ public class MainActivity extends AppCompatActivity implements IStreamsCallback 
 
     /**
      * Get back the camera intent's result.
-     * @param requestCode
-     * @param resultCode
-     * @param data
      */
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
@@ -296,7 +301,6 @@ public class MainActivity extends AppCompatActivity implements IStreamsCallback 
     @Override
     public void onStreamCreated(Stream stream) {
         // refresh the list of streams.
-        Log.i("#PHREAM", "created stream.");
         streamManager.findAllStreams();
     }
 
@@ -312,15 +316,25 @@ public class MainActivity extends AppCompatActivity implements IStreamsCallback 
 
     @Override
     public void onStreamListAvailable(Stream[] streams) {
-        Log.i("#PHREAM", "updating list of streams.");
 
         // Rebuild the menu
         Menu navigationMenu =  mNavigation.getMenu();
         Menu streamsMenu = navigationMenu.findItem(R.id.main_drawer_streams).getSubMenu();
         streamsMenu.clear();
-        for (Stream stream : streams) {
+        for (final Stream stream : streams) {
             MenuItem item = streamsMenu.add(stream.getName());
             item.setIcon(R.drawable.ic_folder_open_black_24dp);
+            item.setCheckable(true);
+            if (stream == activeStream) {
+                item.setChecked(true);
+            }
+            item.setOnMenuItemClickListener(new MenuItem.OnMenuItemClickListener() {
+                @Override
+                public boolean onMenuItemClick(MenuItem item) {
+                    startStreamFragment(stream);
+                    return true;
+                }
+            });
         }
 
         // Temporary workaround for a bug in the android support library
