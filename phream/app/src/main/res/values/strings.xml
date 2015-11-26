@@ -29,7 +29,7 @@
     <string name="exported_image_to_gallery_failed">Bild ist bereits in der Gallerie vorhanden</string>
 
     <!-- Main activity :: card layout-->
-    <string name="card_layout_title">Titel: </string>
-    <string name="card_layout_date">Aufnahmedatum: </string>
-    <string name="card_layout_time">Aufnahmeuhrzeit: </string>
+    <string name="card_layout_title">Titel:</string>
+    <string name="card_layout_date">Aufnahmedatum:</string>
+    <string name="card_layout_time">Aufnahmeuhrzeit:</string>
 </resources>

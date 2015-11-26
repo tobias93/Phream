@@ -155,11 +155,6 @@ public class MainActivity extends AppCompatActivity implements IStreamsCallback 
 
     }
 
-    public void startImageView(View view) {
-        Intent intent = new Intent(this, ImageDetailView.class);
-        intent.putExtra("ImagePath", "/storage/extSdCard/DCIM/Camera/20150101_113305_Richtone(HDR).jpg");
-        startActivity(intent);
-    }
 
     public void startStreamFragment(Stream stream) {
         Toast.makeText(MainActivity.this, "selected stream " + stream.getName(), Toast.LENGTH_LONG).show();
@@ -230,7 +225,7 @@ public class MainActivity extends AppCompatActivity implements IStreamsCallback 
     }
 
     /**
-     * Get back the camera intent's result.
+     * Get back the camera intent result.
      */
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {

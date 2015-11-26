@@ -79,7 +79,7 @@ public class ImageDetailView extends AppCompatActivity {
 
         ImageView imageView = (ImageView) findViewById(R.id.fullscreen_content);
 
-        BitmapWorkerTask task = new BitmapWorkerTask(imageView, 256, 256);
+        BitmapWorkerTask task = new BitmapWorkerTask(imageView, 512, 512);
         task.execute(imageUri);
     }
 
