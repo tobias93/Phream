@@ -21,18 +21,18 @@
                         android:title="Mein Geburtstag"
                         android:icon="@drawable/ic_folder_open_black_24dp"
                         />
-
-                <item
-                    android:title="@string/main_drawer_add"
-                    android:icon="@drawable/ic_add_black_24dp"
-                    android:id="@+id/menu_main_drawer_add_stream"
-                    />
             </group>
         </menu>
     </item>
     <item
+        android:title="@string/main_drawer_add"
+        android:icon="@drawable/ic_add_black_24dp"
+        android:id="@+id/menu_main_drawer_add_stream"
+        />
+    <item
         android:id="@+id/main_drawer_settings"
         android:title="@string/main_drawer_settings"
-        android:icon="@drawable/ic_settings_black_24dp"/>
+        android:icon="@drawable/ic_settings_black_24dp"
+        />
 
 </menu>

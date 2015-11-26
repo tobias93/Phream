@@ -279,9 +279,14 @@ public class MainActivity extends AppCompatActivity implements IStreamsCallback 
         dialogBuilder.setPositiveButton(R.string.main_addstream_ok, new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
+
+                // Close the navigation drawer
                 mDrawerLayout.closeDrawer(mNavigation);
-                
-                Log.i("#PHREAM", "added stream " + streamNameEditText.getText());
+
+                // Add the stream
+                String streamName = streamNameEditText.getText().toString();
+                Stream stream = new Stream(streamName);
+                streamManager.insertStream(stream);
             }
         });
         dialogBuilder.setView(streamNameEditText);
@@ -290,7 +295,9 @@ public class MainActivity extends AppCompatActivity implements IStreamsCallback 
 
     @Override
     public void onStreamCreated(Stream stream) {
-
+        // refresh the list of streams.
+        Log.i("#PHREAM", "created stream.");
+        streamManager.findAllStreams();
     }
 
     @Override
@@ -304,21 +311,29 @@ public class MainActivity extends AppCompatActivity implements IStreamsCallback 
     }
 
     @Override
-    public void onStreamListAviable(Stream[] streams) {
-        Menu menu = mNavigation.getMenu().findItem(R.id.main_drawer_streams).getSubMenu();
-        menu.clear();
+    public void onStreamListAvailable(Stream[] streams) {
+        Log.i("#PHREAM", "updating list of streams.");
+
+        // Rebuild the menu
+        Menu navigationMenu =  mNavigation.getMenu();
+        Menu streamsMenu = navigationMenu.findItem(R.id.main_drawer_streams).getSubMenu();
+        streamsMenu.clear();
         for (Stream stream : streams) {
-            menu.add(stream.getName());
+            MenuItem item = streamsMenu.add(stream.getName());
+            item.setIcon(R.drawable.ic_folder_open_black_24dp);
         }
 
-        //reinflate the menu to make the changes visible.
-        //mNavigation.getMenu().clear();
-        //mNavigation.inflateMenu(R.menu.menu_main_drawer);
+        // Temporary workaround for a bug in the android support library
+        // grrrrr...
+        // look here for further information:
+        // http://stackoverflow.com/a/30706233/5440981
+        MenuItem mi = navigationMenu.getItem(navigationMenu.size() - 1);
+        mi.setTitle(mi.getTitle());
     }
 
     @Override
     public void onStreamCreationError(Stream stream) {
-
+        Log.i("#PHREAM", "stream creation error.");
     }
 
     @Override

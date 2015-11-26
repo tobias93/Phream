@@ -3,6 +3,8 @@ package com.example.phream.phream.model;
 import android.content.Context;
 import android.database.sqlite.SQLiteDatabase;
 import android.os.AsyncTask;
+import android.os.Debug;
+import android.util.Log;
 
 import com.example.phream.phream.model.database.DBManager;
 import com.example.phream.phream.model.database.Tables.TblStream;
@@ -53,7 +55,7 @@ public class StreamManager {
 
             @Override
             protected void onPostExecute(Stream[] streams) {
-                callback.onStreamListAviable(streams);
+                callback.onStreamListAvailable(streams);
             }
         };
 
@@ -68,13 +70,13 @@ public class StreamManager {
         AsyncTask<com.example.phream.phream.model.Stream, Integer, Boolean> inserter = new AsyncTask<com.example.phream.phream.model.Stream, Integer, Boolean>() {
             @Override
             protected Boolean doInBackground(com.example.phream.phream.model.Stream... params) {
-                assert(params.length == 1);
                 SQLiteDatabase db = DBManager.getDB();
                 try {
                     TblStream.insert(db, params[0]);
                     return true;
                 } catch (Exception e)
                 {
+                    Log.e("#PHREAM error", e.toString());
                     return false;
                 }
             }
@@ -89,7 +91,7 @@ public class StreamManager {
             }
         };
 
-        inserter.execute();
+        inserter.execute(stream);
 
     }
 
