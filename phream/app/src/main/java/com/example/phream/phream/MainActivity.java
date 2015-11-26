@@ -18,6 +18,8 @@ import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
 
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.view.KeyEvent;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -29,6 +31,7 @@ import android.util.Log;
 import android.widget.EditText;
 
 import com.example.phream.phream.model.IStreamsCallback;
+import com.example.phream.phream.model.RecyclerViewAdapter;
 import com.example.phream.phream.model.Stream;
 import com.example.phream.phream.model.StreamManager;
 import java.io.File;
@@ -43,7 +46,6 @@ public class MainActivity extends AppCompatActivity implements IStreamsCallback 
 
 
     // Constants
-    static final int PICK_PHOTO_REQUEST = 1;
     static final int PICK_CAMERA_REQUEST = 1;
     static final int GALLERY_INTENT_CALLED = 2;
 
@@ -51,6 +53,10 @@ public class MainActivity extends AppCompatActivity implements IStreamsCallback 
     private DrawerLayout mDrawerLayout;
     private ActionBarDrawerToggle mDrawerToggle;
     private NavigationView mNavigation;
+
+    private RecyclerView mRecyclerView;
+    private RecyclerView.Adapter mAdapter;
+    private RecyclerView.LayoutManager mLayoutManager;
 
     // Model
     StreamManager streamManager;
@@ -121,6 +127,25 @@ public class MainActivity extends AppCompatActivity implements IStreamsCallback 
                 }
             }
         });
+
+        // Recyler view
+        mRecyclerView = (RecyclerView) findViewById(R.id.recycler_view);
+
+        // use this setting to improve performance if you know that changes
+        // in content do not change the layout size of the RecyclerView
+        mRecyclerView.setHasFixedSize(true);
+
+        // use a linear layout manager
+        mLayoutManager = new LinearLayoutManager(this);
+        mRecyclerView.setLayoutManager(mLayoutManager);
+
+        // specify an adapter (see also next example)
+        String[] strings = {"Hallo", "Hallo","Hallo","Hallo","Hallo","Hallo","Hallo","Hallo","Hallo","Hallo","Hallo","Hallo","Hallo","Hallo","Hallo","Hallo","Hallo","Hallo","Hallo","Hallo","Hallo","Hallo","Hallo","Hallo", };
+        mAdapter = new RecyclerViewAdapter(strings);
+        mRecyclerView.setAdapter(mAdapter);
+
+
+
     }
 
     public void startImageView(View view) {
