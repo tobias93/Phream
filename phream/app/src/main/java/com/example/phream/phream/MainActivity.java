@@ -73,7 +73,7 @@ public class MainActivity extends AppCompatActivity implements IStreamsCallback 
     /**
      * Setup the Activity
      */
-    private File directory = new File(Environment.getExternalStorageDirectory() + File.separator + "Phream" + File.separator);
+    private File directory;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -89,9 +89,7 @@ public class MainActivity extends AppCompatActivity implements IStreamsCallback 
                 directory.mkdirs();
             }
         } else {
-            if (!directory.isDirectory()) {
-                directory.mkdirs();
-            }
+            directory = getExternalFilesDir(null);
         }
 
         File nomedia = new File(directory.getAbsolutePath() + File.separator + ".nomedia");
@@ -246,6 +244,9 @@ public class MainActivity extends AppCompatActivity implements IStreamsCallback 
         if (resultCode != RESULT_OK)  return;
 
         if(requestCode == PICK_CAMERA_REQUEST && takenPhotoPath != null){
+
+            Log.e("Photopath:", takenPhotoPath);
+
             // Ask for pictures title
             // Input field for the name of the picture
             final EditText pictureNameEditText = new EditText(this);
@@ -320,6 +321,8 @@ public class MainActivity extends AppCompatActivity implements IStreamsCallback 
     public void copyImage(File src, File dst) throws IOException {
         InputStream in = new FileInputStream(src);
         OutputStream out = new FileOutputStream(dst);
+
+        Log.e("PhotopathCopyed:", dst.getAbsolutePath());
 
         // Transfer bytes from in to out
         byte[] buf = new byte[1024];

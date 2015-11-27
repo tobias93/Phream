@@ -41,7 +41,7 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
             v.setOnClickListener(new View.OnClickListener() {
                 @Override public void onClick(View v) {
                         Intent intent = new Intent(context, ImageDetailView.class);
-                        intent.putExtra("ImagePath", "/storage/extSdCard/DCIM/Camera/20150101_113305_Richtone(HDR).jpg");
+                        intent.putExtra("ImagePath", "/storage/emulated/0/Android/data/com.example.phream.phream/files/image_1448623842_2165.jpg");
                         context.startActivity(intent);
                 }
             });
@@ -80,7 +80,7 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
         holder.mCreateDate.setText("26.11.2015");
         holder.mCreateTime.setText("10:45");
         BitmapWorkerTask task = new BitmapWorkerTask(holder.mImageView, 180, 180);
-        task.execute("/storage/extSdCard/DCIM/Camera/20150101_113305_Richtone(HDR).jpg");
+        task.execute("/storage/emulated/0/Android/data/com.example.phream.phream/files/image_1448623842_2165.jpg");
 
     }
 
