@@ -274,7 +274,6 @@ public class MainActivity extends AppCompatActivity implements IStreamsCallback 
             takenPhotoPath = null;
         }
 
-
         if (null == data) return;
 
         if (requestCode == GALLERY_INTENT_CALLED) {

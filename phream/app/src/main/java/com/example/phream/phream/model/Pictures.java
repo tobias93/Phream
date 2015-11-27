@@ -11,7 +11,6 @@ public class Pictures {
     private String name;
     private String filename;
     private long created;
-    private String thumbnail;
     private int stream;
 
     public Pictures(String filename, Stream stream){
@@ -21,12 +20,6 @@ public class Pictures {
     public void addToGallery(){
 
     }
-
-    public Bitmap getThumb(){
-        return null;
-    }
-
-
 
     // Getter & Setter
 
@@ -53,11 +46,6 @@ public class Pictures {
     public long getCreated() {
         return created;
     }
-
-    public String getThumbnail() {
-        return thumbnail;
-    }
-
 
     public int getStream() {
         return stream;
