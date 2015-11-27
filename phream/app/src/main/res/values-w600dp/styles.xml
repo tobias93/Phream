@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- Image preview metadata orientation -->
+    <style name="ImagePreviewMetadata">
+        <item name="android:orientation">horizontal</item>
+    </style>
+</resources>
