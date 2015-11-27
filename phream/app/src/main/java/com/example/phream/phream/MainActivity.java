@@ -60,6 +60,10 @@ public class MainActivity extends AppCompatActivity implements IStreamsCallback 
     private RecyclerView.Adapter mAdapter;
     private RecyclerView.LayoutManager mLayoutManager;
 
+    // Some member variables
+    private String takenPhotoPath;
+    private long takenPhotoTimestamp;
+
     // Model
     StreamManager streamManager;
 
@@ -147,10 +151,9 @@ public class MainActivity extends AppCompatActivity implements IStreamsCallback 
         mRecyclerView.setLayoutManager(mLayoutManager);
 
         // specify an adapter (see also next example)
-        String[] strings = {"Hallo", "Hallo","Hallo","Hallo","Hallo","Hallo","Hallo","Hallo","Hallo","Hallo","Hallo","Hallo","Hallo","Hallo","Hallo","Hallo","Hallo","Hallo","Hallo","Hallo","Hallo","Hallo","Hallo","Hallo", };
+        String[] strings = {"Hallo", "Hallo", "Hallo", "Hallo", "Hallo", "Hallo", "Hallo", "Hallo", "Hallo", "Hallo", "Hallo", "Hallo", "Hallo", "Hallo", "Hallo", "Hallo", "Hallo", "Hallo", "Hallo", "Hallo", "Hallo", "Hallo", "Hallo", "Hallo",};
         mAdapter = new RecyclerViewAdapter(strings);
         mRecyclerView.setAdapter(mAdapter);
-
 
 
     }
@@ -219,9 +222,20 @@ public class MainActivity extends AppCompatActivity implements IStreamsCallback 
     /**
      * Start the camera intent
      */
-    public void openCamera(View v){
-        Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
-        startActivityForResult(intent, PICK_CAMERA_REQUEST);
+    public void openCamera(View v) {
+        Intent takePictureIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+        // Ensure that there's a camera activity to handle the intent
+        if (takePictureIntent.resolveActivity(getPackageManager()) != null) {
+            // Create the File where the photo should go
+
+            File photoFile = new File(directory.getAbsolutePath() + File.separator + imageNameGenerator());
+            takenPhotoPath = photoFile.getAbsolutePath();
+
+            takePictureIntent.putExtra(MediaStore.EXTRA_OUTPUT,
+                    Uri.fromFile(photoFile));
+            startActivityForResult(takePictureIntent, PICK_CAMERA_REQUEST);
+
+        }
     }
 
     /**
@@ -229,17 +243,39 @@ public class MainActivity extends AppCompatActivity implements IStreamsCallback 
      */
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-        if (resultCode != RESULT_OK) return;
+        if (resultCode != RESULT_OK)  return;
+
+        if(requestCode == PICK_CAMERA_REQUEST && takenPhotoPath != null){
+            // Ask for pictures title
+            // Input field for the name of the picture
+            final EditText pictureNameEditText = new EditText(this);
+            pictureNameEditText.setHint(R.string.main_insert_picturename);
+            pictureNameEditText.setSingleLine(true);
+
+            // Dialog that shows the input text.
+            AlertDialog.Builder dialogBuilder = new AlertDialog.Builder(this, R.style.AlertDialogTheme);
+            dialogBuilder.setCancelable(false);
+            dialogBuilder.setTitle(R.string.main_insert_picturename_title);
+            dialogBuilder.setPositiveButton(R.string.main_addstream_ok, new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface dialog, int which) {
+
+                    // Add the picture
+                    String pictureName = pictureNameEditText.getText().toString();
+                    // TODO  Generate a new pictures object
+                }
+            });
+
+            dialogBuilder.setView(pictureNameEditText);
+            dialogBuilder.show();
+
+            // Reset members
+            takenPhotoPath = null;
+        }
+
+
         if (null == data) return;
 
-        if (requestCode == PICK_CAMERA_REQUEST) {
-            Bitmap photo = (Bitmap) data.getExtras().get("data");
-
-            if (photo != null) {
-                Toast toast = Toast.makeText(this, "Klappt", Toast.LENGTH_LONG);
-                toast.show();
-            }
-        }
         if (requestCode == GALLERY_INTENT_CALLED) {
             Uri originalUri = data.getData();
             String selectedImagePath = "";
@@ -257,13 +293,20 @@ public class MainActivity extends AppCompatActivity implements IStreamsCallback 
 
             // Copy Image
             try {
-                // random int for the syncronisation feature
-                Random r = new Random();
-                copyImage(new File(selectedImagePath), new File(directory.getAbsolutePath() + File.separator + "image_" + System.currentTimeMillis() / 1000 + "_" + r.nextInt(1000) + ".jpg"));
+                copyImage(new File(selectedImagePath), new File(directory.getAbsolutePath() + File.separator + imageNameGenerator()));
             } catch (IOException e) {
             }
         }
     }
+
+    // Creates a unique filename from unix timestamp and a random number
+    private String imageNameGenerator() {
+        // random int for the syncronisation feature
+        Random r = new Random();
+        takenPhotoTimestamp = System.currentTimeMillis() / 1000;
+        return "image_" + takenPhotoTimestamp + "_" + r.nextInt(10000) + ".jpg";
+    }
+
 
     // Get the Uri of Internal/External Storage for Media
     private Uri getUri() {
@@ -338,7 +381,7 @@ public class MainActivity extends AppCompatActivity implements IStreamsCallback 
     public void onStreamListAvailable(Stream[] streams) {
 
         // Rebuild the menu
-        Menu navigationMenu =  mNavigation.getMenu();
+        Menu navigationMenu = mNavigation.getMenu();
         Menu streamsMenu = navigationMenu.findItem(R.id.main_drawer_streams).getSubMenu();
         streamsMenu.clear();
         for (final Stream stream : streams) {
