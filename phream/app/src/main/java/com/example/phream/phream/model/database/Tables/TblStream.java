@@ -20,7 +20,8 @@ public class TblStream {
         ContentValues values = new ContentValues();
         values.put(COLUMN_STREAMNAME, stream.getName());
         values.put(COLUMN_CREATED, stream.getCreated());
-        db.insertOrThrow(TABLE_NAME, null, values);
+        long id = db.insertOrThrow(TABLE_NAME, null, values);
+        stream.setId(id);
     }
 
     public static Stream[] findAll(SQLiteDatabase db)

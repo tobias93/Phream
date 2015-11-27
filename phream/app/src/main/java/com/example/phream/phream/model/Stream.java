@@ -1,11 +1,11 @@
 package com.example.phream.phream.model;
 
 public class Stream {
-    private int id;
+    private long id;
     private String name;
     private long created;
 
-    public Stream( int id, String name, long created){
+    public Stream( long id, String name, long created){
         this.name = name;
         this.id = id;
         this.created = created;
@@ -14,6 +14,7 @@ public class Stream {
     public Stream(String name){
         this.name = name;
         created = System.currentTimeMillis();
+        id = -2;
     }
 /*
     public void addPicture(Pictures picture){
@@ -41,8 +42,12 @@ public class Stream {
 
 
     // Getter & Setter
-    public int getId(){
+    public long getId(){
         return id;
+    }
+
+    public void setId(long value){
+        this.id = value;
     }
 
     public String getName() {

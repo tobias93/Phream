@@ -1,11 +1,7 @@
 package com.example.phream.phream.model;
 
-import android.content.Context;
 import android.database.sqlite.SQLiteDatabase;
 import android.os.AsyncTask;
-import android.os.Debug;
-import android.util.Log;
-
 import com.example.phream.phream.model.database.DBManager;
 import com.example.phream.phream.model.database.Tables.TblStream;
 
@@ -81,7 +77,6 @@ public class StreamManager {
         };
 
         inserter.execute(stream);
-
     }
 
     /**

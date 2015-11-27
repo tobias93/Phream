@@ -162,6 +162,7 @@ public class MainActivity extends AppCompatActivity implements IStreamsCallback 
     }
 
     public void startStreamFragment(Stream stream) {
+        this.activeStream = stream;
         Toast.makeText(MainActivity.this, "selected stream " + stream.getName(), Toast.LENGTH_LONG).show();
     }
 
