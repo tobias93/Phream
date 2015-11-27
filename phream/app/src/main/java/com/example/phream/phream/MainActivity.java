@@ -307,7 +307,7 @@ public class MainActivity extends AppCompatActivity implements IStreamsCallback 
         return "image_" + takenPhotoTimestamp + "_" + r.nextInt(10000) + ".jpg";
     }
 
-    
+
     public void copyImage(File src, File dst) throws IOException {
         InputStream in = new FileInputStream(src);
         OutputStream out = new FileOutputStream(dst);

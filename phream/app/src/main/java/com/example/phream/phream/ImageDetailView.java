@@ -1,12 +1,15 @@
 package com.example.phream.phream;
 
 import android.annotation.SuppressLint;
+import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.BitmapFactory;
 import android.net.Uri;
 import android.os.Environment;
 import android.support.v4.view.MenuItemCompat;
 import android.support.v7.app.ActionBar;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.os.Handler;
@@ -17,6 +20,7 @@ import android.view.MenuItem;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.WindowManager;
+import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.Toast;
 
@@ -142,17 +146,40 @@ public class ImageDetailView extends AppCompatActivity {
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
             case R.id.export_gallery:
-                // Copy Image
-                try {
-                    File destination = new File(Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES) + File.separator + imageUri.substring(imageUri.lastIndexOf("/") + 1));
-                    if (!destination.exists()) {
-                        copyImage(new File(imageUri), destination);
-                        Toast.makeText(this, R.string.exported_image_to_gallery, Toast.LENGTH_SHORT).show();
-                    } else {
-                        Toast.makeText(this, R.string.exported_image_to_gallery_failed, Toast.LENGTH_SHORT).show();
+                // Ask for pictures title
+                // Input field for the name of the picture
+                // TODO Fill edittext with title from picture object
+                final EditText pictureNameEditText = new EditText(this);
+                pictureNameEditText.setHint(R.string.image_detail_insert_picturename);
+                pictureNameEditText.setSingleLine(true);
+
+                // Dialog that shows the input text.
+                AlertDialog.Builder dialogBuilder = new AlertDialog.Builder(this, R.style.AlertDialogTheme);
+                dialogBuilder.setCancelable(false);
+                dialogBuilder.setTitle(R.string.image_detail_insert_picturename_title);
+                dialogBuilder.setPositiveButton(R.string.image_detail_insert_picturename_ok, new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+
+                        String pictureName = pictureNameEditText.getText().toString();
+                        // Copy Image
+                        try {
+                            File destination = new File(Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES) + File.separator + pictureName + ".jpg");
+                            if (!destination.exists()) {
+                                copyImage(new File(imageUri), destination);
+                            }
+                        } catch (IOException e) {
+                        }
                     }
-                } catch (IOException e) {
-                }
+                });
+                dialogBuilder.setNegativeButton(R.string.image_detail_insert_picturename_cancel, new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        // Do nothing
+                    }
+                });
+                dialogBuilder.setView(pictureNameEditText);
+                dialogBuilder.show();
                 return true;
             default:
                 return super.onOptionsItemSelected(item);

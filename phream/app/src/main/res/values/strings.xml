@@ -21,6 +21,12 @@
     <string name="main_insert_picturename_ok">OK</string>
     <string name="main_insert_picturename_cancel">Abbrechen</string>
 
+    <!-- Image Detail activity :: Insert Picturename (Export) Dialog -->
+    <string name="image_detail_insert_picturename">Name</string>
+    <string name="image_detail_insert_picturename_title">Bild zu Gallerie hinzufügen</string>
+    <string name="image_detail_insert_picturename_ok">OK</string>
+    <string name="image_detail_insert_picturename_cancel">Abbrechen</string>
+
     <!-- Main activity :: Select image from gallery -->
     <string name="main_select_image_gallery">Wähle ein Bild aus</string>
 
@@ -28,11 +34,9 @@
     <string name="title_activity_image_detail_view">Phream</string>
 
     <!-- Main activity :: menu image detail view -->
-    <string name="share">Teilen</string>
-    <string name="options">Optionen</string>
-    <string name="export_gallery">Gallerie export</string>
-    <string name="exported_image_to_gallery">Bild wurde zur Gallerie hinzugefügt</string>
-    <string name="exported_image_to_gallery_failed">Bild ist bereits in der Gallerie vorhanden</string>
+    <string name="menu_image_detail_share">Teilen</string>
+    <string name="menu_image_detail_options">Optionen</string>
+    <string name="menu_image_detail_export_gallery">Gallerie export</string>
 
     <!-- Main activity :: card layout-->
     <string name="card_layout_title">Titel:</string>
