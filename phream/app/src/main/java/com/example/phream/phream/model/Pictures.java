@@ -6,28 +6,28 @@ import android.graphics.Bitmap;
  * Created by Philipp Pütz on 23.10.2015.
  */
 public class Pictures {
-    private int id;
-    private boolean stored = false;
+    private long id;
     private String name;
     private String filename;
     private long created;
-    private int stream;
+    private long streamId;
 
-    public Pictures(String filename, Stream stream){
+    public Pictures(long pictureId, String pictureName, String filename, long created, long streamid){
+        this.id = pictureId;
+        this.name = pictureName;
         this.filename = filename;
+        this.created = created;
+        this.streamId = streamid;
     }
 
-    public void addToGallery(){
-
-    }
 
     // Getter & Setter
 
-    public int getId() {
+    public long getId() {
         return id;
     }
 
-    public void setId(int id){
+    public void setId(long id){
         this.id = id;
     }
 
@@ -47,20 +47,8 @@ public class Pictures {
         return created;
     }
 
-    public int getStream() {
-        return stream;
-    }
-
-    public void setStored() {
-        this.stored = true;
-    }
-
-    public void setNotStored() {
-        this.stored = false;
-    }
-
-    public boolean getStored() {
-        return stored;
+    public long getStream() {
+        return streamId;
     }
 
 
