@@ -307,16 +307,7 @@ public class MainActivity extends AppCompatActivity implements IStreamsCallback 
         return "image_" + takenPhotoTimestamp + "_" + r.nextInt(10000) + ".jpg";
     }
 
-
-    // Get the Uri of Internal/External Storage for Media
-    private Uri getUri() {
-        String state = Environment.getExternalStorageState();
-        if (!state.equalsIgnoreCase(Environment.MEDIA_MOUNTED))
-            return MediaStore.Images.Media.INTERNAL_CONTENT_URI;
-
-        return MediaStore.Images.Media.EXTERNAL_CONTENT_URI;
-    }
-
+    
     public void copyImage(File src, File dst) throws IOException {
         InputStream in = new FileInputStream(src);
         OutputStream out = new FileOutputStream(dst);
