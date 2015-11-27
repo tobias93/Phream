@@ -43,4 +43,9 @@
         <item name="android:background">@color/image_detail_view_overlay</item>
     </style>
 
+    <!-- Image preview metadata orientation -->
+    <style name="ImagePreviewMetadata">
+        <item name="android:orientation">vertical</item>
+    </style>
+
 </resources>
