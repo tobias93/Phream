@@ -1,5 +1,6 @@
 package com.example.phream.phream;
 
+import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.content.Context;
 import android.content.DialogInterface;
@@ -333,6 +334,7 @@ public class StreamView extends Fragment implements IPicturesCallback {
         takenPhotoPath = null;
     }
 
+    @SuppressLint("NewApi")
     private void importGalleryImage(int buildVersion, Intent data) {
         if (null == data) return;
 
@@ -379,9 +381,6 @@ public class StreamView extends Fragment implements IPicturesCallback {
         }
 
         final String finalSelectedImagePath = selectedImagePath;
-
-
-        Log.e("Photopath:", finalSelectedImagePath);
 
         // Ask for pictures title
         // Input field for the name of the picture
