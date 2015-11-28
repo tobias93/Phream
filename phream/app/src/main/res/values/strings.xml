@@ -43,6 +43,11 @@
     <string name="card_layout_date">Datum:</string>
     <string name="card_layout_time">Uhrzeit:</string>
 
+    <!-- Main activity :: Stream View Callbacks -->
+    <string name="stream_view_callback_update_error">Bild konnte nicht umbenannt werden: </string>
+    <string name="stream_view_callback_insert_error">Bild konnte nicht in die Gallerie geladen werden: </string>
+    <string name="stream_view_callback_delete_error">Bild konnte nicht gelöscht werden: </string>
+
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
 </resources>

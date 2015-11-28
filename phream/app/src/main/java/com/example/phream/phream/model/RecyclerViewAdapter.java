@@ -16,12 +16,15 @@ import com.example.phream.phream.BitmapWorkerTask;
 import com.example.phream.phream.ImageDetailView;
 import com.example.phream.phream.R;
 
+import java.text.SimpleDateFormat;
+import java.util.Date;
+
 
 /**
  * Created by Philipp Pütz on 26.11.2015.
  */
 public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapter.ViewHolder> {
-    private String[] mDataset;
+    private Pictures[] mDataset;
 
     // Provide a reference to the views for each data item
     // Complex data items may need more than one view per item, and
@@ -34,18 +37,21 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
         public ImageView mImageView;
         private final Context context;
 
-        public ViewHolder(CardView v) {
+        public ViewHolder(CardView v, final Pictures picture) {
             super(v);
             context = v.getContext();
             mCardView = v;
             v.setOnClickListener(new View.OnClickListener() {
-                @Override public void onClick(View v) {
-                        Intent intent = new Intent(context, ImageDetailView.class);
-                        intent.putExtra("ImagePath", "/storage/emulated/0/Android/data/com.example.phream.phream/files/image_1448623842_2165.jpg");
-                        context.startActivity(intent);
+                @Override
+                public void onClick(View v) {
+                    Intent intent = new Intent(context, ImageDetailView.class);
+
+                    intent.putExtra("ImagePath", "");
+
+                    context.startActivity(intent);
                 }
             });
-            mTitle =  (TextView) v.findViewById(R.id.labelTitleDescription);
+            mTitle = (TextView) v.findViewById(R.id.labelTitleDescription);
             mCreateDate = (TextView) v.findViewById(R.id.labelCreateDate);
             mCreateTime = (TextView) v.findViewById(R.id.labelCreateTime);
             mImageView = (ImageView) v.findViewById(R.id.thumbnail);
@@ -54,20 +60,20 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
 
 
     // Provide a suitable constructor (depends on the kind of dataset)
-    public RecyclerViewAdapter(String[] myDataset) {
+    public RecyclerViewAdapter(Pictures[] myDataset) {
         mDataset = myDataset;
     }
 
     // Create new views (invoked by the layout manager)
     @Override
     public RecyclerViewAdapter.ViewHolder onCreateViewHolder(ViewGroup parent,
-                                                   int viewType) {
+                                                             int viewType) {
         // create a new view
         CardView v = (CardView) LayoutInflater.from(parent.getContext())
                 .inflate(R.layout.card_layout, parent, false);
         // set the view's size, margins, paddings and layout parameters
 
-        ViewHolder vh = new ViewHolder(v);
+        ViewHolder vh = new ViewHolder(v, new Pictures(null));
         return vh;
     }
 
@@ -76,11 +82,19 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
     public void onBindViewHolder(ViewHolder holder, int position) {
         // - get element from your dataset at this position
         // - replace the contents of the view with that element
-        holder.mTitle.setText(mDataset[position]);
-        holder.mCreateDate.setText("26.11.2015");
-        holder.mCreateTime.setText("10:45");
+        holder.mTitle.setText(mDataset[position].getName());
+
+        Date date = new Date(mDataset[position].getCreated() * 1000L);
+        SimpleDateFormat sdfdate = new SimpleDateFormat("yyyy.MM.dd");
+        String formattedDate = sdfdate.format(date);
+        holder.mCreateDate.setText(formattedDate);
+
+        SimpleDateFormat sdftime = new SimpleDateFormat("HH:mm:ss");
+        String formattedTime = sdftime.format(date);
+        holder.mCreateTime.setText(formattedTime);
+
         BitmapWorkerTask task = new BitmapWorkerTask(holder.mImageView, 180, 180);
-        task.execute("/storage/emulated/0/Android/data/com.example.phream.phream/files/image_1448623842_2165.jpg");
+        task.execute(mDataset[position].getFilepath());
 
     }
 
