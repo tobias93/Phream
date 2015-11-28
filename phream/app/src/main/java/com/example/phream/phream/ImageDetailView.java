@@ -6,6 +6,7 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.BitmapFactory;
 import android.net.Uri;
+import android.os.AsyncTask;
 import android.os.Environment;
 import android.support.v4.view.MenuItemCompat;
 import android.support.v7.app.ActionBar;
@@ -19,7 +20,7 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.MotionEvent;
 import android.view.View;
-import android.view.WindowManager;
+
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.Toast;
@@ -163,13 +164,28 @@ public class ImageDetailView extends AppCompatActivity {
 
                         String pictureName = pictureNameEditText.getText().toString();
                         // Copy Image
-                        try {
-                            File destination = new File(Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES) + File.separator + pictureName + ".jpg");
-                            if (!destination.exists()) {
-                                copyImage(new File(imageUri), destination);
-                            }
-                        } catch (IOException e) {
+                        File src = new File(imageUri);
+                        File dst = new File(Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES) + File.separator + pictureName + ".jpg");
+                        if (!dst.exists()) {
+                            AsyncTask<File, Integer, Boolean> copyprocess = new AsyncTask<File, Integer, Boolean>() {
+                                @Override
+                                protected Boolean doInBackground(File... params) {
+                                    try {
+                                        copyImage(params[0], params[1]);
+                                        return true;
+                                    } catch (IOException e) {
+                                        return false;
+                                    }
+                                }
+                                @Override
+                                protected void onPostExecute(Boolean result) {
+                                }
+                            };
+
+                            copyprocess.execute(src, dst);
+
                         }
+
                     }
                 });
                 dialogBuilder.setNegativeButton(R.string.image_detail_insert_picturename_cancel, new DialogInterface.OnClickListener() {

@@ -6,7 +6,6 @@ import android.util.Log;
 
 import com.example.phream.phream.model.database.DBManager;
 import com.example.phream.phream.model.database.Tables.TblPicture;
-import com.example.phream.phream.model.database.Tables.TblStream;
 
 import java.io.File;
 import java.io.FileInputStream;
@@ -14,12 +13,8 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
-import java.util.ArrayList;
-import java.util.Random;
 
-/**
- * Created by Philipp Pütz on 27.11.2015.
- */
+
 public class PicturesManager {
 
     private IPicturesCallback callback = null;
@@ -66,7 +61,7 @@ public class PicturesManager {
 
             @Override
             protected void onPostExecute(Pictures[] pics) {
-                pictures = pics;
+                PicturesManager.this.pictures = pics;
                 callback.onPicturesListUpdated(pics);
             }
         };
@@ -120,7 +115,7 @@ public class PicturesManager {
 
         picture.setStreamId(this.stream.getId());
 
-        AsyncTask<Pictures, Integer, Boolean> inserter = new AsyncTask<Pictures, Integer, Boolean>() {
+        AsyncTask<Pictures, Integer, Boolean> importInserter = new AsyncTask<Pictures, Integer, Boolean>() {
             @Override
             protected Boolean doInBackground(Pictures... params) {
 
@@ -156,7 +151,7 @@ public class PicturesManager {
             }
         };
 
-        inserter.execute(picture);
+        importInserter.execute(picture);
         findAllPictures();
     }
 
@@ -167,7 +162,7 @@ public class PicturesManager {
      * "onPicturesDeleted" callback.
      */
     public void deletePicture(final Pictures picture) {
-        AsyncTask<Pictures, Integer, Boolean> inserter = new AsyncTask<Pictures, Integer, Boolean>() {
+        AsyncTask<Pictures, Integer, Boolean> deleter = new AsyncTask<Pictures, Integer, Boolean>() {
             @Override
             protected Boolean doInBackground(Pictures... params) {
                 SQLiteDatabase db = DBManager.getDB();
@@ -189,18 +184,18 @@ public class PicturesManager {
             }
         };
 
-        inserter.execute(picture);
+        deleter.execute(picture);
         findAllPictures();
     }
 
     /**
      * Update a picture in the database
-     * <p/>
+     *
      * As the method works asynchronously, the result will be returned using the
      * "onPictureUpdated" callback.
      */
     public void updatePicture(final Pictures picture, String newPictureName) {
-        AsyncTask<Pictures, Integer, Boolean> inserter = new AsyncTask<Pictures, Integer, Boolean>() {
+        AsyncTask<Pictures, Integer, Boolean> updater = new AsyncTask<Pictures, Integer, Boolean>() {
             @Override
             protected Boolean doInBackground(Pictures... params) {
                 SQLiteDatabase db = DBManager.getDB();
@@ -222,7 +217,7 @@ public class PicturesManager {
             }
         };
 
-        inserter.execute(picture);
+        updater.execute(picture);
         findAllPictures();
     }
 
