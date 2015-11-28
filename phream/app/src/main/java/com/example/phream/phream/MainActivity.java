@@ -24,7 +24,7 @@ import com.example.phream.phream.model.Stream;
 import com.example.phream.phream.model.StreamManager;
 import com.example.phream.phream.model.database.DBManager;
 
-public class MainActivity extends AppCompatActivity implements IStreamsCallback, StreamView.OnFragmentInteractionListener {
+public class MainActivity extends AppCompatActivity implements IStreamsCallback, StreamView.OnFragmentInteractionListener, NoStreamView.OnFragmentInteractionListener {
 
     // UI
     private DrawerLayout mDrawerLayout;
