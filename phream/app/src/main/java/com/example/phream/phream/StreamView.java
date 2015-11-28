@@ -171,8 +171,15 @@ public class StreamView extends Fragment implements IPicturesCallback {
 
     @Override
     public void onPicturesListUpdated(Pictures[] pictures) {
-        mAdapter = new RecyclerViewAdapter(pictures);
-        mRecyclerView.setAdapter(mAdapter);
+        if(mAdapter == null){
+            mAdapter = new RecyclerViewAdapter(pictures);
+            mRecyclerView.setAdapter(mAdapter);
+        }
+        else{
+            mAdapter = new RecyclerViewAdapter(pictures);
+            mRecyclerView.swapAdapter(mAdapter, false);
+
+        }
     }
 
     @Override

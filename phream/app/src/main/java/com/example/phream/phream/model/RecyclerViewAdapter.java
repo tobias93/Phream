@@ -76,11 +76,11 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
         holder.mTitle.setText(mDataset[position].getName());
 
         Date date = new Date(mDataset[position].getCreated() * 1000L);
-        SimpleDateFormat sdfdate = new SimpleDateFormat("yyyy.MM.dd");
+        SimpleDateFormat sdfdate = new SimpleDateFormat("dd.MM.yyyy");
         String formattedDate = sdfdate.format(date);
         holder.mCreateDate.setText(formattedDate);
 
-        SimpleDateFormat sdftime = new SimpleDateFormat("HH:mm:ss");
+        SimpleDateFormat sdftime = new SimpleDateFormat("HH:mm");
         String formattedTime = sdftime.format(date);
         holder.mCreateTime.setText(formattedTime);
 
@@ -99,6 +99,7 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
         task.execute(mDataset[position].getFilepath());
 
     }
+
 
     // Return the size of your dataset (invoked by the layout manager)
     @Override

@@ -149,7 +149,6 @@ public class ImageDetailView extends AppCompatActivity {
             case R.id.export_gallery:
                 // Ask for pictures title
                 // Input field for the name of the picture
-                // TODO Fill edittext with title from picture object
                 final EditText pictureNameEditText = new EditText(this);
                 pictureNameEditText.setHint(R.string.image_detail_insert_picturename);
                 pictureNameEditText.setSingleLine(true);
