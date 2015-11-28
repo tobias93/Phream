@@ -206,8 +206,15 @@ public class StreamView extends Fragment implements IPicturesCallback {
 
     @Override
     public void onPicturesListUpdated(Pictures[] pictures) {
-        mAdapter = new RecyclerViewAdapter(pictures);
-        mRecyclerView.setAdapter(mAdapter);
+        if(mAdapter == null){
+            mAdapter = new RecyclerViewAdapter(pictures);
+            mRecyclerView.setAdapter(mAdapter);
+        }
+        else{
+            mAdapter = new RecyclerViewAdapter(pictures);
+            mRecyclerView.swapAdapter(mAdapter, false);
+
+        }
     }
 
     @Override
@@ -307,9 +314,11 @@ public class StreamView extends Fragment implements IPicturesCallback {
 
                 // Generate new Pictures Object
                 Pictures picture = new Pictures(pictureNameEditText.getText().toString(), takenPhotoPath, PhotoTimestamp);
-
                 // Add the picture to the stream/picturemanager/database
                 picturesManager.insertPicture(picture);
+
+                // Reset members
+                takenPhotoPath = null;
 
             }
         });
@@ -317,8 +326,6 @@ public class StreamView extends Fragment implements IPicturesCallback {
         dialogBuilder.setView(pictureNameEditText);
         dialogBuilder.show();
 
-        // Reset members
-        takenPhotoPath = null;
     }
 
     @SuppressLint("NewApi")
