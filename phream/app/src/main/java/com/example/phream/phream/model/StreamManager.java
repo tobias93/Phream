@@ -83,7 +83,27 @@ public class StreamManager {
      * Persists a stream by changing an already existing database entry.
      * @param stream
      */
-    public void updateStream(com.example.phream.phream.model.Stream stream) {
+    public void updateStream(final com.example.phream.phream.model.Stream stream) {
+        AsyncTask<com.example.phream.phream.model.Stream, Integer, Boolean> updater = new AsyncTask<com.example.phream.phream.model.Stream, Integer, Boolean>() {
+            @Override
+            protected Boolean doInBackground(com.example.phream.phream.model.Stream... params) {
+                SQLiteDatabase db = DBManager.getDB();
+                TblStream.update(db, params[0]);
+                return true;
+            }
+
+            @Override
+            protected void onPostExecute(Boolean result) {
+                if (result) {
+                    callback.onStreamUpdated(stream);
+                } else {
+                    callback.onStreamUpdateError(stream);
+                }
+            }
+        };
+
+        updater.execute(stream);
+
         /*AsyncTask<Stream, Integer, Boolean> inserter = new AsyncTask<Stream, Integer, Boolean>() {
             @Override
             protected Boolean doInBackground(com.example.phream.phream.model.Stream... params) {

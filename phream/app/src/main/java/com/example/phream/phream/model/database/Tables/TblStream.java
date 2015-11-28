@@ -24,6 +24,14 @@ public class TblStream {
         stream.setId(id);
     }
 
+    public static void update(SQLiteDatabase db, Stream stream)
+    {
+        ContentValues values = new ContentValues();
+        values.put(COLUMN_STREAMNAME, stream.getName());
+        values.put(COLUMN_CREATED, stream.getCreated());
+        db.update(TABLE_NAME, values, COLUMN_ID + " = " + String.valueOf(stream.getId()), new String[0]);
+    }
+
     public static Stream[] findAll(SQLiteDatabase db)
     {
         Cursor cursor = db.rawQuery(QUERY_UPDATE, null);

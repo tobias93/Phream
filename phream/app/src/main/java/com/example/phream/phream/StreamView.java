@@ -61,6 +61,7 @@ public class StreamView extends Fragment implements IPicturesCallback {
 
     // Content Manger
     PicturesManager picturesManager;
+    Stream myStream;
 
     // variables
     private String takenPhotoPath;
@@ -77,6 +78,7 @@ public class StreamView extends Fragment implements IPicturesCallback {
     public void initPicturesManager(Stream stream) {
         this.picturesManager = new PicturesManager(stream);
         picturesManager.setCallback(this);
+        myStream = stream;
     }
 
     @Override
@@ -93,6 +95,22 @@ public class StreamView extends Fragment implements IPicturesCallback {
         super.onCreateOptionsMenu(menu, inflater);
 
         inflater.inflate(R.menu.menu_stream_view, menu);
+
+        // register click events
+        menu.findItem(R.id.menu_stream_view_rename).setOnMenuItemClickListener(new MenuItem.OnMenuItemClickListener() {
+            @Override
+            public boolean onMenuItemClick(MenuItem item) {
+                mListener.renameStream(myStream);
+                return true;
+            }
+        });
+        menu.findItem(R.id.menu_stream_view_delete).setOnMenuItemClickListener(new MenuItem.OnMenuItemClickListener() {
+            @Override
+            public boolean onMenuItemClick(MenuItem item) {
+                mListener.deleteStream(myStream);
+                return true;
+            }
+        });
     }
 
     @Override
@@ -253,7 +271,8 @@ public class StreamView extends Fragment implements IPicturesCallback {
      * >Communicating with Other Fragments</a> for more information.
      */
     public interface OnFragmentInteractionListener {
-
+        void renameStream(Stream stream);
+        void deleteStream(Stream stream);
     }
 
     @Override
@@ -270,6 +289,10 @@ public class StreamView extends Fragment implements IPicturesCallback {
             importGalleryImage(requestCode, data);
         }
     }
+
+    //---- Stream actions --------------------------------------------------------------------------
+
+
 
     //---- Picture list management -----------------------------------------------------------------
 

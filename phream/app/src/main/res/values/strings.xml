@@ -13,7 +13,11 @@
     <string name="main_addstream_title">Stream anlegen</string>
     <string name="main_addstream_name">Name</string>
     <string name="main_addstream_ok">OK</string>
-    <string name="main_addstream_cancel">Abbrechen</string>
+
+    <!-- Stream selection fragment :: Rename stream dialog -->
+    <string name="main_renamestream_title">Stream umbenennen</string>
+    <string name="main_renamestream_name">Name</string>
+    <string name="main_renamestream_ok">OK</string>
 
     <!-- Main activity :: Insert Picturename Dialog -->
     <string name="main_insert_picturename">Name</string>

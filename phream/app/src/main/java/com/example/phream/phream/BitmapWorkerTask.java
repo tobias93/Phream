@@ -8,33 +8,33 @@ import android.widget.ImageView;
 
 import java.lang.ref.WeakReference;
 
-/**
- * Created by Philipp Pütz on 10.11.2015.
- */
-public class BitmapWorkerTask extends AsyncTask<String, Void, Bitmap> {
+public class BitmapWorkerTask extends AsyncTask<Void, Void, Bitmap> {
     private final WeakReference<ImageView> imageViewReference;
     private int width;
     private int height;
+    private String imageFile;
 
-    public BitmapWorkerTask(ImageView imageView, int width, int height) {
+    public BitmapWorkerTask(ImageView imageView, String imageFile, int width, int height) {
         // Use a WeakReference to ensure the ImageView can be garbage collected
+        imageView.setTag(R.id.BITMAP_WORKER_TASK_IMAGE_FILE, imageFile);
         imageViewReference = new WeakReference<ImageView>(imageView);
+        this.imageFile = imageFile;
         this.width = width;
         this.height = height;
     }
 
     // Decode image in background.
     @Override
-    protected Bitmap doInBackground(String... params) {
-        return decodeSampledBitmapFromUri(params[0], width, height);
+    protected Bitmap doInBackground(Void... params) {
+        return decodeSampledBitmapFromUri(imageFile, width, height);
     }
 
     // Once complete, see if ImageView is still around and set bitmap.
     @Override
     protected void onPostExecute(Bitmap bitmap) {
-        if (imageViewReference != null && bitmap != null) {
+        if (imageViewReference.get() != null && bitmap != null) {
             final ImageView imageView = imageViewReference.get();
-            if (imageView != null) {
+            if (((String) imageView.getTag(R.id.BITMAP_WORKER_TASK_IMAGE_FILE)).equals(imageFile)) {
                 imageView.setImageBitmap(bitmap);
             }
         }

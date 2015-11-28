@@ -3,7 +3,8 @@ package com.example.phream.phream.model;
 import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
-import android.graphics.drawable.Drawable;
+
+import android.graphics.Bitmap;
 import android.support.v7.widget.CardView;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
@@ -26,10 +27,8 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 
 
-/**
- * Created by Philipp Pütz on 26.11.2015.
- */
 public class RecyclerViewAdapter extends ContextMenuRecyclerView.Adapter<RecyclerViewAdapter.ViewHolder> {
+
     private Picture[] mDataset;
 
     // Provide a reference to the views for each data item
@@ -101,11 +100,16 @@ public class RecyclerViewAdapter extends ContextMenuRecyclerView.Adapter<Recycle
             }
         });
 
+
         holder.mCardView.setLongClickable(true);
 
-        BitmapWorkerTask task = new BitmapWorkerTask(holder.mImageView, 180, 180);
+        // clear the image view to prevent recycled images from showing up.
+        holder.mImageView.setImageBitmap(Bitmap.createBitmap(1, 1, Bitmap.Config.ALPHA_8));
+        holder.mImageView.invalidate();
 
-        task.execute(mDataset[position].getFilepath());
+        // load the image into the image view.
+        BitmapWorkerTask task = new BitmapWorkerTask(holder.mImageView, mDataset[position].getFilepath(), 180, 180);
+        task.execute();
 
     }
 
