@@ -59,7 +59,7 @@ public class StreamView extends Fragment implements IPicturesCallback {
     // Content Manger
     PicturesManager picturesManager;
 
-    //...
+    // variables
     private String takenPhotoPath;
     private long PhotoTimestamp;
 
@@ -209,7 +209,7 @@ public class StreamView extends Fragment implements IPicturesCallback {
 
     @Override
     public void onPicturesListUpdated(Picture[] pictures) {
-        mAdapter = new RecyclerViewAdapter(pictures);
+        mAdapter = new RecyclerViewAdapter(pictures, picturesManager);
         mRecyclerView.swapAdapter(mAdapter, false);
 
     }
@@ -324,7 +324,6 @@ public class StreamView extends Fragment implements IPicturesCallback {
 
     }
 
-    @SuppressLint("NewApi")
     private void importGalleryImage(int buildVersion, Intent data) {
         if (null == data) return;
         final Uri pictureUri = data.getData();

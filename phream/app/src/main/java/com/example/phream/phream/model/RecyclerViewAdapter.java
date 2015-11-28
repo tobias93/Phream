@@ -7,6 +7,7 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -23,6 +24,7 @@ import java.util.Date;
  */
 public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapter.ViewHolder> {
     private Picture[] mDataset;
+    private PicturesManager mPicturesManager;
 
     // Provide a reference to the views for each data item
     // Complex data items may need more than one view per item, and
@@ -45,12 +47,14 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
             mCreateTime = (TextView) v.findViewById(R.id.labelCreateTime);
             mImageView = (ImageView) v.findViewById(R.id.thumbnail);
         }
+
     }
 
 
-    // Provide a suitable constructor (depends on the kind of dataset)
-    public RecyclerViewAdapter(Picture[] myDataset) {
+    // constructor
+    public RecyclerViewAdapter(Picture[] myDataset, PicturesManager picturesManager) {
         mDataset = myDataset;
+        mPicturesManager = picturesManager;
     }
 
     // Create new views (invoked by the layout manager)
@@ -60,7 +64,6 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
         // create a new view
         CardView v = (CardView) LayoutInflater.from(parent.getContext())
                 .inflate(R.layout.card_layout, parent, false);
-        // set the view's size, margins, paddings and layout parameters
 
         ViewHolder vh = new ViewHolder(v);
         return vh;
@@ -69,8 +72,6 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
     // Replace the contents of a view (invoked by the layout manager)
     @Override
     public void onBindViewHolder(final ViewHolder holder, final int position) {
-        // - get element from your dataset at this position
-        // - replace the contents of the view with that element
         holder.mTitle.setText(mDataset[position].getName());
 
         Date date = new Date(mDataset[position].getCreated() * 1000L);
