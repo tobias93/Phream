@@ -20,6 +20,8 @@ import android.util.Log;
 import android.widget.EditText;
 
 import com.example.phream.phream.model.IStreamsCallback;
+import com.example.phream.phream.model.Pictures;
+import com.example.phream.phream.model.PicturesManager;
 import com.example.phream.phream.model.Stream;
 import com.example.phream.phream.model.StreamManager;
 import com.example.phream.phream.model.database.DBManager;

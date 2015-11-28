@@ -19,7 +19,7 @@ public class Stream {
 /*
     public void addPicture(Pictures picture){
         DBHandler dbHandler = new DBHandler(null, null, null, 1); // Todo Set Context
-        dbHandler.insertPicture(picture.getName(), picture.getCreated(), picture.getFilename(), id);
+        dbHandler.insertPicture(picture.getName(), picture.getCreated(), picture.getFilepath(), id);
         picture.setStored();
     }*/
 

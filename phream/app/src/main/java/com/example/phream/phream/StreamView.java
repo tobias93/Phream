@@ -20,15 +20,14 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.EditText;
 
+import com.example.phream.phream.model.IPicturesCallback;
+import com.example.phream.phream.model.Pictures;
+import com.example.phream.phream.model.PicturesManager;
 import com.example.phream.phream.model.RecyclerViewAdapter;
 import com.example.phream.phream.model.Stream;
 
 import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileOutputStream;
 import java.io.IOException;
-import java.io.InputStream;
-import java.io.OutputStream;
 import java.util.Random;
 
 /**
@@ -39,7 +38,7 @@ import java.util.Random;
  * Use the {@link StreamView#newInstance} factory method to
  * create an instance of this fragment.
  */
-public class StreamView extends Fragment {
+public class StreamView extends Fragment implements IPicturesCallback {
 
     // Constants
     static final int PICK_CAMERA_REQUEST = 1;
@@ -56,9 +55,12 @@ public class StreamView extends Fragment {
     private FloatingActionButton mCameraFab;
     private FloatingActionButton mGaleryFab;
 
+    // Content Manger
+    PicturesManager picturesManager;
+
     //...
     private String takenPhotoPath;
-    private long takenPhotoTimestamp;
+    private long PhotoTimestamp;
 
     //---- Lifecycle stuff -------------------------------------------------------------------------
 
@@ -91,6 +93,13 @@ public class StreamView extends Fragment {
             //mParam1 = getArguments().getString(ARG_PARAM1);
             //mParam2 = getArguments().getString(ARG_PARAM2);
         }
+    }
+
+    // One solution to pass a object to fragments -> Parcelable aren't such easy to implement
+    // http://stackoverflow.com/questions/10836525/passing-objects-in-to-fragments
+    public void initPicturesManager(Stream stream) {
+        this.picturesManager = new PicturesManager(stream);
+        picturesManager.setCallback(this);
     }
 
     @Override
@@ -177,6 +186,41 @@ public class StreamView extends Fragment {
         mListener = null;
     }
 
+    @Override
+    public void onPicturesListUpdated(Pictures[] pictures) {
+
+    }
+
+    @Override
+    public void onPictureCreated(Pictures picture) {
+
+    }
+
+    @Override
+    public void onPictureCreatedError(Pictures picture) {
+
+    }
+
+    @Override
+    public void onPictureDeleted() {
+
+    }
+
+    @Override
+    public void onPictureDeletedError(Pictures picture) {
+
+    }
+
+    @Override
+    public void onPictureUpdated() {
+
+    }
+
+    @Override
+    public void onPictureUpdatedError(Pictures picture) {
+
+    }
+
     /**
      * This interface must be implemented by activities that contain this
      * fragment to allow an interaction in this fragment to be communicated
@@ -195,9 +239,9 @@ public class StreamView extends Fragment {
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
 
-        if (resultCode != Activity.RESULT_OK)  return;
+        if (resultCode != Activity.RESULT_OK) return;
 
-        if(requestCode == PICK_CAMERA_REQUEST){
+        if (requestCode == PICK_CAMERA_REQUEST) {
             importCameraImage();
         }
 
@@ -209,7 +253,7 @@ public class StreamView extends Fragment {
     //---- Photo import ----------------------------------------------------------------------------
 
     /**
-     * Start the galery intent
+     * Start the gallery intent
      */
     public void openGallery(View v) {
         Intent intent = new Intent();
@@ -227,7 +271,7 @@ public class StreamView extends Fragment {
         if (takePictureIntent.resolveActivity(getActivity().getPackageManager()) != null) {
             // Create the File where the photo should go
 
-            File photoFile = new File(directory.getAbsolutePath() + File.separator + imageNameGenerator());
+            File photoFile = new File(imagePathNameGenerator());
             takenPhotoPath = photoFile.getAbsolutePath();
 
             takePictureIntent.putExtra(MediaStore.EXTRA_OUTPUT,
@@ -254,13 +298,16 @@ public class StreamView extends Fragment {
         AlertDialog.Builder dialogBuilder = new AlertDialog.Builder(getActivity(), R.style.AlertDialogTheme);
         dialogBuilder.setCancelable(false);
         dialogBuilder.setTitle(R.string.main_insert_picturename_title);
-        dialogBuilder.setPositiveButton(R.string.main_addstream_ok, new DialogInterface.OnClickListener() {
+        dialogBuilder.setPositiveButton(R.string.main_insert_picturename_ok, new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
 
-                // Add the picture
-                String pictureName = pictureNameEditText.getText().toString();
-                // TODO  Generate a new pictures object
+                // Generate new Pictures Object
+                Pictures picture = new Pictures(pictureNameEditText.getText().toString(), takenPhotoPath, PhotoTimestamp);
+
+                // Add the picture to the stream/picturemanager/database
+                picturesManager.insertPicture(picture);
+
             }
         });
 
@@ -274,8 +321,8 @@ public class StreamView extends Fragment {
     private void importGalleryImage(Intent data) {
         if (null == data) return;
 
+
         Uri originalUri = data.getData();
-        String selectedImagePath = "";
 
         String[] projection = {MediaStore.Images.Media.DATA};
 
@@ -283,43 +330,51 @@ public class StreamView extends Fragment {
         imageCursor.moveToFirst();
 
         int columnIndex = imageCursor.getColumnIndex(projection[0]);
-        selectedImagePath = imageCursor.getString(columnIndex);
+        final String selectedImagePath = imageCursor.getString(columnIndex);
         imageCursor.close();
 
         Log.e("Photopath:", selectedImagePath);
 
-        // Copy Image
-        try {
-            copyImage(new File(selectedImagePath), new File(directory.getAbsolutePath() + File.separator + imageNameGenerator()));
-        } catch (IOException e) {
-        }
+        // Ask for pictures title
+        // Input field for the name of the picture
+        final EditText pictureNameEditText = new EditText(getActivity());
+        pictureNameEditText.setHint(R.string.main_insert_picturename);
+        pictureNameEditText.setSingleLine(true);
+
+        // Dialog that shows the input text.
+        AlertDialog.Builder dialogBuilder = new AlertDialog.Builder(getActivity(), R.style.AlertDialogTheme);
+        dialogBuilder.setCancelable(false);
+        dialogBuilder.setTitle(R.string.main_insert_picturename_title);
+        dialogBuilder.setPositiveButton(R.string.main_insert_picturename_ok, new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+
+                // Generate new Pictures Object
+                Pictures picture = new Pictures(pictureNameEditText.getText().toString());
+
+                picture.setGalleryFilepath(selectedImagePath);
+                picture.setFilepath(imagePathNameGenerator());
+                picture.setCreated(PhotoTimestamp);
+
+                // Add the picture to the stream/picturemanager/database
+                picturesManager.importInsertPicture(picture);
+
+            }
+        });
+
+        dialogBuilder.setView(pictureNameEditText);
+        dialogBuilder.show();
+
     }
+
     /**
      * Creates a unique filename from unix timestamp and a random number
      */
-    private String imageNameGenerator() {
+    private String imagePathNameGenerator() {
         // random int for the syncronisation feature
         Random r = new Random();
-        takenPhotoTimestamp = System.currentTimeMillis() / 1000;
-        return "image_" + takenPhotoTimestamp + "_" + r.nextInt(10000) + ".jpg";
+        PhotoTimestamp = System.currentTimeMillis() / 1000;
+        return directory.getAbsolutePath() + File.separator + "image_" + PhotoTimestamp + "_" + r.nextInt(10000) + ".jpg";
     }
 
-    /**
-     * copies an image
-     */
-    public void copyImage(File src, File dst) throws IOException {
-        InputStream in = new FileInputStream(src);
-        OutputStream out = new FileOutputStream(dst);
-
-        Log.e("PhotopathCopyed:", dst.getAbsolutePath());
-
-        // Transfer bytes from in to out
-        byte[] buf = new byte[1024];
-        int len;
-        while ((len = in.read(buf)) > 0) {
-            out.write(buf, 0, len);
-        }
-        in.close();
-        out.close();
-    }
 }
