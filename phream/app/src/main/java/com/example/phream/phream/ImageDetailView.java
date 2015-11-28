@@ -4,10 +4,12 @@ import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Environment;
+import android.provider.MediaStore;
 import android.support.v4.view.MenuItemCompat;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AlertDialog;
@@ -24,6 +26,8 @@ import android.view.View;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.Toast;
+
+import com.example.phream.phream.model.CapturePhotoUtils;
 
 import java.io.File;
 import java.io.FileInputStream;
@@ -161,7 +165,7 @@ public class ImageDetailView extends AppCompatActivity {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
 
-                        String pictureName = pictureNameEditText.getText().toString();
+                        final String pictureName = pictureNameEditText.getText().toString();
                         // Copy Image
                         File src = new File(imageUri);
                         File dst = new File(Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES) + File.separator + pictureName + ".jpg");
@@ -169,12 +173,16 @@ public class ImageDetailView extends AppCompatActivity {
                             AsyncTask<File, Integer, Boolean> copyprocess = new AsyncTask<File, Integer, Boolean>() {
                                 @Override
                                 protected Boolean doInBackground(File... params) {
-                                    try {
-                                        copyImage(params[0], params[1]);
+                                    //try {
+                                        BitmapFactory.Options bmOptions = new BitmapFactory.Options();
+                                        Bitmap bitmap = BitmapFactory.decodeFile(imageUri,bmOptions);
+                                       CapturePhotoUtils export = new CapturePhotoUtils();
+                                       export.insertImage(getContentResolver(), bitmap, pictureName , "");
+                                        //copyImage(params[0], params[1]);
                                         return true;
-                                    } catch (IOException e) {
-                                        return false;
-                                    }
+//                                    } catch (IOException e) {
+//                                        return false;
+//                                    }
                                 }
                                 @Override
                                 protected void onPostExecute(Boolean result) {
@@ -201,6 +209,8 @@ public class ImageDetailView extends AppCompatActivity {
         }
 
     }
+
+
 
     public void copyImage(File src, File dst) throws IOException {
         InputStream in = new FileInputStream(src);
@@ -288,4 +298,6 @@ public class ImageDetailView extends AppCompatActivity {
         mHideHandler.removeCallbacks(mHideRunnable);
         mHideHandler.postDelayed(mHideRunnable, delayMillis);
     }
+
+
 }

@@ -96,10 +96,10 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
         });
 
         BitmapWorkerTask task = new BitmapWorkerTask(holder.mImageView, 180, 180);
+
         task.execute(mDataset[position].getFilepath());
 
     }
-
 
     // Return the size of your dataset (invoked by the layout manager)
     @Override

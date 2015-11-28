@@ -23,7 +23,7 @@
 
     <!-- Image Detail activity :: Insert Picturename (Export) Dialog -->
     <string name="image_detail_insert_picturename">Name</string>
-    <string name="image_detail_insert_picturename_title">Bild zu Gallerie hinzufügen</string>
+    <string name="image_detail_insert_picturename_title">Bild zur Gallerie hinzufügen</string>
     <string name="image_detail_insert_picturename_ok">OK</string>
     <string name="image_detail_insert_picturename_cancel">Abbrechen</string>
 
