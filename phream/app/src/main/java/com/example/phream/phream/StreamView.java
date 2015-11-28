@@ -27,19 +27,12 @@ import com.example.phream.phream.model.Pictures;
 import com.example.phream.phream.model.PicturesManager;
 import com.example.phream.phream.model.RecyclerViewAdapter;
 import com.example.phream.phream.model.Stream;
+import com.example.phream.phream.model.database.DBManager;
 
 import java.io.File;
 import java.io.IOException;
 import java.util.Random;
 
-/**
- * A simple {@link Fragment} subclass.
- * Activities that contain this fragment must implement the
- * {@link StreamView.OnFragmentInteractionListener} interface
- * to handle interaction events.
- * Use the {@link StreamView#newInstance} factory method to
- * create an instance of this fragment.
- */
 public class StreamView extends Fragment implements IPicturesCallback {
 
     // Constants
@@ -71,38 +64,18 @@ public class StreamView extends Fragment implements IPicturesCallback {
         // Required empty public constructor
     }
 
-    /**
-     * Use this factory method to create a new instance of
-     * this fragment using the provided parameters.
-     *
-     * @param param1 Parameter 1.
-     * @param param2 Parameter 2.
-     * @return A new instance of fragment StreamView.
-     */
-    // TODO: Rename and change types and number of parameters
-    public static StreamView newInstance(String param1, String param2) {
-        StreamView fragment = new StreamView();
-        Bundle args = new Bundle();
-        //args.putString(ARG_PARAM1, param1);
-        //args.putString(ARG_PARAM2, param2);
-        fragment.setArguments(args);
-        return fragment;
-    }
-
-    @Override
-    public void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        if (getArguments() != null) {
-            //mParam1 = getArguments().getString(ARG_PARAM1);
-            //mParam2 = getArguments().getString(ARG_PARAM2);
-        }
-    }
-
     // One solution to pass a object to fragments -> Parcelable aren't such easy to implement
     // http://stackoverflow.com/questions/10836525/passing-objects-in-to-fragments
     public void initPicturesManager(Stream stream) {
         this.picturesManager = new PicturesManager(stream);
         picturesManager.setCallback(this);
+    }
+
+    @Override
+    public void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+
+        DBManager.init(getContext());
     }
 
     @Override

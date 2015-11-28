@@ -104,7 +104,8 @@ public class MainActivity extends AppCompatActivity implements StreamView.OnFrag
                     .replace(R.id.activity_main_main_view_container, noStreamView)
                     .commit();
         } else {
-            StreamView streamView = StreamView.newInstance("", "");
+            StreamView streamView = new StreamView();
+            streamView.initPicturesManager(stream);
             getSupportFragmentManager().beginTransaction()
                     .replace(R.id.activity_main_main_view_container, streamView)
                     .commit();

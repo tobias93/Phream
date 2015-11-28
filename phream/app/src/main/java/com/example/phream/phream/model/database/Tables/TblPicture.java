@@ -37,7 +37,6 @@ public class TblPicture {
             } while (cursor.moveToNext());
         }
 
-        cursor.close();
         return pictures;
     }
 
@@ -50,7 +49,6 @@ public class TblPicture {
 
         long id = db.insertOrThrow(TABLE_NAME, null, values);
         picture.setId(id);
-        db.close();
     }
 
     public static void deletePicture(SQLiteDatabase db, Pictures picture) {
@@ -63,7 +61,6 @@ public class TblPicture {
             db.delete(TABLE_NAME, COLUMN_ID + "= ?", new String[]{String.valueOf(picture.getId())});
             cursor.close();
         }
-        db.close();
     }
 
     public static void updatePicture(SQLiteDatabase db, Pictures picture) {
@@ -75,7 +72,6 @@ public class TblPicture {
         values.put(COLUMN_STREAM, picture.getStream());
 
         db.update(TABLE_NAME, values, COLUMN_ID + "= ?", new String[]{String.valueOf(picture.getId())});
-        db.close();
     }
 
 }
