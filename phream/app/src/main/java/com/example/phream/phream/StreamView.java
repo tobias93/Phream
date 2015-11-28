@@ -80,6 +80,7 @@ public class StreamView extends Fragment implements IPicturesCallback {
 
         setHasOptionsMenu(true);
         DBManager.init(getContext());
+        setRetainInstance(true);
     }
 
     @Override

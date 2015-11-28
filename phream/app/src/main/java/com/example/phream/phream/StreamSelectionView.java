@@ -40,6 +40,7 @@ public class StreamSelectionView extends Fragment implements IStreamsCallback{
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        setRetainInstance(true);
 
         // Init database
         DBManager.init(getContext());
