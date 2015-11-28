@@ -23,6 +23,7 @@ import android.view.MenuInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.EditText;
+import android.widget.Toast;
 
 import com.example.phream.phream.model.IPicturesCallback;
 import com.example.phream.phream.model.Pictures;
@@ -110,9 +111,6 @@ public class StreamView extends Fragment implements IPicturesCallback {
         mRecyclerView.setHasFixedSize(true);
         mLayoutManager = new LinearLayoutManager(getContext());
         mRecyclerView.setLayoutManager(mLayoutManager);
-        String[] strings = {"Hallo", "Hallo", "Hallo", "Hallo", "Hallo", "Hallo", "Hallo", "Hallo", "Hallo", "Hallo", "Hallo", "Hallo", "Hallo", "Hallo", "Hallo", "Hallo", "Hallo", "Hallo", "Hallo", "Hallo", "Hallo", "Hallo", "Hallo", "Hallo",};
-        mAdapter = new RecyclerViewAdapter(strings);
-        mRecyclerView.setAdapter(mAdapter);
 
         // Create App dir
         if (!Environment.getExternalStorageState().equals(Environment.MEDIA_MOUNTED)) {
@@ -134,6 +132,8 @@ public class StreamView extends Fragment implements IPicturesCallback {
                 Log.d("Phream", "Couldn't create .nomedia file!");
             }
         }
+
+        picturesManager.findAllPictures();
     }
 
     @Override
@@ -171,7 +171,8 @@ public class StreamView extends Fragment implements IPicturesCallback {
 
     @Override
     public void onPicturesListUpdated(Pictures[] pictures) {
-
+        mAdapter = new RecyclerViewAdapter(pictures);
+        mRecyclerView.setAdapter(mAdapter);
     }
 
     @Override
@@ -181,7 +182,7 @@ public class StreamView extends Fragment implements IPicturesCallback {
 
     @Override
     public void onPictureCreatedError(Pictures picture) {
-
+        Toast.makeText(this.getContext(), R.string.stream_view_callback_insert_error + picture.getName(), Toast.LENGTH_SHORT).show();
     }
 
     @Override
@@ -191,7 +192,7 @@ public class StreamView extends Fragment implements IPicturesCallback {
 
     @Override
     public void onPictureDeletedError(Pictures picture) {
-
+        Toast.makeText(this.getContext(), R.string.stream_view_callback_delete_error + picture.getName(), Toast.LENGTH_SHORT).show();
     }
 
     @Override
@@ -201,7 +202,7 @@ public class StreamView extends Fragment implements IPicturesCallback {
 
     @Override
     public void onPictureUpdatedError(Pictures picture) {
-
+        Toast.makeText(this.getContext(), R.string.stream_view_callback_update_error + picture.getName(), Toast.LENGTH_SHORT).show();
     }
 
     /**
