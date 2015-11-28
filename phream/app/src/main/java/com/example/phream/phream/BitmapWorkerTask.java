@@ -3,6 +3,7 @@ package com.example.phream.phream;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.os.AsyncTask;
+import android.view.View;
 import android.widget.ImageView;
 
 import java.lang.ref.WeakReference;

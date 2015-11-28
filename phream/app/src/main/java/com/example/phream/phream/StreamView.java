@@ -115,6 +115,27 @@ public class StreamView extends Fragment implements IPicturesCallback {
     public void onActivityCreated(Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
 
+        // Create App dir
+        if (!Environment.getExternalStorageState().equals(Environment.MEDIA_MOUNTED)) {
+            Log.d("Phream", "No SDCARD");
+            //Creating an internal dir
+            directory = getActivity().getDir("Phream", Context.MODE_PRIVATE);
+            if (!directory.isDirectory()) {
+                directory.mkdirs();
+            }
+        } else {
+            directory = getActivity().getExternalFilesDir(null);
+        }
+
+        File nomedia = new File(directory.getAbsolutePath() + File.separator + ".nomedia");
+        if (!nomedia.exists()) {
+            try {
+                nomedia.createNewFile();
+            } catch (IOException e) {
+                Log.d("Phream", "Couldn't create .nomedia file!");
+            }
+        }
+
         // Floating Action Button(s)
         mCameraFab = (FloatingActionButton) getActivity().findViewById(R.id.streamViewCameraFab);
         mGaleryFab = (FloatingActionButton) getActivity().findViewById(R.id.streamViewGaleryFab);
@@ -136,27 +157,6 @@ public class StreamView extends Fragment implements IPicturesCallback {
         mRecyclerView.setHasFixedSize(true);
         mLayoutManager = new LinearLayoutManager(getContext());
         mRecyclerView.setLayoutManager(mLayoutManager);
-
-        // Create App dir
-        if (!Environment.getExternalStorageState().equals(Environment.MEDIA_MOUNTED)) {
-            Log.d("Phream", "No SDCARD");
-            //Creating an internal dir
-            directory = getActivity().getDir("Phream", Context.MODE_PRIVATE);
-            if (!directory.isDirectory()) {
-                directory.mkdirs();
-            }
-        } else {
-            directory = getActivity().getExternalFilesDir(null);
-        }
-
-        File nomedia = new File(directory.getAbsolutePath() + File.separator + ".nomedia");
-        if (!nomedia.exists()) {
-            try {
-                nomedia.createNewFile();
-            } catch (IOException e) {
-                Log.d("Phream", "Couldn't create .nomedia file!");
-            }
-        }
 
         picturesManager.findAllPictures();
     }
@@ -233,15 +233,9 @@ public class StreamView extends Fragment implements IPicturesCallback {
 
     @Override
     public void onPicturesListUpdated(Picture[] pictures) {
-        if(mAdapter == null){
-            mAdapter = new RecyclerViewAdapter(pictures);
-            mRecyclerView.setAdapter(mAdapter);
-        }
-        else{
-            mAdapter = new RecyclerViewAdapter(pictures);
-            mRecyclerView.swapAdapter(mAdapter, false);
+        mAdapter = new RecyclerViewAdapter(pictures);
+        mRecyclerView.swapAdapter(mAdapter, false);
 
-        }
     }
 
     @Override
