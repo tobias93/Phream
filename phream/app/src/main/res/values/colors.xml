@@ -9,4 +9,6 @@
 
     <color name="image_detail_view_overlay">#66000000</color>
     <color name="image_detail_view_bg">#000000</color>
+
+    <color name="main_activity_app_drawer_shadow">#000000</color>
     </resources>

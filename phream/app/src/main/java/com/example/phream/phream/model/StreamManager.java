@@ -31,7 +31,7 @@ public class StreamManager {
      * As the method works asynchronously, the result will be returned using the
      * "onStreamListAviable" callback.
      */
-    public void findAllStreams() {
+    public void refreshListOfStreams() {
         AsyncTask<Void, Integer, Stream[]> finder = new AsyncTask<Void, Integer, Stream[]>() {
             @Override
             protected Stream[] doInBackground(Void... params) {
