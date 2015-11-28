@@ -48,6 +48,13 @@
     <string name="stream_view_callback_insert_error">Bild konnte nicht in die Gallerie geladen werden: </string>
     <string name="stream_view_callback_delete_error">Bild konnte nicht gelöscht werden: </string>
 
-    <!-- TODO: Remove or change this placeholder text -->
-    <string name="hello_blank_fragment">Hello blank fragment</string>
+    <!-- Stream view fragment :: Menu -->
+    <string name="stream_view_menu_delete">Stream löschen</string>
+    <string name="stream_view_menu_rename">Stream umbenennen</string>
+
+    <!-- No stream view fragment -->
+    <string name="no_stream_view_app_title">#Phream</string>
+    <string name="no_stream_view_begin">Fange an zu phreamen und</string>
+    <string name="no_stream_view_create_stream">Erstelle einen Stream</string>
+
 </resources>

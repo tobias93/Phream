@@ -78,12 +78,16 @@ public class StreamView extends Fragment implements IPicturesCallback {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
+        setHasOptionsMenu(true);
         DBManager.init(getContext());
+        setRetainInstance(true);
     }
 
     @Override
     public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
         super.onCreateOptionsMenu(menu, inflater);
+
+        inflater.inflate(R.menu.menu_stream_view, menu);
     }
 
     @Override
@@ -169,6 +173,38 @@ public class StreamView extends Fragment implements IPicturesCallback {
         mListener = null;
     }
 
+
+    /**
+     * This interface must be implemented by activities that contain this
+     * fragment to allow an interaction in this fragment to be communicated
+     * to the activity and potentially other fragments contained in that
+     * activity.
+     * <p/>
+     * See the Android Training lesson <a href=
+     * "http://developer.android.com/training/basics/fragments/communicating.html"
+     * >Communicating with Other Fragments</a> for more information.
+     */
+    public interface OnFragmentInteractionListener {
+
+    }
+
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+
+        if (resultCode != Activity.RESULT_OK) return;
+
+        if (requestCode == PICK_CAMERA_REQUEST) {
+            importCameraImage();
+        }
+
+        if (requestCode == GALLERY_PRE_KITKAT_INTENT_CALLED || requestCode == GALLERY_KITKAT_INTENT_CALLED) {
+            importGalleryImage(requestCode, data);
+        }
+    }
+
+    //---- Picture list management -----------------------------------------------------------------
+
     @Override
     public void onPicturesListUpdated(Pictures[] pictures) {
         mAdapter = new RecyclerViewAdapter(pictures);
@@ -203,35 +239,6 @@ public class StreamView extends Fragment implements IPicturesCallback {
     @Override
     public void onPictureUpdatedError(Pictures picture) {
         Toast.makeText(this.getContext(), R.string.stream_view_callback_update_error + picture.getName(), Toast.LENGTH_SHORT).show();
-    }
-
-    /**
-     * This interface must be implemented by activities that contain this
-     * fragment to allow an interaction in this fragment to be communicated
-     * to the activity and potentially other fragments contained in that
-     * activity.
-     * <p/>
-     * See the Android Training lesson <a href=
-     * "http://developer.android.com/training/basics/fragments/communicating.html"
-     * >Communicating with Other Fragments</a> for more information.
-     */
-    public interface OnFragmentInteractionListener {
-
-    }
-
-    @Override
-    public void onActivityResult(int requestCode, int resultCode, Intent data) {
-        super.onActivityResult(requestCode, resultCode, data);
-
-        if (resultCode != Activity.RESULT_OK) return;
-
-        if (requestCode == PICK_CAMERA_REQUEST) {
-            importCameraImage();
-        }
-
-        if (requestCode == GALLERY_PRE_KITKAT_INTENT_CALLED || requestCode == GALLERY_KITKAT_INTENT_CALLED) {
-            importGalleryImage(requestCode, data);
-        }
     }
 
     //---- Photo import ----------------------------------------------------------------------------
