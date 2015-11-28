@@ -140,42 +140,45 @@ public class ImageDetailView extends AppCompatActivity {
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
             case R.id.export_gallery:
-
-                // Use the Builder class for convenient dialog construction
-                AlertDialog.Builder builder = new AlertDialog.Builder(this, R.style.AlertDialogTheme);
-                builder.setMessage(R.string.image_detail_export_picture_title)
-                        .setPositiveButton(R.string.image_detail_export_picture_ok, new DialogInterface.OnClickListener() {
-                            public void onClick(DialogInterface dialog, int id) {
-                                AsyncTask<File, Integer, Boolean> copyprocess = new AsyncTask<File, Integer, Boolean>() {
-                                    @Override
-                                    protected Boolean doInBackground(File... params) {
-                                        BitmapFactory.Options bmOptions = new BitmapFactory.Options();
-                                        Bitmap bitmap = BitmapFactory.decodeFile(imageUri, bmOptions);
-                                        CapturePhotoUtils export = new CapturePhotoUtils();
-                                        export.insertImage(getContentResolver(), bitmap, "", "");
-                                        return true;
-                                    }
-
-                                    @Override
-                                    protected void onPostExecute(Boolean result) {
-                                    }
-                                };
-
-                                copyprocess.execute();
-                            }
-                        })
-                        .setNegativeButton(R.string.image_detail_export_picture_cancel, new DialogInterface.OnClickListener() {
-                            public void onClick(DialogInterface dialog, int id) {
-                                // User cancelled the dialog
-                            }
-                        });
-                builder.show();
+                exportToGallery();
 
                 return true;
             default:
                 return super.onOptionsItemSelected(item);
         }
 
+    }
+
+    private void exportToGallery() {
+        // Use the Builder class for convenient dialog construction
+        AlertDialog.Builder builder = new AlertDialog.Builder(this, R.style.AlertDialogTheme);
+        builder.setMessage(R.string.image_detail_export_picture_title)
+                .setPositiveButton(R.string.image_detail_export_picture_ok, new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int id) {
+                        AsyncTask<File, Integer, Boolean> copyprocess = new AsyncTask<File, Integer, Boolean>() {
+                            @Override
+                            protected Boolean doInBackground(File... params) {
+                                BitmapFactory.Options bmOptions = new BitmapFactory.Options();
+                                Bitmap bitmap = BitmapFactory.decodeFile(imageUri, bmOptions);
+                                CapturePhotoUtils export = new CapturePhotoUtils();
+                                export.insertImage(getContentResolver(), bitmap, "", "");
+                                return true;
+                            }
+
+                            @Override
+                            protected void onPostExecute(Boolean result) {
+                            }
+                        };
+
+                        copyprocess.execute();
+                    }
+                })
+                .setNegativeButton(R.string.image_detail_export_picture_cancel, new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int id) {
+                        // User cancelled the dialog
+                    }
+                });
+        builder.show();
     }
 
 

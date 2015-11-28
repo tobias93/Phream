@@ -7,15 +7,10 @@
         android:icon="@drawable/ic_share_white_24dp"
         app:showAsAction="ifRoom"
         app:actionProviderClass="android.support.v7.widget.ShareActionProvider"/>
-    <item android:id="@+id/options"
-        android:title="@string/menu_image_detail_options"
-        android:icon="@drawable/ic_more_vert_white_24dp"
+    <item android:id="@+id/export_gallery"
+        android:title="@string/menu_image_detail_export"
+        android:icon="@drawable/ic_save_white_36dp"
         app:showAsAction="ifRoom">
-        <!-- submenu -->
-        <menu>
-            <item android:id="@+id/export_gallery"
-                android:title="@string/menu_image_detail_export_gallery" />
-        </menu>
     </item>
 
 </menu>

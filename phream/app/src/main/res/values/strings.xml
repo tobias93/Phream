@@ -39,8 +39,8 @@
 
     <!-- Main activity :: menu image detail view -->
     <string name="menu_image_detail_share">Teilen</string>
-    <string name="menu_image_detail_options">Optionen</string>
-    <string name="menu_image_detail_export_gallery">In Gallerie exportieren</string>
+    <string name="menu_image_detail_export">Export</string>
+
 
     <!-- Main activity :: card layout-->
     <string name="card_layout_title">Titel:</string>
@@ -49,6 +49,7 @@
 
     <!-- Main activity :: card layout context menu-->
     <string name="card_context_menu_rename">Bild umbennen</string>
+    <string name="card_context_menu_export">Bild in Galerie exportieren</string>
     <string name="card_context_menu_delete">Bild löschen</string>
 
     <!-- Main activity :: card layout context menu Delete-->
