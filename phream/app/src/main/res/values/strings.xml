@@ -29,6 +29,7 @@
 
     <!-- Main activity :: Select image from gallery -->
     <string name="main_select_image_gallery">Wähle ein Bild aus</string>
+    <string name="main_select_image_error">Das Bild konnte nicht importiert werden.</string>
 
     <!-- Main activity :: image detail view -->
     <string name="title_activity_image_detail_view">Phream</string>

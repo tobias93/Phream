@@ -147,7 +147,7 @@ public class DBHandler extends SQLiteOpenHelper {
         return streamList;
     }
 
-    public Pictures getNextPicture(int streamId, int currentPictureId){
+    public Picture getNextPicture(int streamId, int currentPictureId){
 
         String query = "Select * FROM " + TABLE_PICTURE + " WHERE " + PICTURE_COLUMN_STREAM + " = " + streamId + " and " + PICTURE_COLUMN_ID + " > " + currentPictureId;
 
@@ -155,10 +155,10 @@ public class DBHandler extends SQLiteOpenHelper {
 
         Cursor cursor = db.rawQuery(query, null);
 
-        Pictures picture = null;
+        Picture picture = null;
 
         if (cursor.moveToFirst()) {
-           picture = new Pictures(cursor.getString(cursor.getColumnIndex(PICTURE_COLUMN_FILENAME)), null);
+           picture = new Picture(cursor.getString(cursor.getColumnIndex(PICTURE_COLUMN_FILENAME)), null);
             picture.setId(cursor.getInt(cursor.getColumnIndex(PICTURE_COLUMN_ID)));
             picture.setStored();
             picture.setName(cursor.getString(cursor.getColumnIndex(PICTURE_COLUMN_PICTURENAME)));

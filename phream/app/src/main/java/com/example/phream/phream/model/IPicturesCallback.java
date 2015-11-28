@@ -1,16 +1,14 @@
 package com.example.phream.phream.model;
 
-import java.util.ArrayList;
-
 /**
  * Created by tobias on 06.11.15.
  */
 public interface IPicturesCallback {
-    void onPicturesListUpdated(Pictures[] pictures);
-    void onPictureCreated(Pictures picture);
-    void onPictureCreatedError(Pictures picture);
+    void onPicturesListUpdated(Picture[] pictures);
+    void onPictureCreated(Picture picture);
+    void onPictureCreatedError(Picture picture);
     void onPictureDeleted();
-    void onPictureDeletedError(Pictures picture);
+    void onPictureDeletedError(Picture picture);
     void onPictureUpdated();
-    void onPictureUpdatedError(Pictures picture);
+    void onPictureUpdatedError(Picture picture);
 }

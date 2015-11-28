@@ -2,10 +2,10 @@ package com.example.phream.phream;
 
 import android.annotation.SuppressLint;
 import android.app.Activity;
+import android.content.ContentResolver;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
-import android.database.Cursor;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
@@ -26,14 +26,16 @@ import android.widget.EditText;
 import android.widget.Toast;
 
 import com.example.phream.phream.model.IPicturesCallback;
-import com.example.phream.phream.model.Pictures;
+import com.example.phream.phream.model.Picture;
 import com.example.phream.phream.model.PicturesManager;
 import com.example.phream.phream.model.RecyclerViewAdapter;
 import com.example.phream.phream.model.Stream;
 import com.example.phream.phream.model.database.DBManager;
 
 import java.io.File;
+import java.io.FileNotFoundException;
 import java.io.IOException;
+import java.io.InputStream;
 import java.util.Random;
 
 public class StreamView extends Fragment implements IPicturesCallback {
@@ -206,7 +208,7 @@ public class StreamView extends Fragment implements IPicturesCallback {
     //---- Picture list management -----------------------------------------------------------------
 
     @Override
-    public void onPicturesListUpdated(Pictures[] pictures) {
+    public void onPicturesListUpdated(Picture[] pictures) {
         if(mAdapter == null){
             mAdapter = new RecyclerViewAdapter(pictures);
             mRecyclerView.setAdapter(mAdapter);
@@ -219,12 +221,12 @@ public class StreamView extends Fragment implements IPicturesCallback {
     }
 
     @Override
-    public void onPictureCreated(Pictures picture) {
+    public void onPictureCreated(Picture picture) {
 
     }
 
     @Override
-    public void onPictureCreatedError(Pictures picture) {
+    public void onPictureCreatedError(Picture picture) {
         Toast.makeText(this.getContext(), R.string.stream_view_callback_insert_error + picture.getName(), Toast.LENGTH_SHORT).show();
     }
 
@@ -234,7 +236,7 @@ public class StreamView extends Fragment implements IPicturesCallback {
     }
 
     @Override
-    public void onPictureDeletedError(Pictures picture) {
+    public void onPictureDeletedError(Picture picture) {
         Toast.makeText(this.getContext(), R.string.stream_view_callback_delete_error + picture.getName(), Toast.LENGTH_SHORT).show();
     }
 
@@ -244,7 +246,7 @@ public class StreamView extends Fragment implements IPicturesCallback {
     }
 
     @Override
-    public void onPictureUpdatedError(Pictures picture) {
+    public void onPictureUpdatedError(Picture picture) {
         Toast.makeText(this.getContext(), R.string.stream_view_callback_update_error + picture.getName(), Toast.LENGTH_SHORT).show();
     }
 
@@ -259,7 +261,6 @@ public class StreamView extends Fragment implements IPicturesCallback {
             intent.setType("image/*");
             intent.setAction(Intent.ACTION_GET_CONTENT);
             startActivityForResult(Intent.createChooser(intent, getResources().getString(R.string.main_select_image_gallery)), GALLERY_PRE_KITKAT_INTENT_CALLED);
-
         } else {
             Intent intent = new Intent(Intent.ACTION_OPEN_DOCUMENT);
             intent.addCategory(Intent.CATEGORY_OPENABLE);
@@ -313,8 +314,8 @@ public class StreamView extends Fragment implements IPicturesCallback {
             @Override
             public void onClick(DialogInterface dialog, int which) {
 
-                // Generate new Pictures Object
-                Pictures picture = new Pictures(pictureNameEditText.getText().toString(), takenPhotoPath, PhotoTimestamp);
+                // Generate new Picture Object
+                Picture picture = new Picture(pictureNameEditText.getText().toString(), takenPhotoPath, PhotoTimestamp);
                 // Add the picture to the stream/picturemanager/database
                 picturesManager.insertPicture(picture);
 
@@ -332,50 +333,7 @@ public class StreamView extends Fragment implements IPicturesCallback {
     @SuppressLint("NewApi")
     private void importGalleryImage(int buildVersion, Intent data) {
         if (null == data) return;
-
-        Uri originalUri = data.getData();
-        Context context = this.getContext();
-        String selectedImagePath = "";
-
-        if (buildVersion == GALLERY_KITKAT_INTENT_CALLED) {
-            final int takeFlags = data.getFlags()
-                    & (Intent.FLAG_GRANT_READ_URI_PERMISSION
-                    | Intent.FLAG_GRANT_WRITE_URI_PERMISSION);
-            // Check for the freshest data.
-            context.getContentResolver().takePersistableUriPermission(originalUri, takeFlags);
-
-               /* Extract ID from Uri path using getLastPathSegment() and then split with ":"
-                then call getMediaUri to get Internal storage or External storage for media
-               */
-
-            String id = originalUri.getLastPathSegment().split(":")[1];
-            final String[] imageColumns = {MediaStore.Images.Media.DATA};
-
-            Uri uri = getMediaUri();
-            Cursor imageCursor = context.getContentResolver().query(uri, imageColumns,
-                    MediaStore.Images.Media._ID + "=" + id, null, null);
-
-            if (imageCursor.moveToFirst()) {
-                selectedImagePath = imageCursor.getString(imageCursor.getColumnIndex(MediaStore.Images.Media.DATA));
-            }
-            Log.e("Photopath KITKAT", selectedImagePath);
-            imageCursor.close();
-
-        } else {
-            String[] projection = {MediaStore.Images.Media.DATA};
-
-            Cursor imageCursor = context.getContentResolver().query(originalUri, projection, null, null, null);
-            imageCursor.moveToFirst();
-
-            int columnIndex = imageCursor.getColumnIndex(projection[0]);
-            selectedImagePath = imageCursor.getString(columnIndex);
-
-            imageCursor.close();
-
-            Log.e("Photopath pre KITKAT", selectedImagePath);
-        }
-
-        final String finalSelectedImagePath = selectedImagePath;
+        final Uri pictureUri = data.getData();
 
         // Ask for pictures title
         // Input field for the name of the picture
@@ -391,22 +349,21 @@ public class StreamView extends Fragment implements IPicturesCallback {
             @Override
             public void onClick(DialogInterface dialog, int which) {
 
-                // Generate new Pictures Object
-                Pictures picture = new Pictures(pictureNameEditText.getText().toString());
+                // Generate new Picture Object
+                Picture picture = new Picture(pictureNameEditText.getText().toString());
 
-                picture.setGalleryFilepath(finalSelectedImagePath);
+                picture.setImportUri(pictureUri);
                 picture.setFilepath(imagePathNameGenerator());
                 picture.setCreated(PhotoTimestamp);
 
                 // Add the picture to the stream/picturemanager/database
-                picturesManager.importInsertPicture(picture);
-
+                ContentResolver cr = getContext().getApplicationContext().getContentResolver();
+                picturesManager.importInsertPicture(picture, cr);
             }
         });
 
         dialogBuilder.setView(pictureNameEditText);
         dialogBuilder.show();
-
     }
 
     // Get the MediaUri of Internal/External Storage for Media

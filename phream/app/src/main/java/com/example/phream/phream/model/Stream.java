@@ -17,17 +17,17 @@ public class Stream {
         id = -2;
     }
 /*
-    public void addPicture(Pictures picture){
+    public void addPicture(Picture picture){
         DBHandler dbHandler = new DBHandler(null, null, null, 1); // Todo Set Context
         dbHandler.insertPicture(picture.getName(), picture.getCreated(), picture.getFilepath(), id);
         picture.setStored();
     }*/
 
-    public Pictures getPicture(){
+    public Picture getPicture(){
      return null;
     }
 /*
-    public void delete(Pictures picture){
+    public void delete(Picture picture){
         if (picture.getStored() == true){
             DBHandler dbHandler = new DBHandler(null, null, null, 1); // Todo Set Context
             dbHandler.deletePicture(picture.getId());
@@ -36,7 +36,7 @@ public class Stream {
 
     }*/
 /*
-    public void renamePicture(Pictures picture){
+    public void renamePicture(Picture picture){
 
     }*/
 
