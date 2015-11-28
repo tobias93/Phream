@@ -1,5 +1,6 @@
 package com.example.phream.phream.model.database.Tables;
 
+import android.content.ContentValues;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 
@@ -40,6 +41,17 @@ public class TblPicture {
 
         cursor.close();
         return pictures;
+    }
+
+    public static void insertPicture(SQLiteDatabase db, Pictures picture) {
+        ContentValues values = new ContentValues();
+        values.put(COLUMN_PICTURENAME, picture.getName());
+        values.put(COLUMN_CREATED, picture.getCreated());
+        values.put(COLUMN_FILENAME, picture.getFilename());
+        values.put(COLUMN_STREAM, picture.getStream());
+
+        db.insert(TABLE_NAME, null, values);
+        db.close();
     }
 
 
