@@ -124,7 +124,9 @@ public class StreamSelectionView extends Fragment implements IStreamsCallback{
         selectStream(stream, true);
     }
 
-    public void onStreamUpdated(Stream stream){}
+    public void onStreamUpdated(Stream stream){
+        streamManager.refreshListOfStreams();
+    }
     public void onStreamDeleted(Stream stream){}
     public void onStreamListAvailable(Stream[] streams){
 
@@ -136,6 +138,7 @@ public class StreamSelectionView extends Fragment implements IStreamsCallback{
         }
 
         // Rebuild the menu
+        boolean foundActiveStream = false;
         Menu navigationMenu = mNavigation.getMenu();
         Menu streamsMenu = navigationMenu.findItem(R.id.main_drawer_streams).getSubMenu();
         streamsMenu.clear();
@@ -145,14 +148,20 @@ public class StreamSelectionView extends Fragment implements IStreamsCallback{
             item.setCheckable(true);
             if (stream.getId() == activeStream.getId()) {
                 item.setChecked(true);
+                foundActiveStream = true;
             }
             item.setOnMenuItemClickListener(new MenuItem.OnMenuItemClickListener() {
                 @Override
                 public boolean onMenuItemClick(MenuItem item) {
-                    selectStream(stream, false);
+                    selectStream(stream, true);
                     return true;
                 }
             });
+        }
+
+        // select the first stream, if the selected stream was deleted.
+        if (activeStream != null && !foundActiveStream && streams.length > 0) {
+            selectStream(streams[0], true);
         }
 
         // Temporary workaround for a bug in the android support library
