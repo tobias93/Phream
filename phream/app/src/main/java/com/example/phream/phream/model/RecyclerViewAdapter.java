@@ -18,10 +18,6 @@ import com.example.phream.phream.R;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
-
-/**
- * Created by Philipp Pütz on 26.11.2015.
- */
 public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapter.ViewHolder> {
     private Picture[] mDataset;
 

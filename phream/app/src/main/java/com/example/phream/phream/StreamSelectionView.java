@@ -128,7 +128,7 @@ public class StreamSelectionView extends Fragment implements IStreamsCallback{
     public void onStreamUpdated(Stream stream){
         streamManager.refreshListOfStreams();
     }
-    public void onStreamDeleted(Stream stream){}
+    public void onStreamDeleted(Stream stream){ streamManager.refreshListOfStreams(); }
     public void onStreamListAvailable(Stream[] streams){
 
         // handle transitions between streams available and no streams available.
@@ -206,6 +206,28 @@ public class StreamSelectionView extends Fragment implements IStreamsCallback{
                 String streamName = streamNameEditText.getText().toString();
                 Stream stream = new Stream(streamName);
                 streamManager.insertStream(stream);
+            }
+        });
+        dialogBuilder.setView(streamNameEditText);
+        dialogBuilder.show();
+    }
+
+    public void renameStream(final Stream stream) {
+        // Input field for the name of the stream
+        final EditText streamNameEditText = new EditText(getActivity());
+        streamNameEditText.setHint(R.string.main_renamestream_name);
+        streamNameEditText.setSingleLine(true);
+
+        // Dialog that shows the input text.
+        AlertDialog.Builder dialogBuilder = new AlertDialog.Builder(getActivity(), R.style.AlertDialogTheme);
+        dialogBuilder.setTitle(R.string.main_renamestream_title);
+        dialogBuilder.setPositiveButton(R.string.main_renamestream_ok, new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                // Add the stream
+                String streamName = streamNameEditText.getText().toString();
+                stream.setName(streamName);
+                streamManager.updateStream(stream);
             }
         });
         dialogBuilder.setView(streamNameEditText);

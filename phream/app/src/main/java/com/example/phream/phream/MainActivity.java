@@ -112,4 +112,17 @@ public class MainActivity extends AppCompatActivity implements StreamView.OnFrag
         }
         mDrawerLayout.closeDrawer(mNavigation);
     }
+
+    //---- stream transactions ---------------------------------------------------------------------
+
+    @Override
+    public void renameStream(Stream stream) {
+        StreamSelectionView s = (StreamSelectionView) getSupportFragmentManager().findFragmentById(R.id.activity_main_navigation);
+        s.renameStream(stream);
+    }
+
+    @Override
+    public void deleteStream(Stream stream) {
+
+    }
 }
