@@ -109,5 +109,6 @@ public class MainActivity extends AppCompatActivity implements StreamView.OnFrag
                     .replace(R.id.activity_main_main_view_container, streamView)
                     .commit();
         }
+        mDrawerLayout.closeDrawer(mNavigation);
     }
 }

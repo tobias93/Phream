@@ -120,7 +120,10 @@ public class StreamSelectionView extends Fragment implements IStreamsCallback{
 
     //---- Stream management -----------------------------------------------------------------------
 
-    public void onStreamCreated(Stream stream){}
+    public void onStreamCreated(Stream stream){
+        selectStream(stream, true);
+    }
+
     public void onStreamUpdated(Stream stream){}
     public void onStreamDeleted(Stream stream){}
     public void onStreamListAvailable(Stream[] streams){
@@ -140,7 +143,7 @@ public class StreamSelectionView extends Fragment implements IStreamsCallback{
             MenuItem item = streamsMenu.add(stream.getName());
             item.setIcon(R.drawable.ic_folder_open_black_24dp);
             item.setCheckable(true);
-            if (stream == activeStream) {
+            if (stream.getId() == activeStream.getId()) {
                 item.setChecked(true);
             }
             item.setOnMenuItemClickListener(new MenuItem.OnMenuItemClickListener() {
