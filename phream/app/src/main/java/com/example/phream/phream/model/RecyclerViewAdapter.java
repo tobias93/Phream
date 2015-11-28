@@ -2,6 +2,7 @@ package com.example.phream.phream.model;
 
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.Bitmap;
 import android.support.v7.widget.CardView;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
@@ -93,8 +94,13 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
             }
         });
 
-        BitmapWorkerTask task = new BitmapWorkerTask(holder.mImageView, 180, 180);
-        task.execute(mDataset[position].getFilepath());
+        // clear the image view to prevent recycled images from showing up.
+        holder.mImageView.setImageBitmap(Bitmap.createBitmap(1, 1, Bitmap.Config.ALPHA_8));
+        holder.mImageView.invalidate();
+
+        // load the image into the image view.
+        BitmapWorkerTask task = new BitmapWorkerTask(holder.mImageView, mDataset[position].getFilepath(), 180, 180);
+        task.execute();
 
     }
 
