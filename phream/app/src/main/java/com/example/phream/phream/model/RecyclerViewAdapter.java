@@ -1,10 +1,17 @@
 package com.example.phream.phream.model;
 
+import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.drawable.Drawable;
 import android.support.v7.widget.CardView;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
+import android.view.ContextMenu;
+import android.view.KeyEvent;
 import android.view.LayoutInflater;
+import android.view.MenuItem;
+import android.view.SubMenu;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
@@ -22,9 +29,8 @@ import java.util.Date;
 /**
  * Created by Philipp Pütz on 26.11.2015.
  */
-public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapter.ViewHolder> {
+public class RecyclerViewAdapter extends ContextMenuRecyclerView.Adapter<RecyclerViewAdapter.ViewHolder> {
     private Picture[] mDataset;
-    private PicturesManager mPicturesManager;
 
     // Provide a reference to the views for each data item
     // Complex data items may need more than one view per item, and
@@ -46,15 +52,16 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
             mCreateDate = (TextView) v.findViewById(R.id.labelCreateDate);
             mCreateTime = (TextView) v.findViewById(R.id.labelCreateTime);
             mImageView = (ImageView) v.findViewById(R.id.thumbnail);
+
         }
 
     }
 
 
     // constructor
-    public RecyclerViewAdapter(Picture[] myDataset, PicturesManager picturesManager) {
+    public RecyclerViewAdapter(Picture[] myDataset) {
         mDataset = myDataset;
-        mPicturesManager = picturesManager;
+
     }
 
     // Create new views (invoked by the layout manager)
@@ -94,11 +101,14 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
             }
         });
 
+        holder.mCardView.setLongClickable(true);
+
         BitmapWorkerTask task = new BitmapWorkerTask(holder.mImageView, 180, 180);
 
         task.execute(mDataset[position].getFilepath());
 
     }
+
 
     // Return the size of your dataset (invoked by the layout manager)
     @Override

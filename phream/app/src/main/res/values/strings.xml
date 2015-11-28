@@ -36,12 +36,26 @@
     <!-- Main activity :: menu image detail view -->
     <string name="menu_image_detail_share">Teilen</string>
     <string name="menu_image_detail_options">Optionen</string>
-    <string name="menu_image_detail_export_gallery">Gallerie export</string>
+    <string name="menu_image_detail_export_gallery">In Gallerie exportieren</string>
 
     <!-- Main activity :: card layout-->
     <string name="card_layout_title">Titel:</string>
     <string name="card_layout_date">Datum:</string>
     <string name="card_layout_time">Uhrzeit:</string>
+
+    <!-- Main activity :: card layout context menu-->
+    <string name="card_context_menu_rename">Bild umbennen</string>
+    <string name="card_context_menu_delete">Bild löschen</string>
+
+    <!-- Main activity :: card layout context menu Delete-->
+    <string name="card_context_menu_delete_title">Wollen Sie das Bild wirklich löschen?</string>
+    <string name="card_context_menu_delete_ok">OK</string>
+    <string name="card_context_menu_delete_cancel">Abbrechen</string>
+
+    <!-- Main activity :: card layout context menu Rename-->
+    <string name="card_context_menu_rename_title">Neuer Bildtitle</string>
+    <string name="card_context_menu_rename_ok">OK</string>
+
 
     <!-- Main activity :: Stream View Callbacks -->
     <string name="stream_view_callback_update_error">Bild konnte nicht umbenannt werden: </string>

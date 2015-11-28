@@ -17,14 +17,17 @@ import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
+import android.view.ContextMenu;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.EditText;
 import android.widget.Toast;
 
+import com.example.phream.phream.model.ContextMenuRecyclerView;
 import com.example.phream.phream.model.IPicturesCallback;
 import com.example.phream.phream.model.Picture;
 import com.example.phream.phream.model.PicturesManager;
@@ -134,12 +137,75 @@ public class StreamView extends Fragment implements IPicturesCallback {
         });
 
         // Recyler view
-        mRecyclerView = (RecyclerView) getView().findViewById(R.id.recycler_view);
+        mRecyclerView = (ContextMenuRecyclerView) getView().findViewById(R.id.recycler_view);
         mRecyclerView.setHasFixedSize(true);
         mLayoutManager = new LinearLayoutManager(getContext());
         mRecyclerView.setLayoutManager(mLayoutManager);
+        registerForContextMenu(mRecyclerView);
 
         picturesManager.findAllPictures();
+    }
+
+    @Override
+    public void onCreateContextMenu(ContextMenu menu, View v, ContextMenu.ContextMenuInfo menuInfo) {
+        super.onCreateContextMenu(menu, v, menuInfo);
+
+        // Inflate Menu from xml resource
+        MenuInflater menuInflater = getActivity().getMenuInflater();
+        menuInflater.inflate(R.menu.card_context_menu, menu);
+    }
+
+    @Override
+    public boolean onContextItemSelected(MenuItem item) {
+
+        ContextMenuRecyclerView.RecyclerContextMenuInfo info = (ContextMenuRecyclerView.RecyclerContextMenuInfo) item.getMenuInfo();
+
+       final Picture picture = picturesManager.getPicture(info.position);
+
+        if (item.getTitle() == getString(R.string.card_context_menu_rename)) {
+            // Ask for pictures title
+            // Input field for the name of the picture
+            final EditText pictureNameEditText = new EditText(getActivity());
+            pictureNameEditText.setHint(R.string.card_context_menu_rename_title);
+            pictureNameEditText.setText(picture.getName());
+            pictureNameEditText.setSingleLine(true);
+
+            pictureNameEditText.setSelection(pictureNameEditText.getText().length());
+
+            // Dialog that shows the input text.
+            AlertDialog.Builder dialogBuilder = new AlertDialog.Builder(getActivity(), R.style.AlertDialogTheme);
+            dialogBuilder.setCancelable(false);
+            dialogBuilder.setTitle(R.string.card_context_menu_rename_title);
+            dialogBuilder.setPositiveButton(R.string.card_context_menu_rename_ok, new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface dialog, int which) {
+
+                    picture.setName(pictureNameEditText.getText().toString());
+                    picturesManager.updatePicture(picture);
+                }
+            });
+
+            dialogBuilder.setView(pictureNameEditText);
+            dialogBuilder.show();
+
+        } else if (item.getTitle() == getString(R.string.card_context_menu_delete)) {
+            // Use the Builder class for convenient dialog construction
+            AlertDialog.Builder builder = new AlertDialog.Builder(getActivity(), R.style.AlertDialogTheme);
+            builder.setMessage(R.string.card_context_menu_delete_title)
+                    .setPositiveButton(R.string.card_context_menu_delete_ok, new DialogInterface.OnClickListener() {
+                        public void onClick(DialogInterface dialog, int id) {
+                            picturesManager.deletePicture(picture);
+                        }
+                    })
+                    .setNegativeButton(R.string.card_context_menu_delete_cancel, new DialogInterface.OnClickListener() {
+                        public void onClick(DialogInterface dialog, int id) {
+                            // User cancelled the dialog
+                        }
+                    });
+            builder.show();
+        }
+
+        return false;
     }
 
     @Override
@@ -209,7 +275,7 @@ public class StreamView extends Fragment implements IPicturesCallback {
 
     @Override
     public void onPicturesListUpdated(Picture[] pictures) {
-        mAdapter = new RecyclerViewAdapter(pictures, picturesManager);
+        mAdapter = new RecyclerViewAdapter(pictures);
         mRecyclerView.swapAdapter(mAdapter, false);
 
     }
@@ -323,6 +389,7 @@ public class StreamView extends Fragment implements IPicturesCallback {
         dialogBuilder.show();
 
     }
+
 
     private void importGalleryImage(int buildVersion, Intent data) {
         if (null == data) return;
