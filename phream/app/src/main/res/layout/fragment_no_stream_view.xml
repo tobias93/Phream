@@ -19,24 +19,23 @@
         android:layout_height="wrap_content"
         android:orientation="vertical"
         android:layout_gravity="center">
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Welcome to"/>
+
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:textSize="50sp"
-            android:text="Phream"/>
+            android:text="@string/no_stream_view_app_title"/>
 
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="18dp"
-            android:text="To get started, go ahead and" />
+            android:text="@string/no_stream_view_begin" />
+
         <Button
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Create your first Stream"/>
+            android:text="@string/no_stream_view_create_stream"
+            />
     </LinearLayout>
 </FrameLayout>
