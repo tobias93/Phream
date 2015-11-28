@@ -1,15 +1,12 @@
 package com.example.phream.phream;
 
 import android.annotation.SuppressLint;
-import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.net.Uri;
 import android.os.AsyncTask;
-import android.os.Environment;
-import android.provider.MediaStore;
 import android.support.v4.view.MenuItemCompat;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AlertDialog;
@@ -23,18 +20,11 @@ import android.view.MenuItem;
 import android.view.MotionEvent;
 import android.view.View;
 
-import android.widget.EditText;
 import android.widget.ImageView;
-import android.widget.Toast;
 
 import com.example.phream.phream.model.CapturePhotoUtils;
 
 import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileOutputStream;
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.OutputStream;
 
 /**
  * An example full-screen activity that shows and hides the system UI (i.e.
@@ -151,58 +141,37 @@ public class ImageDetailView extends AppCompatActivity {
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
             case R.id.export_gallery:
-                // Ask for pictures title
-                // Input field for the name of the picture
-                final EditText pictureNameEditText = new EditText(this);
-                pictureNameEditText.setHint(R.string.image_detail_insert_picturename);
-                pictureNameEditText.setSingleLine(true);
 
-                // Dialog that shows the input text.
-                AlertDialog.Builder dialogBuilder = new AlertDialog.Builder(this, R.style.AlertDialogTheme);
-                dialogBuilder.setCancelable(false);
-                dialogBuilder.setTitle(R.string.image_detail_insert_picturename_title);
-                dialogBuilder.setPositiveButton(R.string.image_detail_insert_picturename_ok, new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialog, int which) {
-
-                        final String pictureName = pictureNameEditText.getText().toString();
-                        // Copy Image
-                        File src = new File(imageUri);
-                        File dst = new File(Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES) + File.separator + pictureName + ".jpg");
-                        if (!dst.exists()) {
-                            AsyncTask<File, Integer, Boolean> copyprocess = new AsyncTask<File, Integer, Boolean>() {
-                                @Override
-                                protected Boolean doInBackground(File... params) {
-                                    //try {
+                // Use the Builder class for convenient dialog construction
+                AlertDialog.Builder builder = new AlertDialog.Builder(this, R.style.AlertDialogTheme);
+                builder.setMessage(R.string.image_detail_export_picture_title)
+                        .setPositiveButton(R.string.image_detail_export_picture_ok, new DialogInterface.OnClickListener() {
+                            public void onClick(DialogInterface dialog, int id) {
+                                AsyncTask<File, Integer, Boolean> copyprocess = new AsyncTask<File, Integer, Boolean>() {
+                                    @Override
+                                    protected Boolean doInBackground(File... params) {
                                         BitmapFactory.Options bmOptions = new BitmapFactory.Options();
-                                        Bitmap bitmap = BitmapFactory.decodeFile(imageUri,bmOptions);
-                                       CapturePhotoUtils export = new CapturePhotoUtils();
-                                       export.insertImage(getContentResolver(), bitmap, pictureName , "");
-                                        //copyImage(params[0], params[1]);
+                                        Bitmap bitmap = BitmapFactory.decodeFile(imageUri, bmOptions);
+                                        CapturePhotoUtils export = new CapturePhotoUtils();
+                                        export.insertImage(getContentResolver(), bitmap, "", "");
                                         return true;
-//                                    } catch (IOException e) {
-//                                        return false;
-//                                    }
-                                }
-                                @Override
-                                protected void onPostExecute(Boolean result) {
-                                }
-                            };
+                                    }
 
-                            copyprocess.execute(src, dst);
+                                    @Override
+                                    protected void onPostExecute(Boolean result) {
+                                    }
+                                };
 
-                        }
+                                copyprocess.execute();
+                            }
+                        })
+                        .setNegativeButton(R.string.image_detail_export_picture_cancel, new DialogInterface.OnClickListener() {
+                            public void onClick(DialogInterface dialog, int id) {
+                                // User cancelled the dialog
+                            }
+                        });
+                builder.show();
 
-                    }
-                });
-                dialogBuilder.setNegativeButton(R.string.image_detail_insert_picturename_cancel, new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialog, int which) {
-                        // Do nothing
-                    }
-                });
-                dialogBuilder.setView(pictureNameEditText);
-                dialogBuilder.show();
                 return true;
             default:
                 return super.onOptionsItemSelected(item);
@@ -210,21 +179,6 @@ public class ImageDetailView extends AppCompatActivity {
 
     }
 
-
-
-    public void copyImage(File src, File dst) throws IOException {
-        InputStream in = new FileInputStream(src);
-        OutputStream out = new FileOutputStream(dst);
-
-        // Transfer bytes from in to out
-        byte[] buf = new byte[1024];
-        int len;
-        while ((len = in.read(buf)) > 0) {
-            out.write(buf, 0, len);
-        }
-        in.close();
-        out.close();
-    }
 
     private void hide() {
         // Hide UI first

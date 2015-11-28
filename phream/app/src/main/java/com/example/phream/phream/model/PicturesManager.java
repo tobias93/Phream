@@ -1,5 +1,6 @@
 package com.example.phream.phream.model;
 
+import android.content.ContentResolver;
 import android.database.sqlite.SQLiteDatabase;
 import android.os.AsyncTask;
 import android.util.Log;
@@ -8,7 +9,6 @@ import com.example.phream.phream.model.database.DBManager;
 import com.example.phream.phream.model.database.Tables.TblPicture;
 
 import java.io.File;
-import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
@@ -19,12 +19,11 @@ public class PicturesManager {
 
     private IPicturesCallback callback = null;
     private Stream stream = null;
-    private Pictures[] pictures = null;
+    private Picture[] pictures = null;
 
     public PicturesManager(Stream stream) {
         this.stream = stream;
     }
-
 
     /**
      * Sets the object on which the callback methods will be called.
@@ -52,15 +51,15 @@ public class PicturesManager {
      * "onPicturesListUpdated" callback.
      */
     public void findAllPictures() {
-        AsyncTask<Stream, Integer, Pictures[]> finder = new AsyncTask<Stream, Integer, Pictures[]>() {
+        AsyncTask<Stream, Integer, Picture[]> finder = new AsyncTask<Stream, Integer, Picture[]>() {
             @Override
-            protected Pictures[] doInBackground(Stream... params) {
+            protected Picture[] doInBackground(Stream... params) {
                 SQLiteDatabase db = DBManager.getDB();
                 return TblPicture.getAllPictures(db, params[0].getId());
             }
 
             @Override
-            protected void onPostExecute(Pictures[] pics) {
+            protected void onPostExecute(Picture[] pics) {
                 PicturesManager.this.pictures = pics;
                 callback.onPicturesListUpdated(pics);
             }
@@ -75,13 +74,13 @@ public class PicturesManager {
      * As the method works asynchronously, the result will be returned using the
      * "onPicturesCreated" callback.
      */
-    public void insertPicture(final Pictures picture) {
+    public void insertPicture(final Picture picture) {
 
         picture.setStreamId(this.stream.getId());
 
-        AsyncTask<Pictures, Integer, Boolean> inserter = new AsyncTask<Pictures, Integer, Boolean>() {
+        AsyncTask<Picture, Integer, Boolean> inserter = new AsyncTask<Picture, Integer, Boolean>() {
             @Override
-            protected Boolean doInBackground(Pictures... params) {
+            protected Boolean doInBackground(Picture... params) {
                 SQLiteDatabase db = DBManager.getDB();
                 try {
                     TblPicture.insertPicture(db, params[0]);
@@ -111,22 +110,24 @@ public class PicturesManager {
      * As the method works asynchronously, the result will be returned using the
      * "onPicturesCreated" callback.
      */
-    public void importInsertPicture(final Pictures picture) {
+    public void importInsertPicture(final Picture picture, final ContentResolver cr) {
 
         picture.setStreamId(this.stream.getId());
 
-        AsyncTask<Pictures, Integer, Boolean> importInserter = new AsyncTask<Pictures, Integer, Boolean>() {
+        AsyncTask<Picture, Integer, Boolean> importInserter = new AsyncTask<Picture, Integer, Boolean>() {
             @Override
-            protected Boolean doInBackground(Pictures... params) {
+            protected Boolean doInBackground(Picture... params) {
 
                 try {
-                    if(params[0].getGalleryFilepath() != null && params[0].getFilepath() != null){
-                        copyImage(new File(params[0].getGalleryFilepath()), new File(params[0].getFilepath()));
+                    if(params[0].getImportUri() != null && params[0].getFilepath() != null){
+                        InputStream imageStream = cr.openInputStream(params[0].getImportUri());
+                        copyImage(imageStream, new File(params[0].getFilepath()));
+                        params[0].setImportUri(null);
 
                         SQLiteDatabase db = DBManager.getDB();
                         try {
                             TblPicture.insertPicture(db, params[0]);
-                            params[0].setGalleryFilepath(null);
+
                             return true;
                         } catch (Exception e) {
                             return false;
@@ -161,10 +162,10 @@ public class PicturesManager {
      * As the method works asynchronously, the result will be returned using the
      * "onPicturesDeleted" callback.
      */
-    public void deletePicture(final Pictures picture) {
-        AsyncTask<Pictures, Integer, Boolean> deleter = new AsyncTask<Pictures, Integer, Boolean>() {
+    public void deletePicture(final Picture picture) {
+        AsyncTask<Picture, Integer, Boolean> deleter = new AsyncTask<Picture, Integer, Boolean>() {
             @Override
-            protected Boolean doInBackground(Pictures... params) {
+            protected Boolean doInBackground(Picture... params) {
                 SQLiteDatabase db = DBManager.getDB();
                 try {
                     TblPicture.deletePicture(db, params[0]);
@@ -194,10 +195,10 @@ public class PicturesManager {
      * As the method works asynchronously, the result will be returned using the
      * "onPictureUpdated" callback.
      */
-    public void updatePicture(final Pictures picture, String newPictureName) {
-        AsyncTask<Pictures, Integer, Boolean> updater = new AsyncTask<Pictures, Integer, Boolean>() {
+    public void updatePicture(final Picture picture, String newPictureName) {
+        AsyncTask<Picture, Integer, Boolean> updater = new AsyncTask<Picture, Integer, Boolean>() {
             @Override
-            protected Boolean doInBackground(Pictures... params) {
+            protected Boolean doInBackground(Picture... params) {
                 SQLiteDatabase db = DBManager.getDB();
                 try {
                     TblPicture.updatePicture(db, params[0]);
@@ -225,8 +226,7 @@ public class PicturesManager {
     /**
      * Copies an image
      */
-    public void copyImage(File src, File dst) throws IOException {
-        InputStream in = new FileInputStream(src);
+    public void copyImage(InputStream in, File dst) throws IOException {
         OutputStream out = new FileOutputStream(dst);
 
         Log.e("PhotopathCopyed:", dst.getAbsolutePath());

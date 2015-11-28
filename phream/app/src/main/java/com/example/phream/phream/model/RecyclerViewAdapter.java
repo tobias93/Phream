@@ -2,7 +2,6 @@ package com.example.phream.phream.model;
 
 import android.content.Context;
 import android.content.Intent;
-import android.net.Uri;
 import android.support.v7.widget.CardView;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
@@ -10,7 +9,6 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.example.phream.phream.BitmapWorkerTask;
 import com.example.phream.phream.ImageDetailView;
@@ -24,7 +22,7 @@ import java.util.Date;
  * Created by Philipp Pütz on 26.11.2015.
  */
 public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapter.ViewHolder> {
-    private Pictures[] mDataset;
+    private Picture[] mDataset;
 
     // Provide a reference to the views for each data item
     // Complex data items may need more than one view per item, and
@@ -51,7 +49,7 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
 
 
     // Provide a suitable constructor (depends on the kind of dataset)
-    public RecyclerViewAdapter(Pictures[] myDataset) {
+    public RecyclerViewAdapter(Picture[] myDataset) {
         mDataset = myDataset;
     }
 

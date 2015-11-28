@@ -1,19 +1,18 @@
 package com.example.phream.phream.model;
 
-import android.graphics.Bitmap;
+import android.net.Uri;
 
-/**
- * Created by Philipp Pütz on 23.10.2015.
- */
-public class Pictures {
+import java.io.InputStream;
+
+public class Picture {
     private long id;
     private String name;
-    private String galleryFilepath;
+    private Uri importUri = null;
     private String filepath;
     private long created;
     private long streamId;
 
-    public Pictures(long pictureId, String pictureName, String filepath, long created, long streamid) {
+    public Picture(long pictureId, String pictureName, String filepath, long created, long streamid) {
         this.id = pictureId;
         this.name = pictureName;
         this.filepath = filepath;
@@ -21,13 +20,13 @@ public class Pictures {
         this.streamId = streamid;
     }
 
-    public Pictures(String pictureName, String filepath, long created) {
+    public Picture(String pictureName, String filepath, long created) {
         this.name = pictureName;
         this.filepath = filepath;
         this.created = created;
     }
 
-    public Pictures(String pictureName) {
+    public Picture(String pictureName) {
         this.name = pictureName;
     }
 
@@ -75,12 +74,12 @@ public class Pictures {
         return streamId;
     }
 
-    public void setGalleryFilepath(String filepath) {
-        this.galleryFilepath = filepath;
+    public void setImportUri(Uri value) {
+        this.importUri = value;
     }
 
-    public String getGalleryFilepath() {
-        return this.galleryFilepath;
+    public Uri getImportUri() {
+        return this.importUri;
     }
 
 

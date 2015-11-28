@@ -4,11 +4,8 @@ import android.content.ContentValues;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 
-import com.example.phream.phream.model.Pictures;
+import com.example.phream.phream.model.Picture;
 
-/**
- * Created by tobias on 10.11.15.
- */
 public class TblPicture {
     public static final String TABLE_NAME = "picture";
     public static final String COLUMN_ID = "pictureid";
@@ -18,17 +15,17 @@ public class TblPicture {
     public static final String COLUMN_STREAM = "streamid";
     public static final String QUERY_CREATE_TABLE = "CREATE TABLE " + TABLE_NAME + "(" + COLUMN_ID + " INTEGER PRIMARY KEY," + COLUMN_PICTURENAME + " TEXT," + COLUMN_CREATED + " INTEGER," + COLUMN_FILENAME + " TEXT," + COLUMN_STREAM + " INTEGER" + ")";
 
-    public static Pictures[] getAllPictures(SQLiteDatabase db, long streamId) {
+    public static Picture[] getAllPictures(SQLiteDatabase db, long streamId) {
 
         String query = "Select * FROM " + TABLE_NAME + " WHERE " + COLUMN_STREAM + " = " + streamId;
 
         Cursor cursor = db.rawQuery(query, null);
-        Pictures[] pictures = new Pictures[cursor.getCount()];
+        Picture[] pictures = new Picture[cursor.getCount()];
 
         if (cursor.moveToFirst()) {
             int i = 0;
             do {
-                pictures[i] = new Pictures(cursor.getLong(cursor.getColumnIndex(COLUMN_ID)),
+                pictures[i] = new Picture(cursor.getLong(cursor.getColumnIndex(COLUMN_ID)),
                         cursor.getString(cursor.getColumnIndex(COLUMN_PICTURENAME)),
                         cursor.getString(cursor.getColumnIndex(COLUMN_FILENAME)),
                         cursor.getLong(cursor.getColumnIndex(COLUMN_CREATED)),
@@ -40,7 +37,7 @@ public class TblPicture {
         return pictures;
     }
 
-    public static void insertPicture(SQLiteDatabase db, Pictures picture) {
+    public static void insertPicture(SQLiteDatabase db, Picture picture) {
         ContentValues values = new ContentValues();
         values.put(COLUMN_PICTURENAME, picture.getName());
         values.put(COLUMN_CREATED, picture.getCreated());
@@ -51,7 +48,7 @@ public class TblPicture {
         picture.setId(id);
     }
 
-    public static void deletePicture(SQLiteDatabase db, Pictures picture) {
+    public static void deletePicture(SQLiteDatabase db, Picture picture) {
 
         String query = "Select * FROM " + TABLE_NAME + " WHERE " + COLUMN_ID + " =  " + picture.getId();
 
@@ -63,7 +60,7 @@ public class TblPicture {
         }
     }
 
-    public static void updatePicture(SQLiteDatabase db, Pictures picture) {
+    public static void updatePicture(SQLiteDatabase db, Picture picture) {
         ContentValues values = new ContentValues();
 
         values.put(COLUMN_PICTURENAME, picture.getName());
