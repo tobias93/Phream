@@ -6,8 +6,6 @@ import android.database.sqlite.SQLiteDatabase;
 
 import com.example.phream.phream.model.Pictures;
 
-import java.util.ArrayList;
-
 /**
  * Created by tobias on 10.11.15.
  */
@@ -30,7 +28,7 @@ public class TblPicture {
         if (cursor.moveToFirst()) {
             int i = 0;
             do {
-                pictures[i] = new Pictures (cursor.getLong(cursor.getColumnIndex(COLUMN_ID)),
+                pictures[i] = new Pictures(cursor.getLong(cursor.getColumnIndex(COLUMN_ID)),
                         cursor.getString(cursor.getColumnIndex(COLUMN_PICTURENAME)),
                         cursor.getString(cursor.getColumnIndex(COLUMN_FILENAME)),
                         cursor.getLong(cursor.getColumnIndex(COLUMN_CREATED)),
@@ -47,12 +45,37 @@ public class TblPicture {
         ContentValues values = new ContentValues();
         values.put(COLUMN_PICTURENAME, picture.getName());
         values.put(COLUMN_CREATED, picture.getCreated());
-        values.put(COLUMN_FILENAME, picture.getFilename());
+        values.put(COLUMN_FILENAME, picture.getFilepath());
         values.put(COLUMN_STREAM, picture.getStream());
 
-        db.insert(TABLE_NAME, null, values);
+        long id = db.insertOrThrow(TABLE_NAME, null, values);
+        picture.setId(id);
         db.close();
     }
 
+    public static void deletePicture(SQLiteDatabase db, Pictures picture) {
+
+        String query = "Select * FROM " + TABLE_NAME + " WHERE " + COLUMN_ID + " =  " + picture.getId();
+
+        Cursor cursor = db.rawQuery(query, null);
+
+        if (cursor.moveToFirst()) {
+            db.delete(TABLE_NAME, COLUMN_ID + "= ?", new String[]{String.valueOf(picture.getId())});
+            cursor.close();
+        }
+        db.close();
+    }
+
+    public static void updatePicture(SQLiteDatabase db, Pictures picture) {
+        ContentValues values = new ContentValues();
+
+        values.put(COLUMN_PICTURENAME, picture.getName());
+        values.put(COLUMN_CREATED, picture.getCreated());
+        values.put(COLUMN_FILENAME, picture.getFilepath());
+        values.put(COLUMN_STREAM, picture.getStream());
+
+        db.update(TABLE_NAME, values, COLUMN_ID + "= ?", new String[]{String.valueOf(picture.getId())});
+        db.close();
+    }
 
 }

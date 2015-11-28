@@ -6,6 +6,7 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.database.Cursor;
 import android.net.Uri;
+import android.os.Build;
 import android.os.Bundle;
 import android.os.Environment;
 import android.provider.MediaStore;
@@ -20,15 +21,14 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.EditText;
 
+import com.example.phream.phream.model.IPicturesCallback;
+import com.example.phream.phream.model.Pictures;
+import com.example.phream.phream.model.PicturesManager;
 import com.example.phream.phream.model.RecyclerViewAdapter;
 import com.example.phream.phream.model.Stream;
 
 import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileOutputStream;
 import java.io.IOException;
-import java.io.InputStream;
-import java.io.OutputStream;
 import java.util.Random;
 
 /**
@@ -39,11 +39,12 @@ import java.util.Random;
  * Use the {@link StreamView#newInstance} factory method to
  * create an instance of this fragment.
  */
-public class StreamView extends Fragment {
+public class StreamView extends Fragment implements IPicturesCallback {
 
     // Constants
     static final int PICK_CAMERA_REQUEST = 1;
-    static final int GALLERY_INTENT_CALLED = 2;
+    static final int GALLERY_PRE_KITKAT_INTENT_CALLED = 2;
+    static final int GALLERY_KITKAT_INTENT_CALLED = 3;
     private File directory;
 
     // Communication with parent view
@@ -56,9 +57,12 @@ public class StreamView extends Fragment {
     private FloatingActionButton mCameraFab;
     private FloatingActionButton mGaleryFab;
 
+    // Content Manger
+    PicturesManager picturesManager;
+
     //...
     private String takenPhotoPath;
-    private long takenPhotoTimestamp;
+    private long PhotoTimestamp;
 
     //---- Lifecycle stuff -------------------------------------------------------------------------
 
@@ -91,6 +95,13 @@ public class StreamView extends Fragment {
             //mParam1 = getArguments().getString(ARG_PARAM1);
             //mParam2 = getArguments().getString(ARG_PARAM2);
         }
+    }
+
+    // One solution to pass a object to fragments -> Parcelable aren't such easy to implement
+    // http://stackoverflow.com/questions/10836525/passing-objects-in-to-fragments
+    public void initPicturesManager(Stream stream) {
+        this.picturesManager = new PicturesManager(stream);
+        picturesManager.setCallback(this);
     }
 
     @Override
@@ -177,6 +188,41 @@ public class StreamView extends Fragment {
         mListener = null;
     }
 
+    @Override
+    public void onPicturesListUpdated(Pictures[] pictures) {
+
+    }
+
+    @Override
+    public void onPictureCreated(Pictures picture) {
+
+    }
+
+    @Override
+    public void onPictureCreatedError(Pictures picture) {
+
+    }
+
+    @Override
+    public void onPictureDeleted() {
+
+    }
+
+    @Override
+    public void onPictureDeletedError(Pictures picture) {
+
+    }
+
+    @Override
+    public void onPictureUpdated() {
+
+    }
+
+    @Override
+    public void onPictureUpdatedError(Pictures picture) {
+
+    }
+
     /**
      * This interface must be implemented by activities that contain this
      * fragment to allow an interaction in this fragment to be communicated
@@ -195,27 +241,40 @@ public class StreamView extends Fragment {
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
 
-        if (resultCode != Activity.RESULT_OK)  return;
+        if (resultCode != Activity.RESULT_OK) return;
 
-        if(requestCode == PICK_CAMERA_REQUEST){
+        if (requestCode == PICK_CAMERA_REQUEST) {
             importCameraImage();
         }
 
-        if (requestCode == GALLERY_INTENT_CALLED) {
-            importGalleryImage(data);
+        if (requestCode == GALLERY_PRE_KITKAT_INTENT_CALLED || requestCode == GALLERY_KITKAT_INTENT_CALLED) {
+            importGalleryImage(requestCode, data);
         }
     }
 
     //---- Photo import ----------------------------------------------------------------------------
 
     /**
-     * Start the galery intent
+     * Start the gallery intent
      */
     public void openGallery(View v) {
-        Intent intent = new Intent();
-        intent.setType("image/*");
-        intent.setAction(Intent.ACTION_GET_CONTENT);
-        startActivityForResult(Intent.createChooser(intent, getResources().getString(R.string.main_select_image_gallery)), GALLERY_INTENT_CALLED);
+        if (Build.VERSION.SDK_INT < 19) {
+            Intent intent = new Intent();
+            intent.setType("image/*");
+            intent.setAction(Intent.ACTION_GET_CONTENT);
+            startActivityForResult(Intent.createChooser(intent, getResources().getString(R.string.main_select_image_gallery)), GALLERY_PRE_KITKAT_INTENT_CALLED);
+
+        } else {
+            Intent intent = new Intent(Intent.ACTION_OPEN_DOCUMENT);
+            intent.addCategory(Intent.CATEGORY_OPENABLE);
+            intent.setType("image/*");
+            startActivityForResult(intent, GALLERY_KITKAT_INTENT_CALLED);
+        }
+
+//        Intent intent = new Intent();
+//        intent.setType("image/*");
+//        intent.setAction(Intent.ACTION_GET_CONTENT);
+//        startActivityForResult(Intent.createChooser(intent, getResources().getString(R.string.main_select_image_gallery)), GALLERY_PRE_KITKAT_INTENT_CALLED);
     }
 
     /**
@@ -227,7 +286,7 @@ public class StreamView extends Fragment {
         if (takePictureIntent.resolveActivity(getActivity().getPackageManager()) != null) {
             // Create the File where the photo should go
 
-            File photoFile = new File(directory.getAbsolutePath() + File.separator + imageNameGenerator());
+            File photoFile = new File(imagePathNameGenerator());
             takenPhotoPath = photoFile.getAbsolutePath();
 
             takePictureIntent.putExtra(MediaStore.EXTRA_OUTPUT,
@@ -254,13 +313,16 @@ public class StreamView extends Fragment {
         AlertDialog.Builder dialogBuilder = new AlertDialog.Builder(getActivity(), R.style.AlertDialogTheme);
         dialogBuilder.setCancelable(false);
         dialogBuilder.setTitle(R.string.main_insert_picturename_title);
-        dialogBuilder.setPositiveButton(R.string.main_addstream_ok, new DialogInterface.OnClickListener() {
+        dialogBuilder.setPositiveButton(R.string.main_insert_picturename_ok, new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
 
-                // Add the picture
-                String pictureName = pictureNameEditText.getText().toString();
-                // TODO  Generate a new pictures object
+                // Generate new Pictures Object
+                Pictures picture = new Pictures(pictureNameEditText.getText().toString(), takenPhotoPath, PhotoTimestamp);
+
+                // Add the picture to the stream/picturemanager/database
+                picturesManager.insertPicture(picture);
+
             }
         });
 
@@ -271,55 +333,105 @@ public class StreamView extends Fragment {
         takenPhotoPath = null;
     }
 
-    private void importGalleryImage(Intent data) {
+    private void importGalleryImage(int buildVersion, Intent data) {
         if (null == data) return;
 
         Uri originalUri = data.getData();
+        Context context = this.getContext();
         String selectedImagePath = "";
 
-        String[] projection = {MediaStore.Images.Media.DATA};
+        if (buildVersion == GALLERY_KITKAT_INTENT_CALLED) {
+            final int takeFlags = data.getFlags()
+                    & (Intent.FLAG_GRANT_READ_URI_PERMISSION
+                    | Intent.FLAG_GRANT_WRITE_URI_PERMISSION);
+            // Check for the freshest data.
+            context.getContentResolver().takePersistableUriPermission(originalUri, takeFlags);
 
-        Cursor imageCursor = getActivity().getContentResolver().query(originalUri, projection, null, null, null);
-        imageCursor.moveToFirst();
+               /* Extract ID from Uri path using getLastPathSegment() and then split with ":"
+                then call getMediaUri to get Internal storage or External storage for media
+               */
 
-        int columnIndex = imageCursor.getColumnIndex(projection[0]);
-        selectedImagePath = imageCursor.getString(columnIndex);
-        imageCursor.close();
+            String id = originalUri.getLastPathSegment().split(":")[1];
+            final String[] imageColumns = {MediaStore.Images.Media.DATA};
 
-        Log.e("Photopath:", selectedImagePath);
+            Uri uri = getMediaUri();
+            Cursor imageCursor = context.getContentResolver().query(uri, imageColumns,
+                    MediaStore.Images.Media._ID + "=" + id, null, null);
 
-        // Copy Image
-        try {
-            copyImage(new File(selectedImagePath), new File(directory.getAbsolutePath() + File.separator + imageNameGenerator()));
-        } catch (IOException e) {
+            if (imageCursor.moveToFirst()) {
+                selectedImagePath = imageCursor.getString(imageCursor.getColumnIndex(MediaStore.Images.Media.DATA));
+            }
+            Log.e("Photopath KITKAT", selectedImagePath);
+            imageCursor.close();
+
+        } else {
+            String[] projection = {MediaStore.Images.Media.DATA};
+
+            Cursor imageCursor = context.getContentResolver().query(originalUri, projection, null, null, null);
+            imageCursor.moveToFirst();
+
+            int columnIndex = imageCursor.getColumnIndex(projection[0]);
+            selectedImagePath = imageCursor.getString(columnIndex);
+
+            imageCursor.close();
+
+            Log.e("Photopath pre KITKAT", selectedImagePath);
         }
+
+        final String finalSelectedImagePath = selectedImagePath;
+
+
+        Log.e("Photopath:", finalSelectedImagePath);
+
+        // Ask for pictures title
+        // Input field for the name of the picture
+        final EditText pictureNameEditText = new EditText(getActivity());
+        pictureNameEditText.setHint(R.string.main_insert_picturename);
+        pictureNameEditText.setSingleLine(true);
+
+        // Dialog that shows the input text.
+        AlertDialog.Builder dialogBuilder = new AlertDialog.Builder(getActivity(), R.style.AlertDialogTheme);
+        dialogBuilder.setCancelable(false);
+        dialogBuilder.setTitle(R.string.main_insert_picturename_title);
+        dialogBuilder.setPositiveButton(R.string.main_insert_picturename_ok, new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+
+                // Generate new Pictures Object
+                Pictures picture = new Pictures(pictureNameEditText.getText().toString());
+
+                picture.setGalleryFilepath(finalSelectedImagePath);
+                picture.setFilepath(imagePathNameGenerator());
+                picture.setCreated(PhotoTimestamp);
+
+                // Add the picture to the stream/picturemanager/database
+                picturesManager.importInsertPicture(picture);
+
+            }
+        });
+
+        dialogBuilder.setView(pictureNameEditText);
+        dialogBuilder.show();
+
     }
+
+    // Get the MediaUri of Internal/External Storage for Media
+    private Uri getMediaUri() {
+        String state = Environment.getExternalStorageState();
+        if (!state.equalsIgnoreCase(Environment.MEDIA_MOUNTED))
+            return MediaStore.Images.Media.INTERNAL_CONTENT_URI;
+
+        return MediaStore.Images.Media.EXTERNAL_CONTENT_URI;
+    }
+
     /**
      * Creates a unique filename from unix timestamp and a random number
      */
-    private String imageNameGenerator() {
+    private String imagePathNameGenerator() {
         // random int for the syncronisation feature
         Random r = new Random();
-        takenPhotoTimestamp = System.currentTimeMillis() / 1000;
-        return "image_" + takenPhotoTimestamp + "_" + r.nextInt(10000) + ".jpg";
+        PhotoTimestamp = System.currentTimeMillis() / 1000;
+        return directory.getAbsolutePath() + File.separator + "image_" + PhotoTimestamp + "_" + r.nextInt(10000) + ".jpg";
     }
 
-    /**
-     * copies an image
-     */
-    public void copyImage(File src, File dst) throws IOException {
-        InputStream in = new FileInputStream(src);
-        OutputStream out = new FileOutputStream(dst);
-
-        Log.e("PhotopathCopyed:", dst.getAbsolutePath());
-
-        // Transfer bytes from in to out
-        byte[] buf = new byte[1024];
-        int len;
-        while ((len = in.read(buf)) > 0) {
-            out.write(buf, 0, len);
-        }
-        in.close();
-        out.close();
-    }
 }

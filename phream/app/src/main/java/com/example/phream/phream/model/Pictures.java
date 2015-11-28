@@ -8,16 +8,27 @@ import android.graphics.Bitmap;
 public class Pictures {
     private long id;
     private String name;
-    private String filename;
+    private String galleryFilepath;
+    private String filepath;
     private long created;
     private long streamId;
 
-    public Pictures(long pictureId, String pictureName, String filename, long created, long streamid){
+    public Pictures(long pictureId, String pictureName, String filepath, long created, long streamid) {
         this.id = pictureId;
         this.name = pictureName;
-        this.filename = filename;
+        this.filepath = filepath;
         this.created = created;
         this.streamId = streamid;
+    }
+
+    public Pictures(String pictureName, String filepath, long created) {
+        this.name = pictureName;
+        this.filepath = filepath;
+        this.created = created;
+    }
+
+    public Pictures(String pictureName) {
+        this.name = pictureName;
     }
 
 
@@ -27,8 +38,12 @@ public class Pictures {
         return id;
     }
 
-    public void setId(long id){
+    public void setId(long id) {
         this.id = id;
+    }
+
+    public void setStreamId(long id) {
+        this.streamId = id;
     }
 
     public String getName() {
@@ -39,9 +54,18 @@ public class Pictures {
         this.name = name;
     }
 
-    public String getFilename() {
-        return filename;
+    public void setFilepath(String filepath) {
+        this.filepath = filepath;
     }
+
+    public String getFilepath() {
+        return filepath;
+    }
+
+    public void setCreated(long created) {
+        this.created = created;
+    }
+
 
     public long getCreated() {
         return created;
@@ -51,6 +75,13 @@ public class Pictures {
         return streamId;
     }
 
+    public void setGalleryFilepath(String filepath) {
+        this.galleryFilepath = filepath;
+    }
+
+    public String getGalleryFilepath() {
+        return this.galleryFilepath;
+    }
 
 
 }
