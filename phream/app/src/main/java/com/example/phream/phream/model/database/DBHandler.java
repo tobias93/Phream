@@ -4,10 +4,9 @@ package com.example.phream.phream.model.database;
  * Created by Philipp Pütz on 23.10.2015.
  */
 
+import android.content.Context;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
-
-import android.content.Context;
 
 import com.example.phream.phream.model.database.Tables.TblPicture;
 import com.example.phream.phream.model.database.Tables.TblStream;

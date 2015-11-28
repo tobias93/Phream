@@ -1,6 +1,5 @@
 package com.example.phream.phream;
 
-import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.content.ContentResolver;
 import android.content.Context;
@@ -36,9 +35,7 @@ import com.example.phream.phream.model.Stream;
 import com.example.phream.phream.model.database.DBManager;
 
 import java.io.File;
-import java.io.FileNotFoundException;
 import java.io.IOException;
-import java.io.InputStream;
 import java.util.Random;
 
 public class StreamView extends Fragment implements IPicturesCallback {
