@@ -37,20 +37,11 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
         public ImageView mImageView;
         private final Context context;
 
-        public ViewHolder(CardView v, final Pictures picture) {
+        public ViewHolder(CardView v) {
             super(v);
             context = v.getContext();
             mCardView = v;
-            v.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    Intent intent = new Intent(context, ImageDetailView.class);
 
-                    intent.putExtra("ImagePath", "");
-
-                    context.startActivity(intent);
-                }
-            });
             mTitle = (TextView) v.findViewById(R.id.labelTitleDescription);
             mCreateDate = (TextView) v.findViewById(R.id.labelCreateDate);
             mCreateTime = (TextView) v.findViewById(R.id.labelCreateTime);
@@ -73,13 +64,13 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
                 .inflate(R.layout.card_layout, parent, false);
         // set the view's size, margins, paddings and layout parameters
 
-        ViewHolder vh = new ViewHolder(v, new Pictures(null));
+        ViewHolder vh = new ViewHolder(v);
         return vh;
     }
 
     // Replace the contents of a view (invoked by the layout manager)
     @Override
-    public void onBindViewHolder(ViewHolder holder, int position) {
+    public void onBindViewHolder(final ViewHolder holder, final int position) {
         // - get element from your dataset at this position
         // - replace the contents of the view with that element
         holder.mTitle.setText(mDataset[position].getName());
@@ -92,6 +83,17 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
         SimpleDateFormat sdftime = new SimpleDateFormat("HH:mm:ss");
         String formattedTime = sdftime.format(date);
         holder.mCreateTime.setText(formattedTime);
+
+        holder.mCardView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(holder.mCardView.getContext(), ImageDetailView.class);
+
+                intent.putExtra("ImagePath", mDataset[position].getFilepath());
+
+                holder.mCardView.getContext().startActivity(intent);
+            }
+        });
 
         BitmapWorkerTask task = new BitmapWorkerTask(holder.mImageView, 180, 180);
         task.execute(mDataset[position].getFilepath());
