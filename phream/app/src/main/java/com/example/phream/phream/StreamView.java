@@ -146,6 +146,8 @@ public class StreamView extends Fragment {
 
     @Override
     public void onDestroyView() {
+        super.onDestroyView();
+
         mRecyclerView = null;
         mLayoutManager = null;
         mAdapter = null;
