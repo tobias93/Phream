@@ -6,6 +6,7 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.database.Cursor;
 import android.net.Uri;
+import android.os.Build;
 import android.os.Bundle;
 import android.os.Environment;
 import android.provider.MediaStore;
@@ -42,7 +43,8 @@ public class StreamView extends Fragment implements IPicturesCallback {
 
     // Constants
     static final int PICK_CAMERA_REQUEST = 1;
-    static final int GALLERY_INTENT_CALLED = 2;
+    static final int GALLERY_PRE_KITKAT_INTENT_CALLED = 2;
+    static final int GALLERY_KITKAT_INTENT_CALLED = 3;
     private File directory;
 
     // Communication with parent view
@@ -245,8 +247,8 @@ public class StreamView extends Fragment implements IPicturesCallback {
             importCameraImage();
         }
 
-        if (requestCode == GALLERY_INTENT_CALLED) {
-            importGalleryImage(data);
+        if (requestCode == GALLERY_PRE_KITKAT_INTENT_CALLED || requestCode == GALLERY_KITKAT_INTENT_CALLED) {
+            importGalleryImage(requestCode, data);
         }
     }
 
@@ -256,10 +258,23 @@ public class StreamView extends Fragment implements IPicturesCallback {
      * Start the gallery intent
      */
     public void openGallery(View v) {
-        Intent intent = new Intent();
-        intent.setType("image/*");
-        intent.setAction(Intent.ACTION_GET_CONTENT);
-        startActivityForResult(Intent.createChooser(intent, getResources().getString(R.string.main_select_image_gallery)), GALLERY_INTENT_CALLED);
+        if (Build.VERSION.SDK_INT < 19) {
+            Intent intent = new Intent();
+            intent.setType("image/*");
+            intent.setAction(Intent.ACTION_GET_CONTENT);
+            startActivityForResult(Intent.createChooser(intent, getResources().getString(R.string.main_select_image_gallery)), GALLERY_PRE_KITKAT_INTENT_CALLED);
+
+        } else {
+            Intent intent = new Intent(Intent.ACTION_OPEN_DOCUMENT);
+            intent.addCategory(Intent.CATEGORY_OPENABLE);
+            intent.setType("image/*");
+            startActivityForResult(intent, GALLERY_KITKAT_INTENT_CALLED);
+        }
+
+//        Intent intent = new Intent();
+//        intent.setType("image/*");
+//        intent.setAction(Intent.ACTION_GET_CONTENT);
+//        startActivityForResult(Intent.createChooser(intent, getResources().getString(R.string.main_select_image_gallery)), GALLERY_PRE_KITKAT_INTENT_CALLED);
     }
 
     /**
@@ -318,22 +333,55 @@ public class StreamView extends Fragment implements IPicturesCallback {
         takenPhotoPath = null;
     }
 
-    private void importGalleryImage(Intent data) {
+    private void importGalleryImage(int buildVersion, Intent data) {
         if (null == data) return;
 
-
         Uri originalUri = data.getData();
+        Context context = this.getContext();
+        String selectedImagePath = "";
 
-        String[] projection = {MediaStore.Images.Media.DATA};
+        if (buildVersion == GALLERY_KITKAT_INTENT_CALLED) {
+            final int takeFlags = data.getFlags()
+                    & (Intent.FLAG_GRANT_READ_URI_PERMISSION
+                    | Intent.FLAG_GRANT_WRITE_URI_PERMISSION);
+            // Check for the freshest data.
+            context.getContentResolver().takePersistableUriPermission(originalUri, takeFlags);
 
-        Cursor imageCursor = getActivity().getContentResolver().query(originalUri, projection, null, null, null);
-        imageCursor.moveToFirst();
+               /* Extract ID from Uri path using getLastPathSegment() and then split with ":"
+                then call getMediaUri to get Internal storage or External storage for media
+               */
 
-        int columnIndex = imageCursor.getColumnIndex(projection[0]);
-        final String selectedImagePath = imageCursor.getString(columnIndex);
-        imageCursor.close();
+            String id = originalUri.getLastPathSegment().split(":")[1];
+            final String[] imageColumns = {MediaStore.Images.Media.DATA};
 
-        Log.e("Photopath:", selectedImagePath);
+            Uri uri = getMediaUri();
+            Cursor imageCursor = context.getContentResolver().query(uri, imageColumns,
+                    MediaStore.Images.Media._ID + "=" + id, null, null);
+
+            if (imageCursor.moveToFirst()) {
+                selectedImagePath = imageCursor.getString(imageCursor.getColumnIndex(MediaStore.Images.Media.DATA));
+            }
+            Log.e("Photopath KITKAT", selectedImagePath);
+            imageCursor.close();
+
+        } else {
+            String[] projection = {MediaStore.Images.Media.DATA};
+
+            Cursor imageCursor = context.getContentResolver().query(originalUri, projection, null, null, null);
+            imageCursor.moveToFirst();
+
+            int columnIndex = imageCursor.getColumnIndex(projection[0]);
+            selectedImagePath = imageCursor.getString(columnIndex);
+
+            imageCursor.close();
+
+            Log.e("Photopath pre KITKAT", selectedImagePath);
+        }
+
+        final String finalSelectedImagePath = selectedImagePath;
+
+
+        Log.e("Photopath:", finalSelectedImagePath);
 
         // Ask for pictures title
         // Input field for the name of the picture
@@ -352,7 +400,7 @@ public class StreamView extends Fragment implements IPicturesCallback {
                 // Generate new Pictures Object
                 Pictures picture = new Pictures(pictureNameEditText.getText().toString());
 
-                picture.setGalleryFilepath(selectedImagePath);
+                picture.setGalleryFilepath(finalSelectedImagePath);
                 picture.setFilepath(imagePathNameGenerator());
                 picture.setCreated(PhotoTimestamp);
 
@@ -365,6 +413,15 @@ public class StreamView extends Fragment implements IPicturesCallback {
         dialogBuilder.setView(pictureNameEditText);
         dialogBuilder.show();
 
+    }
+
+    // Get the MediaUri of Internal/External Storage for Media
+    private Uri getMediaUri() {
+        String state = Environment.getExternalStorageState();
+        if (!state.equalsIgnoreCase(Environment.MEDIA_MOUNTED))
+            return MediaStore.Images.Media.INTERNAL_CONTENT_URI;
+
+        return MediaStore.Images.Media.EXTERNAL_CONTENT_URI;
     }
 
     /**
