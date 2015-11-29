@@ -61,8 +61,8 @@ public class StreamView extends Fragment implements IPicturesCallback {
     private FloatingActionButton mGaleryFab;
 
     // Content Manger
-    PicturesManager picturesManager;
-    Stream myStream;
+    private PicturesManager picturesManager;
+    private Stream myStream;
 
     // variables
     private String takenPhotoPath;
@@ -80,6 +80,10 @@ public class StreamView extends Fragment implements IPicturesCallback {
         this.picturesManager = new PicturesManager(stream);
         picturesManager.setCallback(this);
         myStream = stream;
+    }
+
+    public void deleteAllPictures(){
+        picturesManager.deleteAllPictures();
     }
 
     @Override

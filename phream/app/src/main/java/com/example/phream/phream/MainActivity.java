@@ -1,8 +1,10 @@
 package com.example.phream.phream;
 
+import android.content.DialogInterface;
 import android.os.Bundle;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.view.KeyEvent;
 import android.view.MenuItem;
@@ -117,9 +119,24 @@ public class MainActivity extends AppCompatActivity implements StreamView.OnFrag
     }
 
     @Override
-    public void deleteStream(Stream stream) {
-        StreamSelectionView s = (StreamSelectionView) getSupportFragmentManager().findFragmentById(R.id.activity_main_navigation);
-        s.deleteStream(stream);
+    public void deleteStream(final Stream stream) {
+        // Use the Builder class for convenient dialog construction
+        AlertDialog.Builder builder = new AlertDialog.Builder(this, R.style.AlertDialogTheme);
+        builder.setMessage(R.string.main_deletestream_title)
+                .setPositiveButton(R.string.main_deletestream_ok, new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int id) {
+                        StreamSelectionView s = (StreamSelectionView) getSupportFragmentManager().findFragmentById(R.id.activity_main_navigation);
+                        s.deleteStream(stream);
+                        StreamView sv = (StreamView) getSupportFragmentManager().findFragmentById(R.id.activity_main_main_view_container);
+                        sv.deleteAllPictures();
+                    }
+                })
+                .setNegativeButton(R.string.main_deletestream_cancel, new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int id) {
+                        // User cancelled the dialog
+                    }
+                });
+        builder.show();
     }
 
     @Override

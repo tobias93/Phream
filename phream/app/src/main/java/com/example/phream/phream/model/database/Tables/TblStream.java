@@ -51,4 +51,16 @@ public class TblStream {
         cursor.close();
         return streams;
     }
+
+    public static void deleteStream(SQLiteDatabase db, long id){
+        String query = "Select * FROM " + TABLE_NAME + " WHERE " + COLUMN_ID + " =  " + id;
+
+        Cursor cursor = db.rawQuery(query, null);
+
+        if (cursor.moveToFirst()) {
+            db.delete(TABLE_NAME, COLUMN_ID + "= ?", new String[]{String.valueOf(id)});
+            cursor.close();
+        }
+
+    }
 }

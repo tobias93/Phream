@@ -197,7 +197,7 @@ public class PicturesManager {
      * As the method works asynchronously, the result will be returned using the
      * "onPicturesDeleted" callback.
      */
-    public void deleteAllPicture(){
+    public void deleteAllPictures(){
         for (int i = 0; i < pictures.length; ++i){
             deletePicture(pictures[i]);
         }
