@@ -122,6 +122,7 @@ public class MainActivity extends AppCompatActivity implements StreamView.OnFrag
 
     @Override
     public void deleteStream(Stream stream) {
-
+        StreamSelectionView s = (StreamSelectionView) getSupportFragmentManager().findFragmentById(R.id.activity_main_navigation);
+        s.deleteStream(stream);
     }
 }
