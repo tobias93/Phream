@@ -78,7 +78,7 @@ Nach dem Auswählen eines Streams im Navigation Drawer oder beim Appstart (wenn 
   \caption{Kontextmenü - CardView}
 \end{wrapfigure}
   
-Durch einen \enquote{long tap} auf eine CardView in der Hauptansicht öffnet sich ein Kontextmenü zum aktuellen Bild. Das Kontextmenü bietet verschiedene Optionen, wie das Umbenennen des Bildes, das Löschen des Bildes oder einer Export Möglichkeit in die Galerie. Durch an tippen der gewünschten Option erscheinen zusätzliche Abfragen, je nach Menüeintrag. Es wird beispielsweise beim Umbenennen ein AlertDialog erzeugt, der die Eingabe eines neuen Bildtitels ermöglicht. Beim Löschen oder Exportieren des Bildes sollen eingeblendete AlerDialogs versehentliche Nutzeraktionen abfangen und eine Bestätigung der Aktion vom Benutzer erfragen.
+Durch einen \enquote{long tap} auf eine CardView in der Hauptansicht öffnet sich ein Kontextmenü zum aktuellen Bild. Das Kontextmenü bietet verschiedene Optionen, wie das Umbenennen des Bildes, das Löschen des Bildes oder einer Export Möglichkeit in die Galerie. Durch an tippen der gewünschten Option erscheinen zusätzliche Abfragen, je nach Menüeintrag. Es wird beispielsweise beim Umbenennen ein AlertDialog erzeugt, der die Eingabe eines neuen Bildtitels ermöglicht. Beim Löschen oder Exportieren des Bildes sollen eingeblendete AlertDialogs versehentliche Nutzeraktionen abfangen und eine Bestätigung der Aktion vom Benutzer erfragen.
 
 \section{Detailansicht eines Bildes}
 Durch anklicken einer Card in der Hauptansicht, öffnet sich eine zweite Activity die eine Detailansicht (Abbildung \ref{label:fullscreenview}) des Bildes im Vollbild ermöglicht. Die Detailansicht besteht dabei aus einer Fullscreenactivity mit einer ImageView, die die gesamte Activity ausfüllt.
@@ -140,7 +140,7 @@ Nach dem auswählen des Menü Eintrags im Floating Action Menu startet ein Kamer
 \end{figure}
 
 \subsection{Importieren eines Fotos}
-Nach dem auswählen des Menü Eintrags im Floating Action Menu startet der Content-Provider (Abbildung \ref{label:content_provider}), der dem Benutzer die Option bietet Dateien (in diesem Fall Bilder) auszuwählen. Dabei beschränkt sich die Dateiauswahl nicht nur auf die eigene Galerie, sondern zeigt falls vorhanden auch Bilder aus Google Drive oder Dropbox an. Dabei werden die Bilder erst aus der Cloud geladen und dann in die App importiert. Nach dem importieren des Bildes kann der Benutzer wieder einen Bildtitel festlegen.
+Nach dem auswählen des Menü Eintrags im Floating Action Menu startet der Content-Provider (Abbildung \ref{label:content_provider}), der dem Benutzer die Option bietet Dateien (in diesem Fall Bilder) auszuwählen. Dabei beschränkt sich die Dateiauswahl nicht nur auf die eigene Galerie, sondern zeigt auch falls vorhanden, Bilder aus Google Drive oder Dropbox an. Dabei werden die Bilder erst aus der Cloud geladen und dann in die App importiert. Nach dem importieren des Bildes kann der Benutzer wieder einen Bildtitel festlegen.
 
 \begin{figure}[H]
 \centering
@@ -150,6 +150,6 @@ Nach dem auswählen des Menü Eintrags im Floating Action Menu startet der Conte
 \end{figure}
 
 \section{Verwendete Libraries}
-Um verschiedene Benutzeroberflächenelemente auch auf früheren Android Versionen verfügbar zu machen, wurde die AppCompat Support Library\footnote{\url{http://developer.android.com/tools/support-library/features.html}} von Google verwendet. Sie ermöglicht erst in späteren Android Versionen eingefügte Features auch unter älteren Anroid Geräten verfügbar zu machen. Weiterhin wurde zur Gestaltung des Floating Action Menu die AppCompat-Extension-Library\footnote{\url{https://github.com/TR4Android/AppCompat-Extension-Library}} verwendet, um einfach und schnell Floating Action Menu's zu gestalten.
+Um verschiedene Benutzeroberflächenelemente auch auf früheren Android Versionen verfügbar zu machen, wurde die AppCompat Support Library\footnote{\url{http://developer.android.com/tools/support-library/features.html}} von Google verwendet. Sie ermöglicht erst in späteren Android Versionen eingefügte Features auch unter älteren Anroid Geräten verfügbar zu machen. Weiterhin wurde zur Gestaltung des Floating Action Menu die AppCompat-Extension-Library\footnote{\url{https://github.com/TR4Android/AppCompat-Extension-Library}} verwendet, um einfach und schnell Floating Action Menu's zu gestalten. Beide Libraries ermöglichten, dass die App ab API-Level 16 verfügbar ist.
 
 Aufgrund eines Bugs in der Standardexportfunktion von Android zum exportieren von Fotos in die Galerie, wurden exportierte Bilder immer am Ende der Galerie mit Datum 1.1.1970 angezeigt. Daher wurde die Klasse \enquote{CapturePhotoUtils}\footnote{\url{https://gist.github.com/samkirton/0242ba81d7ca00b475b9}} von samuelkirton zum Exportieren von Bildern verwendet.
