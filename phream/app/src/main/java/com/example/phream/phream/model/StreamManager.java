@@ -106,7 +106,25 @@ public class StreamManager {
         updater.execute(stream);
     }
 
-    public void deleteStream(com.example.phream.phream.model.Stream stream) {
+    public void deleteStream(final com.example.phream.phream.model.Stream stream) {
+        AsyncTask<com.example.phream.phream.model.Stream, Integer, Boolean> deleter = new AsyncTask<com.example.phream.phream.model.Stream, Integer, Boolean>() {
+            @Override
+            protected Boolean doInBackground(com.example.phream.phream.model.Stream... params) {
+                SQLiteDatabase db = DBManager.getDB();
+                TblStream.deleteStream(db, params[0].getId());
+                return true;
+            }
 
+            @Override
+            protected void onPostExecute(Boolean result) {
+                if (result) {
+                    callback.onStreamDeleted(stream);
+                } else {
+                    callback.onStreamDeletionError(stream);
+                }
+            }
+        };
+
+        deleter.execute(stream);
     }
 }

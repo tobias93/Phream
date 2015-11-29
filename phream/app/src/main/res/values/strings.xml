@@ -41,6 +41,10 @@
     <string name="menu_image_detail_share">Teilen</string>
     <string name="menu_image_detail_export">Export</string>
 
+    <!-- Main activity :: card layout context menu Delete-->
+    <string name="main_deletestream_title">Wollen Sie den Stream und alle zugehörigen Bilder wirklich löschen?</string>
+    <string name="main_deletestream_ok">OK</string>
+    <string name="main_deletestream_cancel">Abbrechen</string>
 
     <!-- Main activity :: card layout-->
     <string name="card_layout_title">Titel:</string>
