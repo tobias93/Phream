@@ -23,7 +23,7 @@ Entfernt ein Benutzer einen Stream, so bleibt der Stream bei den anderen Teilneh
 Wird ein Benutzer nachträglich zu einem Stream hinzugefügt, so erhält er nicht nur die neuen Bilder, sondern bekommt auch automatisch Zugriff auf alle Bilder, die bereits vor seinem Eintritt im Stream vorhanden waren.
 
 \subsection{Nutzung alternativer Methoden zur Datenübertragung}
-Wenn man gezwungen ist, das Mobilfunknetz zu benutzen, ist die Internetverbindung oft schlecht. Außerdem haben viele Smartphone-Nutzer ein begrenztes Datenvolumen. Daher sollen die Daten nicht über das Internet, sondern über alternative Verbindungen übertragen werden.Diese beinhalten:
+Wenn man gezwungen ist, das Mobilfunknetz zu benutzen, ist die Internetverbindung oft schlecht. Außerdem haben viele Smartphone-Nutzer ein begrenztes Datenvolumen. Daher sollen die Daten nicht über das Internet, sondern über alternative Verbindungen übertragen werden. Diese beinhalten:
 
 \begin{enumerate}
 	\item Bluetooth
@@ -35,7 +35,7 @@ Wenn man gezwungen ist, das Mobilfunknetz zu benutzen, ist die Internetverbindun
 
 \subsection{Umgesetzte Funktionalitäten}
 
-Die Anwendung, die im Rahmen dieses Projektes entwickelt wurde, stellt lediglich einen Prototyp dar. Es werden also nicht alle beschriebenen Funktionen umgesetzt. Bei der Architektur wurde jedoch darauf geachtet, dass die Anwendung um die beschriebenen Funktionalitäten erweiterbar ist. Die Folgenden Funktionalitäten wurden im Prototyp umgesetzt:
+Die Anwendung, die im Rahmen dieses Projektes entwickelt wurde, stellt lediglich einen Prototyp dar. Es werden also nicht alle beschriebenen Funktionen umgesetzt. Bei der Architektur wurde jedoch darauf geachtet, dass die Anwendung um die beschriebenen Funktionalitäten erweiterbar ist. Die folgenden Funktionalitäten wurden im Prototyp umgesetzt:
 
 \begin{center}
 \begin{longtable}{|l|p{12cm}|}
@@ -56,8 +56,9 @@ F-30.1 & Streams können erstellt, gelöscht und umbenannt werden\\
 F-40 & Bilder werden in einer listen ähnlichen Darstellung mit Vorschaubild und Bildinformationen angezeigt\\
 F-50 & Bilder können in einer Vollbildansicht angezeigt werden\\
 F-50.1 & Aus der Vollbildansicht können Bilder in die Galerie exportiert und per E-Mail und Bluetooth versendet werden\\
+F-60 & Die Architektur ist erweiterbar\\
 \hline
-D-10 & Alle Appdaten (Streams, Bilder, Datenbanken) werden in eineen speziellen Verzeichnis gespeichert\\
+D-10 & Alle Appdaten (Streams, Bilder, Datenbanken) werden in einen speziellen Verzeichnis gespeichert\\
 D-10 & Gespeicherte Bilder erhalten als Zusatz das aktuelle Datum\\
 D-20 & Alle Bild- und Streaminformationen werden in einer Datenbank gespeichert\\
 \hline
@@ -84,3 +85,37 @@ UI-20.3 & Es ist möglich ein Bild aus der Vollbildansicht per Bluetooth zu vers
 \end{longtable}
 \end{center}
 
+\subsection{Offene Funktionalitäten}
+
+Die im folgenden aufgelisteten Funktionalitäten wurden bisher nicht implementiert und werden für weitere Versionen vorgemerkt.
+
+\begin{center}
+\begin{longtable}{|l|p{12cm}|}
+\toprule
+\textbf{ID} & \textbf{Beschreibung} \\
+\hline
+\endhead
+\hline
+\endfoot
+F-70 & Es können Benutzer zu Streams hinzugefügt werden\\
+F-70.1 & Neue Benutzer erhalten Zurgiff auf vorhandene und zukünftige Bilder im Stream\\
+F-80 & Bilder werden zwischen den verschiedenen Nutzern live synchronisiert\\
+F-90 & Es existiert ein Art Synchronisationslog der die unterschiedlichen Aktivitäten der Benutzer untereinander abgleicht\\
+F-100 & Benutzer können aus Streams austreten \\
+F-100.1 & Tritt ein Benutzer aus einem Stream aus, so werden lokal alle Bilder des Streams und der Stream selbst gelöscht\\
+F-100.2 & Ausgetretene Benutzer werden bei anderen Benutzern aus der Streamteilnehmerliste entfernt\\
+F-110 & Es stehen verschiedene Synchronisationsmöglichkeiten zur Verfügung:\\
+F-110.1 & Bluetooth\\
+F-110.1 & Bluetooth Low Energy (falls verfügbar)\\
+F-110.1 & Wi-Fi Direct\\
+F-120 & Alle Streamteilnehmer können über eine Teilnehmerliste eingesehen werden\\
+F-130 & In der Vollbildansicht kann an Bilder herangezoomt werden\\
+F-130 & Durch Gesten kann in der Vollbildansicht zum nächsten oder vorherigen Bild gewechselt werden\\
+F-140 & Das gesamte UI ist für verschiedene Endgeräte (Tablets, Android TVs) optimiert\\
+\hline
+D-10 & Der Syncronisationslog und die Teilnehmerlisten werden in der Datenbank gespeichert\\
+\hline
+UI-30 & In der Hauptansicht eines Streams ermöglicht ein Menübutton die Teilnehmerliste einzusehen und Teilnehmer hinzuzufügen\\
+UI-40 & Der Menüpunkt \enquote{Einstellungen} im Navigation Drawer ermöglicht die Synchronisationsmethode und allgemeine Synchronisationseinstellungen festzulegen\\
+\end{longtable}
+\end{center}
