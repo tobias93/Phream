@@ -33,6 +33,7 @@
             android:text="@string/no_stream_view_begin" />
 
         <Button
+            android:id="@+id/no_stream_fragment_create_stream"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="@string/no_stream_view_create_stream"

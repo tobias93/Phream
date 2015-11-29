@@ -82,10 +82,11 @@ public class MainActivity extends AppCompatActivity implements StreamView.OnFrag
                 // Toggle navigation drawer
                 if (mDrawerLayout.isDrawerOpen(mNavigation)) {
                     mDrawerLayout.closeDrawer(mNavigation);
+                    return true;
                 } else {
-                    mDrawerLayout.openDrawer(mNavigation);
+                    return false;
                 }
-                return true;
+
             default:
                 return super.onOptionsItemSelected(item);
         }
@@ -124,5 +125,11 @@ public class MainActivity extends AppCompatActivity implements StreamView.OnFrag
     public void deleteStream(Stream stream) {
         StreamSelectionView s = (StreamSelectionView) getSupportFragmentManager().findFragmentById(R.id.activity_main_navigation);
         s.deleteStream(stream);
+    }
+
+    @Override
+    public void createNewStream() {
+        StreamSelectionView s = (StreamSelectionView) getSupportFragmentManager().findFragmentById(R.id.activity_main_navigation);
+        s.addStream();
     }
 }

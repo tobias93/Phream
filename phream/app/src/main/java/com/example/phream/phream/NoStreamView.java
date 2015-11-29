@@ -6,16 +6,8 @@ import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 
-
-/**
- * A simple {@link Fragment} subclass.
- * Activities that contain this fragment must implement the
- * {@link NoStreamView.OnFragmentInteractionListener} interface
- * to handle interaction events.
- * Use the {@link NoStreamView#newInstance} factory method to
- * create an instance of this fragment.
- */
 public class NoStreamView extends Fragment {
 
     private OnFragmentInteractionListener mListener;
@@ -31,6 +23,19 @@ public class NoStreamView extends Fragment {
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         return inflater.inflate(R.layout.fragment_no_stream_view, container, false);
+    }
+
+    @Override
+    public void onActivityCreated(Bundle savedInstanceState) {
+        super.onActivityCreated(savedInstanceState);
+
+        Button createButton = (Button) getActivity().findViewById(R.id.no_stream_fragment_create_stream);
+        createButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                mListener.createNewStream();
+            }
+        });
     }
 
     @Override
@@ -61,5 +66,6 @@ public class NoStreamView extends Fragment {
      * >Communicating with Other Fragments</a> for more information.
      */
     public interface OnFragmentInteractionListener {
+        void createNewStream();
     }
 }
