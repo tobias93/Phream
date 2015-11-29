@@ -169,6 +169,8 @@ public class PicturesManager {
                 SQLiteDatabase db = DBManager.getDB();
                 try {
                     TblPicture.deletePicture(db, params[0]);
+                    File deleterFile = new File(params[0].getFilepath());
+                    deleterFile.delete();
                     return true;
                 } catch (Exception e) {
                     return false;

@@ -48,7 +48,7 @@
     <string name="card_layout_time">Uhrzeit:</string>
 
     <!-- Main activity :: card layout context menu-->
-    <string name="card_context_menu_rename">Bild umbennen</string>
+    <string name="card_context_menu_rename">Bild umbenennen</string>
     <string name="card_context_menu_export">Bild in Galerie exportieren</string>
     <string name="card_context_menu_delete">Bild löschen</string>
 
