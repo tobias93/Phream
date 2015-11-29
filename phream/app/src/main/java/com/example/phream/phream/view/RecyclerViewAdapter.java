@@ -1,4 +1,4 @@
-package com.example.phream.phream.model;
+package com.example.phream.phream.view;
 
 import android.content.Context;
 import android.content.Intent;
@@ -12,14 +12,14 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.example.phream.phream.BitmapWorkerTask;
-import com.example.phream.phream.ImageDetailView;
+import com.example.phream.phream.model.Picture;
 import com.example.phream.phream.R;
 
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
 
-public class RecyclerViewAdapter extends ContextMenuRecyclerView.Adapter<RecyclerViewAdapter.ViewHolder> {
+public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapter.ViewHolder> {
 
     private Picture[] mDataset;
 

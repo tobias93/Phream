@@ -1,4 +1,4 @@
-package com.example.phream.phream.model;
+package com.example.phream.phream;
 
 import android.content.ContentResolver;
 import android.content.ContentUris;

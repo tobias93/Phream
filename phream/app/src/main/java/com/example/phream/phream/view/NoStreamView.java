@@ -1,4 +1,4 @@
-package com.example.phream.phream;
+package com.example.phream.phream.view;
 
 import android.content.Context;
 import android.os.Bundle;
@@ -7,6 +7,8 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+
+import com.example.phream.phream.R;
 
 public class NoStreamView extends Fragment {
 

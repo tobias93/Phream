@@ -1,4 +1,4 @@
-package com.example.phream.phream;
+package com.example.phream.phream.view;
 
 import android.content.DialogInterface;
 import android.os.Bundle;
@@ -10,6 +10,7 @@ import android.view.KeyEvent;
 import android.view.MenuItem;
 import android.view.View;
 
+import com.example.phream.phream.R;
 import com.example.phream.phream.model.Stream;
 
 public class MainActivity extends AppCompatActivity implements StreamView.OnFragmentInteractionListener, NoStreamView.OnFragmentInteractionListener, StreamSelectionView.OnFragmentInteractionListener {

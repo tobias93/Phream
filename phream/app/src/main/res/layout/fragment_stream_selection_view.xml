@@ -3,7 +3,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="wrap_content"
     android:layout_height="match_parent"
-    tools:context="com.example.phream.phream.StreamSelectionView">
+    tools:context=".view.StreamSelectionView">
 
     <android.support.design.widget.NavigationView
         android:id="@+id/fragment_stream_selection_navigation"

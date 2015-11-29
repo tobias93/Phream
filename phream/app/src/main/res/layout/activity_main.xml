@@ -28,7 +28,7 @@
         in fom the left.
         -->
 
-        <fragment android:name="com.example.phream.phream.StreamSelectionView"
+        <fragment android:name="com.example.phream.phream.view.StreamSelectionView"
             android:id="@+id/activity_main_navigation"
             android:layout_width="wrap_content"
             android:layout_height="match_parent"

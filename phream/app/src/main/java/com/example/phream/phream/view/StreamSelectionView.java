@@ -1,4 +1,4 @@
-package com.example.phream.phream;
+package com.example.phream.phream.view;
 
 import android.content.Context;
 import android.content.DialogInterface;
@@ -13,6 +13,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.EditText;
 
+import com.example.phream.phream.R;
 import com.example.phream.phream.model.IStreamsCallback;
 import com.example.phream.phream.model.Stream;
 import com.example.phream.phream.controller.StreamManager;

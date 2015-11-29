@@ -1,4 +1,4 @@
-package com.example.phream.phream;
+package com.example.phream.phream.view;
 
 import android.annotation.SuppressLint;
 import android.content.DialogInterface;
@@ -21,7 +21,9 @@ import android.view.MotionEvent;
 import android.view.View;
 import android.widget.ImageView;
 
-import com.example.phream.phream.model.CapturePhotoUtils;
+import com.example.phream.phream.BitmapWorkerTask;
+import com.example.phream.phream.R;
+import com.example.phream.phream.CapturePhotoUtils;
 
 import java.io.File;
 

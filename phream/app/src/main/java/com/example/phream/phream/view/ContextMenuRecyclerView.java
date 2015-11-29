@@ -1,4 +1,4 @@
-package com.example.phream.phream.model;
+package com.example.phream.phream.view;
 
 import android.content.Context;
 import android.util.AttributeSet;

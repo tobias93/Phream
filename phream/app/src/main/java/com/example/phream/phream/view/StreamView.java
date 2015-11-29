@@ -1,4 +1,4 @@
-package com.example.phream.phream;
+package com.example.phream.phream.view;
 
 import android.app.Activity;
 import android.content.ContentResolver;
@@ -29,12 +29,11 @@ import android.view.ViewGroup;
 import android.widget.EditText;
 import android.widget.Toast;
 
-import com.example.phream.phream.model.CapturePhotoUtils;
-import com.example.phream.phream.model.ContextMenuRecyclerView;
+import com.example.phream.phream.R;
+import com.example.phream.phream.CapturePhotoUtils;
 import com.example.phream.phream.model.IPicturesCallback;
 import com.example.phream.phream.model.Picture;
 import com.example.phream.phream.controller.PicturesManager;
-import com.example.phream.phream.model.RecyclerViewAdapter;
 import com.example.phream.phream.model.Stream;
 import com.example.phream.phream.model.database.DBManager;
 
