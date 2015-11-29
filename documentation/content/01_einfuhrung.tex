@@ -50,12 +50,12 @@ F-10.1 & Bilder können über die Kamera aufgenommen werden\\
 F-10.2 & Bilder aus der Galerie geladen werden\\
 F-20 & Bilder können verwaltet werden\\
 F-20.1 & Bilder können gelöscht und umbenannt werden\\
-F-20.2 & Bilder haben verschiedene Attribute\\
+F-20.2 & Bilder haben verschiedene Attribute (Bildtitel, Aufnahmeinformationen)\\
 F-30 & \enquote{Streams} (Ordner) gruppieren Bilder\\
 F-30.1 & Streams können erstellt, gelöscht und umbenannt werden\\
 F-40 & Bilder werden in einer listen ähnlichen Darstellung mit Vorschaubild und Bildinformationen angezeigt\\
 F-50 & Bilder können in einer Vollbildansicht angezeigt werden\\
-F-50.1 & Aus der Vollbildansicht können Bilder in die Galerie exportiert und per E-Mail und Bluetooth versendet werden\\
+F-50.1 & Aus der Vollbildansicht können Bilder in die Galerie exportiert und per E-Mail bzw. zu teilen\\
 F-60 & Die Architektur ist erweiterbar\\
 \hline
 D-10 & Alle Appdaten (Streams, Bilder, Datenbanken) werden in einen speziellen Verzeichnis gespeichert\\
@@ -70,7 +70,7 @@ UI-10.4 &  Durch einen \enquote{long tap} auf ein Bild wir ein Kontext Menü ang
 UI-10.4.1 & Im Kontext Menü stehen folgende Optionen zur Verfügung: Bild umbenennen, Bild löschen, Bild in Galerie exportieren\\
 UI-10.5 &  Ein Floating-Action Button Menü bietet weitere Optionen\\
 UI-10.5.1 &  Über das Menü können Bilder mit der Kamera aufgenommen werden\\
-UI-10.5.2 &  Über das Menü können Bilder aus der Galerie werden\\
+UI-10.5.2 &  Über das Menü können Bilder aus der Galerie geladen werden\\
 UI-10.6 & Ein \enquote{Navigation Drawer} bietet die Möglichkeit neue \enquote{Streams} anzulegen, die ähnlich wie Ordner, Bilder gruppieren\\
 UI-10.6.1 & Die Hauptansicht zeigt den Inhalt eines Streams an\\
 UI-10.7 & Über das Hauptmenü können Streams umbenannt werden\\
@@ -80,15 +80,13 @@ UI-10.9 & Eine Standardansicht animiert den Nutzer zum anlegen eines Streams, we
 UI-20 &  Es existiert eine Vollbildansicht für Bilder\\
 UI-20.1 & Die Vollbildansicht wird durch an tippen eines Bildes in der Hauptansicht geöffnet\\
 UI-20.2 & Es ist möglich ein Bild aus der Vollbildansicht in die Galerie zu exportieren\\
-UI-20.3 & Es ist möglich ein Bild aus der Vollbildansicht per Bluetooth zu versenden\\
+UI-20.3 & Es ist möglich ein Bild aus der Vollbildansicht zu teilen (Versand per E-Mail falls E-Mail Client vorhanden)\\
 \hline
 \end{longtable}
 \end{center}
 
 \subsection{Offene Funktionalitäten}
-
 Die im folgenden aufgelisteten Funktionalitäten wurden bisher nicht implementiert und werden für weitere Versionen vorgemerkt.
-
 \begin{center}
 \begin{longtable}{|l|p{12cm}|}
 \toprule
@@ -98,24 +96,22 @@ Die im folgenden aufgelisteten Funktionalitäten wurden bisher nicht implementie
 \hline
 \endfoot
 F-70 & Es können Benutzer zu Streams hinzugefügt werden\\
-F-70.1 & Neue Benutzer erhalten Zurgiff auf vorhandene und zukünftige Bilder im Stream\\
+F-70.1 & Neue Benutzer erhalten Zugriff auf vorhandene und zukünftige Bilder im Stream\\
 F-80 & Bilder werden zwischen den verschiedenen Nutzern live synchronisiert\\
 F-90 & Es existiert ein Art Synchronisationslog der die unterschiedlichen Aktivitäten der Benutzer untereinander abgleicht\\
 F-100 & Benutzer können aus Streams austreten \\
 F-100.1 & Tritt ein Benutzer aus einem Stream aus, so werden lokal alle Bilder des Streams und der Stream selbst gelöscht\\
 F-100.2 & Ausgetretene Benutzer werden bei anderen Benutzern aus der Streamteilnehmerliste entfernt\\
 F-110 & Es stehen verschiedene Synchronisationsmöglichkeiten zur Verfügung:\\
-F-110.1 & Bluetooth\\
-F-110.1 & Bluetooth Low Energy (falls verfügbar)\\
-F-110.1 & Wi-Fi Direct\\
+F-110.1 & Bluetooth, Bluetooth Low Energy (falls verfügbar), Wi-Fi Direct\\
 F-120 & Alle Streamteilnehmer können über eine Teilnehmerliste eingesehen werden\\
 F-130 & In der Vollbildansicht kann an Bilder herangezoomt werden\\
 F-130 & Durch Gesten kann in der Vollbildansicht zum nächsten oder vorherigen Bild gewechselt werden\\
 F-140 & Das gesamte UI ist für verschiedene Endgeräte (Tablets, Android TVs) optimiert\\
 \hline
-D-10 & Der Syncronisationslog und die Teilnehmerlisten werden in der Datenbank gespeichert\\
+D-10 & Der Synchronisationlog und die Teilnehmerlisten werden in der Datenbank gespeichert\\
 \hline
 UI-30 & In der Hauptansicht eines Streams ermöglicht ein Menübutton die Teilnehmerliste einzusehen und Teilnehmer hinzuzufügen\\
-UI-40 & Der Menüpunkt \enquote{Einstellungen} im Navigation Drawer ermöglicht die Synchronisationsmethode und allgemeine Synchronisationseinstellungen festzulegen\\
+UI-40 & Der Menüpunkt \enquote{Einstellungen} im Navigation Drawer ermöglicht allgemeine Synchronisationseinstellungen festzulegen\\
 \end{longtable}
 \end{center}
