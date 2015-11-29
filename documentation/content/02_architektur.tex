@@ -4,6 +4,31 @@ Um die Anwendung modular und damit auch erweiterbar zu halten, haben wir uns bei
 
 \section{Model}
 
+Während die Bilder selber auf der SD-Karte des Gerätes gespeichert werden, haben wir uns dazu entschieden, die Metadaten in einer SQLite-Datenbank zu speichern. So sind auch komplexere Datenabfragen möglich, was uns später bei der Synchronisation der Daten zwischen den verschiedenen Streamteilnehmern zugute kommen wird.
+
+\subsection {Datenbanklayout}
+
+Die Datenbank besteht aus zwei Tabellen: \enquote{Picture} und \enquote{Stream}.
+
+Jeder Datensatz in der Tabelle \enquote{Stream} repräsentiert einen Stream in der App. Die Tabelle enthält die folgenden Spalten:
+\begin{enumerate}
+	\item \textbf{streamid}: Ordnet jedem Stream eine eindeutige ID zu.
+	\item \textbf{streamname}: Speichert den Name eines Streams.
+	\item \textbf{created}: Enthält einen Unix-Timestamp, der den Zeitpunkt der Erstellung eines Streams wiederspiegelt.
+\end{enumerate}
+
+Jeder Datensatz in der Tabelle \enquote{Picture} repräsentiert ein Bild in der App. Die Tabelle enthält tie folgenden Spalten:
+\begin{enumerate}
+	\item \textbf{pictureid}: Ordnet jedem Bild eine eindeutige ID zu.
+	\item \textbf{picturename}: Speichert den Titel eines Bildes.
+	\item \textbf{created}: Enthält einen Unix-Timestamp, der angibt, wann ein Bild in die App importiert wurde.
+	\item \textbf{filename}: Speichert den Dateinamen, an dem die eigentliche Bilddatei zu finden ist.
+	\item \textbf{streamid}: Enthält die ID des Streames, in dem sich das Bild befindet.
+\end{enumerate}
+
+\subsection{Datenbankzugriff}
+Um auf die Datenbank zuzugreifen, gibt es pro Tebelle eine Klasse (\enquote{TblStream} und \enquote{TblPicture}). Diese enthält für jede Datenbankabfrage eine statische Methode. Diese Methoden können vom Controller benutzt werden, um Daten abzufragen oder zu verändern.
+
 \section{Controller}
 
 Teil des Controllers sind die beiden Klassen \enquote{PicturesManager} und \enquote{StreamManager}. Sie stellen dem View alle Funktionalitäten zur Verfügung, die dieser zum Anzeigen und Editieren von Bildern und Streams benötigt.
