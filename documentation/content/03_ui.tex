@@ -48,7 +48,7 @@ In der daraufhin eingeblendeten Ansicht hat der Benutzer die Möglichkeit zwisch
 	\label{label:navigationdrawer_schema}
 	\end{minipage}
 \end{figure}
-In der schematischen Darstellung (Abbildung \ref{label:navigationdrawer_schema}) ist zu sehen, dass der Navigation Drawer das aktuelle Fragment \enquote{überdeckt} und den restlichen Teil des Fragments abdunkelt. In der Action Bar wird dabei der Button zum öffnen des Navigation Drawer zu einem Pfeil.
+In der schematischen Darstellung (Abbildung \ref{label:navigationdrawer_schema}) ist zu sehen, dass der Navigation Drawer das aktuelle Fragment \enquote{überdeckt} und den restlichen Teil des Fragments abdunkelt. Der Navigation Drawer selbst wird dabei wieder aus einem Fragment zusammengesetzt. In der Action Bar wird dabei der Button zum öffnen des Navigation Drawer zu einem Pfeil.
 
 \subsection{Streamansicht}
 Nach dem Auswählen eines Streams im Navigation Drawer oder beim Appstart (wenn ein Stream angelegt ist) wird dieser in der Hauptansicht angezeigt. Die Streamansicht (Abbildung  \ref{label:streamview}) zeigt alle Bilder an die dem entsprechenden Stream zugeordnet wurden. Das Fragment wird dabei mit CardViews gefüllt, die eine ImageView mit einem Vorschaubild, dem Bildtitel, sowie Aufnahmeinformationen zum entsprechenden Bild darstellt. Der Benutzer kann durch Scroll-Gesten durch die CardView navigieren. Das oben links in der Action Bar angezeigte \enquote{Options-Symbol} beinhaltet die Optionen, den aktuellen Stream umzubenennen und zu löschen. Beim Löschvorgang eines Streams werden alle Daten zum Stream und dessen Inhalt aus der Datenbank und alle Bilder von der SD-Karte gelöscht.
@@ -89,7 +89,7 @@ Durch anklicken einer Card in der Hauptansicht, öffnet sich eine zweite Activit
 \label{label:fullscreenview}
 \end{figure}
 
-Durch einen \enquote{short tap} wir die Status Bar und die Action Bar wieder eingeblendet und bietet dem Bentuzer verschiedene Interaktionsmöglichkeiten (Abbildung \ref{label:fullscreenview_menu}).
+Durch einen \enquote{short tap} wird die Status Bar und die Action Bar wieder eingeblendet und bietet dem Bentuzer verschiedene Interaktionsmöglichkeiten (Abbildung \ref{label:fullscreenview_menu}).
 
 \begin{figure}[H]
 \centering
