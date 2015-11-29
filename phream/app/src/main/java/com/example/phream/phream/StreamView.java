@@ -33,7 +33,7 @@ import com.example.phream.phream.model.CapturePhotoUtils;
 import com.example.phream.phream.model.ContextMenuRecyclerView;
 import com.example.phream.phream.model.IPicturesCallback;
 import com.example.phream.phream.model.Picture;
-import com.example.phream.phream.model.PicturesManager;
+import com.example.phream.phream.controller.PicturesManager;
 import com.example.phream.phream.model.RecyclerViewAdapter;
 import com.example.phream.phream.model.Stream;
 import com.example.phream.phream.model.database.DBManager;

@@ -1,8 +1,10 @@
-package com.example.phream.phream.model;
+package com.example.phream.phream.controller;
 
 import android.database.sqlite.SQLiteDatabase;
 import android.os.AsyncTask;
 
+import com.example.phream.phream.model.IStreamsCallback;
+import com.example.phream.phream.model.Stream;
 import com.example.phream.phream.model.database.DBManager;
 import com.example.phream.phream.model.database.Tables.TblStream;
 
