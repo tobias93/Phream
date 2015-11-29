@@ -2,8 +2,6 @@ package com.example.phream.phream.model;
 
 import android.net.Uri;
 
-import java.io.InputStream;
-
 public class Picture {
     private long id;
     private String name;

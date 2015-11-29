@@ -18,7 +18,9 @@ import com.example.phream.phream.R;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
-public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapter.ViewHolder> {
+
+public class RecyclerViewAdapter extends ContextMenuRecyclerView.Adapter<RecyclerViewAdapter.ViewHolder> {
+
     private Picture[] mDataset;
 
     // Provide a reference to the views for each data item
@@ -41,13 +43,16 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
             mCreateDate = (TextView) v.findViewById(R.id.labelCreateDate);
             mCreateTime = (TextView) v.findViewById(R.id.labelCreateTime);
             mImageView = (ImageView) v.findViewById(R.id.thumbnail);
+
         }
+
     }
 
 
-    // Provide a suitable constructor (depends on the kind of dataset)
+    // constructor
     public RecyclerViewAdapter(Picture[] myDataset) {
         mDataset = myDataset;
+
     }
 
     // Create new views (invoked by the layout manager)
@@ -57,7 +62,6 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
         // create a new view
         CardView v = (CardView) LayoutInflater.from(parent.getContext())
                 .inflate(R.layout.card_layout, parent, false);
-        // set the view's size, margins, paddings and layout parameters
 
         ViewHolder vh = new ViewHolder(v);
         return vh;
@@ -66,8 +70,6 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
     // Replace the contents of a view (invoked by the layout manager)
     @Override
     public void onBindViewHolder(final ViewHolder holder, final int position) {
-        // - get element from your dataset at this position
-        // - replace the contents of the view with that element
         holder.mTitle.setText(mDataset[position].getName());
 
         Date date = new Date(mDataset[position].getCreated() * 1000L);
@@ -90,6 +92,9 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
             }
         });
 
+
+        holder.mCardView.setLongClickable(true);
+
         // clear the image view to prevent recycled images from showing up.
         holder.mImageView.setImageBitmap(Bitmap.createBitmap(1, 1, Bitmap.Config.ALPHA_8));
         holder.mImageView.invalidate();
@@ -99,6 +104,7 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
         task.execute();
 
     }
+
 
     // Return the size of your dataset (invoked by the layout manager)
     @Override

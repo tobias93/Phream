@@ -169,6 +169,8 @@ public class PicturesManager {
                 SQLiteDatabase db = DBManager.getDB();
                 try {
                     TblPicture.deletePicture(db, params[0]);
+                    File deleterFile = new File(params[0].getFilepath());
+                    deleterFile.delete();
                     return true;
                 } catch (Exception e) {
                     return false;
@@ -195,7 +197,7 @@ public class PicturesManager {
      * As the method works asynchronously, the result will be returned using the
      * "onPictureUpdated" callback.
      */
-    public void updatePicture(final Picture picture, String newPictureName) {
+    public void updatePicture(final Picture picture) {
         AsyncTask<Picture, Integer, Boolean> updater = new AsyncTask<Picture, Integer, Boolean>() {
             @Override
             protected Boolean doInBackground(Picture... params) {
@@ -220,6 +222,10 @@ public class PicturesManager {
 
         updater.execute(picture);
         findAllPictures();
+    }
+
+    public Picture getPicture(int position){
+        return this.pictures[position];
     }
 
 

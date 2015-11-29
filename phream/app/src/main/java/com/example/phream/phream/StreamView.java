@@ -1,12 +1,14 @@
 package com.example.phream.phream;
 
-import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.content.ContentResolver;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.net.Uri;
+import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Environment;
@@ -17,6 +19,7 @@ import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
+import android.view.ContextMenu;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -26,6 +29,8 @@ import android.view.ViewGroup;
 import android.widget.EditText;
 import android.widget.Toast;
 
+import com.example.phream.phream.model.CapturePhotoUtils;
+import com.example.phream.phream.model.ContextMenuRecyclerView;
 import com.example.phream.phream.model.IPicturesCallback;
 import com.example.phream.phream.model.Picture;
 import com.example.phream.phream.model.PicturesManager;
@@ -34,9 +39,7 @@ import com.example.phream.phream.model.Stream;
 import com.example.phream.phream.model.database.DBManager;
 
 import java.io.File;
-import java.io.FileNotFoundException;
 import java.io.IOException;
-import java.io.InputStream;
 import java.util.Random;
 
 public class StreamView extends Fragment implements IPicturesCallback {
@@ -61,7 +64,7 @@ public class StreamView extends Fragment implements IPicturesCallback {
     PicturesManager picturesManager;
     Stream myStream;
 
-    //...
+    // variables
     private String takenPhotoPath;
     private long PhotoTimestamp;
 
@@ -153,12 +156,116 @@ public class StreamView extends Fragment implements IPicturesCallback {
         });
 
         // Recyler view
-        mRecyclerView = (RecyclerView) getView().findViewById(R.id.recycler_view);
+        mRecyclerView = (ContextMenuRecyclerView) getView().findViewById(R.id.recycler_view);
         mRecyclerView.setHasFixedSize(true);
         mLayoutManager = new LinearLayoutManager(getContext());
         mRecyclerView.setLayoutManager(mLayoutManager);
+        registerForContextMenu(mRecyclerView);
 
         picturesManager.findAllPictures();
+    }
+
+    @Override
+    public void onCreateContextMenu(ContextMenu menu, View v, ContextMenu.ContextMenuInfo menuInfo) {
+        super.onCreateContextMenu(menu, v, menuInfo);
+
+        // Inflate Menu from xml resource
+        MenuInflater menuInflater = getActivity().getMenuInflater();
+        menuInflater.inflate(R.menu.card_context_menu, menu);
+    }
+
+    @Override
+    public boolean onContextItemSelected(MenuItem item) {
+
+        ContextMenuRecyclerView.RecyclerContextMenuInfo info = (ContextMenuRecyclerView.RecyclerContextMenuInfo) item.getMenuInfo();
+
+        Picture picture = picturesManager.getPicture(info.position);
+
+        if (item.getTitle() == getString(R.string.card_context_menu_rename)) {
+            renameImage(picture);
+
+        } else if (item.getTitle() == getString(R.string.card_context_menu_delete)) {
+            deleteImage(picture);
+        } else if (item.getTitle() == getString(R.string.card_context_menu_export)) {
+            exportToGallery(picture);
+        }
+
+        return false;
+    }
+
+    private void exportToGallery(final Picture picture) {
+        // Use the Builder class for convenient dialog construction
+        AlertDialog.Builder builder = new AlertDialog.Builder(getActivity(), R.style.AlertDialogTheme);
+        builder.setMessage(R.string.image_detail_export_picture_title)
+                .setPositiveButton(R.string.image_detail_export_picture_ok, new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int id) {
+                        AsyncTask<File, Integer, Boolean> copyprocess = new AsyncTask<File, Integer, Boolean>() {
+                            @Override
+                            protected Boolean doInBackground(File... params) {
+                                BitmapFactory.Options bmOptions = new BitmapFactory.Options();
+                                Bitmap bitmap = BitmapFactory.decodeFile(picture.getFilepath(), bmOptions);
+                                CapturePhotoUtils export = new CapturePhotoUtils();
+                                export.insertImage(getContext().getContentResolver(), bitmap, "", "");
+                                return true;
+                            }
+
+                            @Override
+                            protected void onPostExecute(Boolean result) {
+                            }
+                        };
+
+                        copyprocess.execute();
+                    }
+                })
+                .setNegativeButton(R.string.image_detail_export_picture_cancel, new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int id) {
+                        // User cancelled the dialog
+                    }
+                });
+        builder.show();
+    }
+
+    private void deleteImage(final Picture picture) {
+        // Use the Builder class for convenient dialog construction
+        AlertDialog.Builder builder = new AlertDialog.Builder(getActivity(), R.style.AlertDialogTheme);
+        builder.setMessage(R.string.card_context_menu_delete_title)
+                .setPositiveButton(R.string.card_context_menu_delete_ok, new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int id) {
+                        picturesManager.deletePicture(picture);
+                    }
+                })
+                .setNegativeButton(R.string.card_context_menu_delete_cancel, new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int id) {
+                        // User cancelled the dialog
+                    }
+                });
+        builder.show();
+    }
+
+    private void renameImage(final Picture picture) {    // Ask for pictures title
+        // Input field for the name of the picture
+        final EditText pictureNameEditText = new EditText(getActivity());
+        pictureNameEditText.setHint(R.string.card_context_menu_rename_title);
+        pictureNameEditText.setText(picture.getName());
+        pictureNameEditText.setSingleLine(true);
+
+        pictureNameEditText.setSelection(pictureNameEditText.getText().length());
+
+        // Dialog that shows the input text.
+        AlertDialog.Builder dialogBuilder = new AlertDialog.Builder(getActivity(), R.style.AlertDialogTheme);
+        dialogBuilder.setCancelable(false);
+        dialogBuilder.setTitle(R.string.card_context_menu_rename_title);
+        dialogBuilder.setPositiveButton(R.string.card_context_menu_rename_ok, new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+
+                picture.setName(pictureNameEditText.getText().toString());
+                picturesManager.updatePicture(picture);
+            }
+        });
+
+        dialogBuilder.setView(pictureNameEditText);
+        dialogBuilder.show();
     }
 
     @Override
@@ -207,6 +314,7 @@ public class StreamView extends Fragment implements IPicturesCallback {
      */
     public interface OnFragmentInteractionListener {
         void renameStream(Stream stream);
+
         void deleteStream(Stream stream);
     }
 
@@ -226,7 +334,6 @@ public class StreamView extends Fragment implements IPicturesCallback {
     }
 
     //---- Stream actions --------------------------------------------------------------------------
-
 
 
     //---- Picture list management -----------------------------------------------------------------
@@ -348,7 +455,7 @@ public class StreamView extends Fragment implements IPicturesCallback {
 
     }
 
-    @SuppressLint("NewApi")
+
     private void importGalleryImage(int buildVersion, Intent data) {
         if (null == data) return;
         final Uri pictureUri = data.getData();

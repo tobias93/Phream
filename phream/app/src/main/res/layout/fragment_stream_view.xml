@@ -5,7 +5,7 @@
     android:layout_height="match_parent"
     tools:context="com.example.phream.phream.StreamView">
 
-    <android.support.v7.widget.RecyclerView
+    <com.example.phream.phream.model.ContextMenuRecyclerView
         android:id="@+id/recycler_view"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
