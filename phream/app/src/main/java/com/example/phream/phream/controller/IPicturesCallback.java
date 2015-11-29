@@ -1,4 +1,6 @@
-package com.example.phream.phream.model;
+package com.example.phream.phream.controller;
+
+import com.example.phream.phream.model.Picture;
 
 /**
  * Created by tobias on 06.11.15.

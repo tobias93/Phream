@@ -64,8 +64,8 @@ public class MainActivity extends AppCompatActivity implements StreamView.OnFrag
      */
     @Override
     public boolean onKeyDown(int keyCode, KeyEvent e) {
-        if (keyCode == KeyEvent.KEYCODE_MENU && !mDrawerLayout.isDrawerOpen(mNavigation)) {
-                mDrawerLayout.openDrawer(mNavigation);
+        if (keyCode == KeyEvent.KEYCODE_MENU && mDrawerLayout.isDrawerOpen(mNavigation)) {
+                mDrawerLayout.closeDrawer(mNavigation);
                 return true;
         }
         return super.onKeyDown(keyCode, e);
