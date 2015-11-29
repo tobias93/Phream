@@ -16,30 +16,6 @@ public class Stream {
         created = System.currentTimeMillis();
         id = -2;
     }
-/*
-    public void addPicture(Picture picture){
-        DBHandler dbHandler = new DBHandler(null, null, null, 1); // Todo Set Context
-        dbHandler.insertPicture(picture.getName(), picture.getCreated(), picture.getFilepath(), id);
-        picture.setStored();
-    }*/
-
-    public Picture getPicture(){
-     return null;
-    }
-/*
-    public void delete(Picture picture){
-        if (picture.getStored() == true){
-            DBHandler dbHandler = new DBHandler(null, null, null, 1); // Todo Set Context
-            dbHandler.deletePicture(picture.getId());
-            picture.setNotStored();
-        }
-
-    }*/
-/*
-    public void renamePicture(Picture picture){
-
-    }*/
-
 
     // Getter & Setter
     public long getId(){

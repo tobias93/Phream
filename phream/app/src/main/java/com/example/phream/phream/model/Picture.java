@@ -22,6 +22,7 @@ public class Picture {
         this.name = pictureName;
         this.filepath = filepath;
         this.created = created;
+        this.id = -2;
     }
 
     public Picture(String pictureName) {

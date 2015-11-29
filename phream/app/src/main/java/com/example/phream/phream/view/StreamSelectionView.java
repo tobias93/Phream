@@ -218,6 +218,8 @@ public class StreamSelectionView extends Fragment implements IStreamsCallback{
         final EditText streamNameEditText = new EditText(getActivity());
         streamNameEditText.setHint(R.string.main_renamestream_name);
         streamNameEditText.setSingleLine(true);
+        streamNameEditText.setText(stream.getName());
+        streamNameEditText.setSelection(streamNameEditText.getText().length());
 
         // Dialog that shows the input text.
         AlertDialog.Builder dialogBuilder = new AlertDialog.Builder(getActivity(), R.style.AlertDialogTheme);
