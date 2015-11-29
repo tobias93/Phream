@@ -157,7 +157,7 @@ public class PicturesManager {
     }
 
     /**
-     * Deletes a picture to the database
+     * Deletes a picture in the database
      * <p/>
      * As the method works asynchronously, the result will be returned using the
      * "onPicturesDeleted" callback.
@@ -190,6 +190,19 @@ public class PicturesManager {
         deleter.execute(picture);
         findAllPictures();
     }
+
+    /**
+     * Deletes all picture in the database to a given stream
+     * <p/>
+     * As the method works asynchronously, the result will be returned using the
+     * "onPicturesDeleted" callback.
+     */
+    public void deleteAllPicture(){
+        for (int i = 0; i < pictures.length; ++i){
+            deletePicture(pictures[i]);
+        }
+    }
+
 
     /**
      * Update a picture in the database
