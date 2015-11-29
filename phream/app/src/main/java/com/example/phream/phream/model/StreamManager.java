@@ -103,21 +103,6 @@ public class StreamManager {
         };
 
         updater.execute(stream);
-
-        /*AsyncTask<Stream, Integer, Boolean> inserter = new AsyncTask<Stream, Integer, Boolean>() {
-            @Override
-            protected Boolean doInBackground(com.example.phream.phream.model.Stream... params) {
-                assert (params.length == 1);
-                SQLiteDatabase db = DBManager.getDB();
-                try {
-
-                } catch (Exception e) {
-                    return false;
-                }
-            }
-        };
-
-        inserter.execute(stream);*/
     }
 
     public void deleteStream(com.example.phream.phream.model.Stream stream) {

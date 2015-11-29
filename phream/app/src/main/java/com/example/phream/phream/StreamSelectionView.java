@@ -234,4 +234,8 @@ public class StreamSelectionView extends Fragment implements IStreamsCallback{
         dialogBuilder.show();
     }
 
+    public void deleteStream(Stream stream) {
+        streamManager.deleteStream(stream);
+    }
+
 }
