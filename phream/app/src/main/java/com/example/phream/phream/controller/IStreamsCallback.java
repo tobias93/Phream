@@ -2,9 +2,6 @@ package com.example.phream.phream.controller;
 
 import com.example.phream.phream.model.Stream;
 
-/**
- * Created by tobias on 06.11.15.
- */
 public interface IStreamsCallback {
     void onStreamCreated(Stream stream);
     void onStreamUpdated(Stream stream);

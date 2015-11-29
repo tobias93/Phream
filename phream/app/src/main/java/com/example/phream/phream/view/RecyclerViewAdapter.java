@@ -23,9 +23,7 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
 
     private Picture[] mDataset;
 
-    // Provide a reference to the views for each data item
-    // Complex data items may need more than one view per item, and
-    // you provide access to all the views for a data item in a view holder
+    // Provides a reference to the views for each data item
     public static class ViewHolder extends RecyclerView.ViewHolder {
         public CardView mCardView;
         public TextView mTitle;
@@ -39,6 +37,7 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
             context = v.getContext();
             mCardView = v;
 
+            // find views
             mTitle = (TextView) v.findViewById(R.id.labelTitleDescription);
             mCreateDate = (TextView) v.findViewById(R.id.labelCreateDate);
             mCreateTime = (TextView) v.findViewById(R.id.labelCreateTime);
@@ -47,7 +46,6 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
         }
 
     }
-
 
     // constructor
     public RecyclerViewAdapter(Picture[] myDataset) {
@@ -72,6 +70,7 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
     public void onBindViewHolder(final ViewHolder holder, final int position) {
         holder.mTitle.setText(mDataset[position].getName());
 
+        // some simple unix->date format operations
         Date date = new Date(mDataset[position].getCreated() * 1000L);
         SimpleDateFormat sdfdate = new SimpleDateFormat("dd.MM.yyyy");
         String formattedDate = sdfdate.format(date);
@@ -92,7 +91,7 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
             }
         });
 
-
+        // activate context menu
         holder.mCardView.setLongClickable(true);
 
         // clear the image view to prevent recycled images from showing up.

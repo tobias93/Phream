@@ -1,10 +1,13 @@
 package com.example.phream.phream.model;
 
 public class Stream {
+
+    //attributes
     private long id;
     private String name;
     private long created;
 
+    //constructors
     public Stream( long id, String name, long created){
         this.name = name;
         this.id = id;

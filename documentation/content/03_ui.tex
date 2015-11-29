@@ -22,10 +22,10 @@ Nach dem erstmaligen Start der App durch anklicken des App Icons gelangt der Ben
 	\label{label:startview_schema}
 	\end{minipage}
 \end{figure}
-Die in Abbildung \ref{label:startview_schema} eingezeichnete Statusbar ist standardmäßig in jeder Ansicht der App zusehen und zeit allgemeine Statusinformationen zum Androidgerät an. Die Action Bar wird von der App selbst gestaltet und beinhaltet verschiedene Optionen, wie beispielsweise Menüs. Die größten Teil der App nimmt das Fragment in Anspruch. In diesem werden die verschiedenen Informationen der App dargestellt. Das Fragment ist dabei eine Art selbständige \enquote{Sub-Activity}, die einen eigenen Lifecycle, inklusive eigener Action Listener.
+Die in Abbildung \ref{label:startview_schema} eingezeichnete Statusbar ist standardmäßig in jeder Ansicht der App zusehen und zeigt allgemeine Statusinformationen zum Androidgerät an. Die Action Bar wird von der App selbst gestaltet und beinhaltet verschiedene Optionen, wie beispielsweise Menüs. Den größten Teil der App nimmt das Fragment in Anspruch. In diesem werden die verschiedenen Informationen der App dargestellt. Das Fragment ist dabei eine Art selbständige \enquote{Sub-Activity}, die einen eigenen Lifecycle, inklusive eigener Action Listener, besitzt.
 Das Fragment wird dynamisch durch einen Manager bei Benutzeraktionen ausgetauscht.
 
-In der aktuell angezeigten Startansicht (Abbildung \ref{label:startview}), die beim erstmaligen Start oder wenn Stream (Ordner) angelegt angezeigt wird, beinhaltet das Fragment den dargestellten Text, den Button zum anlegen eines Streams und den im Hintergrund platzierten Kreis. Durch anklicken des Buttons, öffnet sich ein Eingabefenster, in dem ein neuer Streamname eingegeben werden kann. Nach Bestätigung des Streamnamens wird der Stream angelegt und erscheint daraufhin in Navigation Drawer. 
+In der aktuell angezeigten Startansicht (Abbildung \ref{label:startview}), die beim erstmaligen Start oder wenn Stream (Ordner) angelegt ist, angezeigt wird, beinhaltet das Fragment den dargestellten Text, den Button zum Anlegen eines Streams und den im Hintergrund platzierten Kreis. Durch anklicken des Buttons öffnet sich ein Eingabefenster, in dem ein neuer Streamname eingegeben werden kann. Nach Bestätigung des Streamnamens wird der Stream angelegt und erscheint daraufhin im Navigation Drawer. 
 
 \subsection{Navigation Drawer}
 
@@ -48,10 +48,10 @@ In der daraufhin eingeblendeten Ansicht hat der Benutzer die Möglichkeit zwisch
 	\label{label:navigationdrawer_schema}
 	\end{minipage}
 \end{figure}
-In der schematischen Darstellung (Abbildung \ref{label:navigationdrawer_schema}) ist zu sehen, dass der Navigation Drawer das aktuelle Fragment \enquote{überdeckt} und den restlichen Teil des Fragments abdunkelt. Der Navigation Drawer selbst wird dabei wieder aus einem Fragment zusammengesetzt. In der Action Bar wird dabei der Button zum öffnen des Navigation Drawer zu einem Pfeil.
+In der schematischen Darstellung (Abbildung \ref{label:navigationdrawer_schema}) ist zu sehen, dass der Navigation Drawer das aktuelle Fragment \enquote{überdeckt} und den restlichen Teil des Fragments abdunkelt. Der Navigation Drawer selbst wird dabei wieder aus einem Fragment zusammengesetzt. In der Action Bar wird dabei der Button zum Öffnen des Navigation Drawer zu einem Pfeil.
 
 \subsection{Streamansicht}
-Nach dem Auswählen eines Streams im Navigation Drawer oder beim Appstart (wenn ein Stream angelegt ist) wird dieser in der Hauptansicht angezeigt. Die Streamansicht (Abbildung  \ref{label:streamview}) zeigt alle Bilder an die dem entsprechenden Stream zugeordnet wurden. Das Fragment wird dabei mit CardViews gefüllt, die eine ImageView mit einem Vorschaubild, dem Bildtitel, sowie Aufnahmeinformationen zum entsprechenden Bild darstellt. Der Benutzer kann durch Scroll-Gesten durch die CardView navigieren. Das oben links in der Action Bar angezeigte \enquote{Options-Symbol} beinhaltet die Optionen, den aktuellen Stream umzubenennen und zu löschen. Beim Löschvorgang eines Streams werden alle Daten zum Stream und dessen Inhalt aus der Datenbank und alle Bilder von der SD-Karte gelöscht.
+Nach dem Auswählen eines Streams im Navigation Drawer oder beim Appstart (wenn ein Stream angelegt ist) wird dieser in der Hauptansicht angezeigt. Die Streamansicht (Abbildung  \ref{label:streamview}) zeigt alle Bilder an, die dem entsprechenden Stream zugeordnet wurden. Das Fragment wird dabei mit CardViews gefüllt, die eine ImageView mit einem Vorschaubild, dem Bildtitel, sowie Aufnahmeinformationen zum entsprechenden Bild beinhaltet. Der Benutzer kann durch Scroll-Gesten durch die Ansicht navigieren. Das oben rechts in der Action Bar angezeigte \enquote{Options-Symbol} beinhaltet die Optionen, den aktuellen Stream umzubenennen und zu löschen. Beim Löschvorgang eines Streams werden alle Daten zum Stream und dessen Inhalt aus der Datenbank und alle Bilder von der SD-Karte gelöscht.
 
 \begin{figure}[H]
 \centering
@@ -72,13 +72,13 @@ Nach dem Auswählen eines Streams im Navigation Drawer oder beim Appstart (wenn 
 
 \subsubsection{Kontextmenü des CardView}
 
-\begin{wrapfigure}{r}{0.5\textwidth}
+Durch einen \enquote{long tap} auf eine CardView in der Hauptansicht öffnet sich ein Kontextmenü zum aktuellen Bild. Das Kontextmenü bietet verschiedene Optionen, wie das Umbenennen des Bildes, das Löschen des Bildes und einer Export Möglichkeit in die Galerie. Durch antippen der gewünschten Option erscheinen zusätzliche Abfragen je nach Menüeintrag. Es wird beispielsweise beim Umbenennen ein AlertDialog erzeugt, der die Eingabe eines neuen Bildtitels ermöglicht. Beim Löschen oder Exportieren des Bildes sollen eingeblendete AlertDialogs versehentliche Nutzeraktionen abfangen und eine Bestätigung der Aktion vom Benutzer erfragen.
+
+\begin{figure}[H]
 	\centering
-   \includegraphics[width=0.23\textwidth]{images/screenshots/contextmenu.png}
+   \includegraphics[scale= 0.115]{images/screenshots/contextmenu.png}
   \caption{Kontextmenü - CardView}
-\end{wrapfigure}
-  
-Durch einen \enquote{long tap} auf eine CardView in der Hauptansicht öffnet sich ein Kontextmenü zum aktuellen Bild. Das Kontextmenü bietet verschiedene Optionen, wie das Umbenennen des Bildes, das Löschen des Bildes oder einer Export Möglichkeit in die Galerie. Durch an tippen der gewünschten Option erscheinen zusätzliche Abfragen, je nach Menüeintrag. Es wird beispielsweise beim Umbenennen ein AlertDialog erzeugt, der die Eingabe eines neuen Bildtitels ermöglicht. Beim Löschen oder Exportieren des Bildes sollen eingeblendete AlerDialogs versehentliche Nutzeraktionen abfangen und eine Bestätigung der Aktion vom Benutzer erfragen.
+\end{figure}
 
 \section{Detailansicht eines Bildes}
 Durch anklicken einer Card in der Hauptansicht, öffnet sich eine zweite Activity die eine Detailansicht (Abbildung \ref{label:fullscreenview}) des Bildes im Vollbild ermöglicht. Die Detailansicht besteht dabei aus einer Fullscreenactivity mit einer ImageView, die die gesamte Activity ausfüllt.
@@ -108,10 +108,10 @@ Durch einen \enquote{short tap} wird die Status Bar und die Action Bar wieder ei
 	\end{minipage}
 \end{figure}
 
-Durch anklicken des \enquote{Speichern-Symbols} oben rechts in der Action Bar kann der Benutzer das aktuelle Bild in die Android Galerie exportieren. Dieses wird daraufhin mit aktuellen Datum und Uhrzeit als erstes in der Android Galerie angezeit. Durch an tippen des \enquote{Share-Symbols} öffnet sich der Share Provider (Abbildung \ref{label:fullscreenview_share}) von Android. Der Share-Provider ist eine allgemeines Framework, welches die Option bietet verschiedene Dateien mit anderen Apps zu teilen oder ihnen zur Verfügung zu stellen. Eine Option ist beispielsweise, sofern ein E-Mail Client vorhanden ist, das aktuelle Bild per E-Mail zu versenden.
+Durch anklicken des \enquote{Speichern-Symbols} oben rechts in der Action Bar kann der Benutzer das aktuelle Bild in die Android Galerie exportieren. Dieses wird daraufhin mit aktuellen Datum und Uhrzeit als erstes in der Android Galerie angezeit. Durch antippen des \enquote{Share-Symbols} öffnet sich der Share Provider (Abbildung \ref{label:fullscreenview_share}) von Android. Der Share-Provider ist eine allgemeines Framework, welches die Option bietet verschiedene Dateien mit anderen Apps zu teilen oder ihnen zur Verfügung zu stellen. Eine Option ist beispielsweise, sofern ein E-Mail Client vorhanden ist, das aktuelle Bild per E-Mail zu versenden.
 
 \section{Der Floating Action Button}
-Der Floating Action Button in der Hauptansicht dient der Gruppierung zweier wichtiger Funktionen der App. Dabei bietet der Floating Action Button verschiedene Transformationsverhalten und öffnet durch an tippen ein Floating Action Menu mit weiteren Optionen (Abbildung \ref{label:floatingaction_menu}). Weiterhin ist der Floating Action Button leicht durch eine Daumengeste erreichbar und vereint die Hauptfunktionalitäten der aktuellen Activity in einem Punkt. Je nach an getippten Menüeintrag startet der Galerie import oder ein Kamera-Intent zum Aufnehmen eines Fotos.
+Der Floating Action Button in der Hauptansicht dient der Gruppierung zweier wichtiger Funktionen der App. Dabei bietet der Floating Action Button verschiedene Transformationsverhalten und öffnet durch antippen ein Floating Action Menu mit weiteren Optionen (Abbildung \ref{label:floatingaction_menu}). Weiterhin ist der Floating Action Button leicht durch eine Daumengeste erreichbar und gruppiert die Hauptfunktionalitäten der aktuellen Activity in einem Punkt. Je nach angetippten Menüeintrag startet der Galerieimport oder ein Kamera-Intent zum Aufnehmen eines Fotos.
 
 \begin{figure}[H]
 \centering
@@ -121,7 +121,7 @@ Der Floating Action Button in der Hauptansicht dient der Gruppierung zweier wich
 \end{figure}
 
 \subsection{Aufnehmen eines Fotos}
-Nach dem auswählen des Menü Eintrags im Floating Action Menu startet ein Kamera-Intent (Abbildung \ref{label:camera}), über das der Benutzer ein Foto aufnehmen kann und auch alle weiteren Kameraoptionen zur Verfügung hat. Nach dem Bestätigen des aufgenommenen Fotos kann der Benutzer einen Bildtitel (Abbildung \ref{label:camera_imagetitle}) festlegen.
+Nach dem Auswählen des Menü Eintrags im Floating Action Menu startet ein Kamera-Intent (Abbildung \ref{label:camera}), über das der Benutzer ein Foto aufnehmen kann und auch alle weiteren Kameraoptionen zur Verfügung hat. Nach dem Bestätigen des aufgenommenen Fotos kann der Benutzer einen Bildtitel (Abbildung \ref{label:camera_imagetitle}) festlegen.
 \begin{figure}[H]
 \centering
 	\begin{minipage}{0.4\textwidth} 
@@ -140,7 +140,7 @@ Nach dem auswählen des Menü Eintrags im Floating Action Menu startet ein Kamer
 \end{figure}
 
 \subsection{Importieren eines Fotos}
-Nach dem auswählen des Menü Eintrags im Floating Action Menu startet der Content-Provider (Abbildung \ref{label:content_provider}), der dem Benutzer die Option bietet Dateien (in diesem Fall Bilder) auszuwählen. Dabei beschränkt sich die Dateiauswahl nicht nur auf die eigene Galerie, sondern zeigt falls vorhanden auch Bilder aus Google Drive oder Dropbox an. Dabei werden die Bilder erst aus der Cloud geladen und dann in die App importiert. Nach dem importieren des Bildes kann der Benutzer wieder einen Bildtitel festlegen.
+Nach dem Auswählen der Importierfunktion im Floating Action Menu startet der Content-Provider (Abbildung \ref{label:content_provider}), der dem Benutzer die Option bietet Dateien (in diesem Fall Bilder) auszuwählen. Dabei beschränkt sich die Dateiauswahl nicht nur auf die eigene Galerie, sondern zeigt auch falls vorhanden, Bilder aus Google Drive oder Dropbox an. Dabei werden die Bilder erst aus der Cloud geladen und dann in die App importiert. Nach dem Importieren des Bildes kann der Benutzer wieder einen Bildtitel festlegen.
 
 \begin{figure}[H]
 \centering
@@ -150,6 +150,6 @@ Nach dem auswählen des Menü Eintrags im Floating Action Menu startet der Conte
 \end{figure}
 
 \section{Verwendete Libraries}
-Um verschiedene Benutzeroberflächenelemente auch auf früheren Android Versionen verfügbar zu machen, wurde die AppCompat Support Library\footnote{\url{http://developer.android.com/tools/support-library/features.html}} von Google verwendet. Sie ermöglicht erst in späteren Android Versionen eingefügte Features auch unter älteren Anroid Geräten verfügbar zu machen. Weiterhin wurde zur Gestaltung des Floating Action Menu die AppCompat-Extension-Library\footnote{\url{https://github.com/TR4Android/AppCompat-Extension-Library}} verwendet, um einfach und schnell Floating Action Menu's zu gestalten.
+Um verschiedene Benutzeroberflächenelemente auch auf früheren Android Versionen verfügbar zu machen, wurde die AppCompat Support Library\footnote{\url{http://developer.android.com/tools/support-library/features.html}} von Google verwendet. Sie ermöglicht erst in späteren Android Versionen eingefügte Features auch unter älteren Anroid Geräten verfügbar zu machen. Weiterhin wurde zur Gestaltung des Floating Action Menu die AppCompat-Extension-Library\footnote{\url{https://github.com/TR4Android/AppCompat-Extension-Library}} verwendet, um einfach und schnell Floating Action Menu's zu gestalten. Beide Libraries ermöglichen, dass die App ab API-Level 16 verfügbar ist.
 
 Aufgrund eines Bugs in der Standardexportfunktion von Android zum exportieren von Fotos in die Galerie, wurden exportierte Bilder immer am Ende der Galerie mit Datum 1.1.1970 angezeigt. Daher wurde die Klasse \enquote{CapturePhotoUtils}\footnote{\url{https://gist.github.com/samkirton/0242ba81d7ca00b475b9}} von samuelkirton zum Exportieren von Bildern verwendet.

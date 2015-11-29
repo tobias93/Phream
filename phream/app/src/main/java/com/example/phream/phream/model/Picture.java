@@ -3,6 +3,8 @@ package com.example.phream.phream.model;
 import android.net.Uri;
 
 public class Picture {
+
+    //attributes
     private long id;
     private String name;
     private Uri importUri = null;
@@ -10,6 +12,7 @@ public class Picture {
     private long created;
     private long streamId;
 
+    //constructors
     public Picture(long pictureId, String pictureName, String filepath, long created, long streamid) {
         this.id = pictureId;
         this.name = pictureName;
@@ -27,6 +30,7 @@ public class Picture {
 
     public Picture(String pictureName) {
         this.name = pictureName;
+        this.id = -2;
     }
 
 

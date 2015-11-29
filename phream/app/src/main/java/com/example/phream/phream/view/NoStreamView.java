@@ -30,7 +30,7 @@ public class NoStreamView extends Fragment {
     @Override
     public void onActivityCreated(Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
-
+        // create CreateStream Button
         Button createButton = (Button) getActivity().findViewById(R.id.no_stream_fragment_create_stream);
         createButton.setOnClickListener(new View.OnClickListener() {
             @Override
