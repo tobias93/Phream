@@ -40,10 +40,12 @@ public class MainActivity extends AppCompatActivity implements StreamView.OnFrag
         mDrawerToggle.syncState();
 
         // Insert the default fragment into the main view
-        BlankView defaultView = new BlankView();
-        getSupportFragmentManager().beginTransaction()
-                .add(R.id.activity_main_main_view_container, defaultView)
-                .commit();
+        if (savedInstanceState == null) {
+            BlankView defaultView = new BlankView();
+            getSupportFragmentManager().beginTransaction()
+                    .add(R.id.activity_main_main_view_container, defaultView)
+                    .commit();
+        }
     }
 
     /**

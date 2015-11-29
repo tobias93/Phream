@@ -1,0 +1,41 @@
+\chapter{Architektur}
+
+Um die Anwendung modular und damit auch erweiterbar zu halten, haben wir uns bei der Umsetzung des Projektes am MVC-Prinziep orientiert. Deshalb lässt sich die gesammte Anwendung in drei Komponenten aufteilen: Das Model ist für die Repräsentation und Speicherung der Daten zuständig. Diese Daten werden im View angezeigt. Er beinhaltet in der Hauptsache die Layouts der verschiedenen Activities sowie die zugehörigen Code-Behind-Klassen. Der Controller ist für die Verarbeitung der Daten zuständigt und stellt somit das Bindeglied zwischen Model und View dar. 
+
+\section{Model}
+
+\section{Controller}
+
+Teil des Controllers sind die beiden Klassen \enquote{PicturesManager} und \enquote{StreamManager}. Sie stellen dem View alle Funktionalitäten zur Verfügung, die dieser zum Anzeigen und Editieren von Bildern und Streams benötigt.
+
+\begin{itemize}
+\item{StreamManager}
+\begin{enumerate}
+\item (refreshListOfStreams) Abfragen der Liste aller Streams.
+\item (insertStream) Erzeugen eines Streams.
+\item (updateStream) Umbenennen eines Streams.
+\item (deleteStream) Löschen eines Streams, inklusive aller enthaltener Bilder.
+\end{enumerate}
+\item{PicturesManager} \newline
+Der PicturesManager arbeitet immer auf allen Bildern eines speziellen Streams. Der Stream, der vom PicturesManager verwendet wird, wird diesem im Konstruktor übergeben.
+\begin{enumerate}
+\item (findAllPictures) Abfragen einer Liste aller Bilder des Streams.
+\item (insertPicture) Erzeugen eines Bildes mithilfe einer Bilddatei, die sich bereits im richtigen Ordner befindet. Diese Methode wird zum importieren von Kameraaufnahmen verwendet.
+\item (importInsertPicture) Importiert ein Bild von einer beliebigen Uri. Diese Methode wird zum Importieren von Bildern von der Galerie verwendet.
+\item (deletePicture) Löscht ein Bild aus der Datenbank sowie die zugehörige Bilddatei.
+\item (updatePicture) Ändert den Titel eines Bildes.
+\end{enumerate}
+\end{itemize}
+
+\subsection{Multitasking}
+
+Alle Aktionen, die vom \enquote{PicturesManager} oder \enquote{StreamManager} ausgeführt werden, greifen über das Model indirekt auf die Datenbank zu. Desweiteren muss der \enquote{PicturesManager} Bilder kopieren und verkleinern. Dies sind alles Aktionen, die potenziell lange dauern. Daher dürfen diese nicht im UI-Thread einer App ausgeführt werden. Das würde nämlich zur Folge haben, dass sich das Benutzerinterface aufhängt. Um das zu vermeiden, führen wir alle Aktionen in einem seperaten Thread aus. Dafür kommt die Klasse \enquote{AsyncTask} von Android zum Einsatz.
+
+\subsection{Kommunikation mit dem View}
+
+Nachdem Daten geändert wurden, muss dies dem View mitgeteilt werden, damit dieser die Darstellung aktualisieren kann.
+
+Dafür existieren die Interfaces \enquote{IPicturesCallback} und \enquote{IStreamsCallback}. Sie definieren Callbackfunktionen, die die Code-Behind-Klassen aus dem View über Änderungen der Daten informieren. Dafür müssen diese das jeweils passende Interface implementieren und sich beim \enquote{StreamManager} oder \enquote{PicturesManager} als Callback-Objekt anmelden. Die beiden Controller-Klassen können dann in den jeweils passenden Situationen die passende Callback-Funktion des registrierten Callback-Objektes aufrufen. So wird der View über die Änderung der Daten informiert.
+
+\section{View}
+
