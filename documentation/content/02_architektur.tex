@@ -78,5 +78,5 @@ Der View wird durch die XML-Layoutdateien sowie durch die zugehörigen Code-Behi
 
 Fragments sind wiederverwendbare Teile des Benutzerinterfaces, die ihre eigene XML-Layoutdatei und ihre eigene Code-Behind-Klasse haben. Activities müssen dann nur noch aus den passenden Fragments zusammengesetzt werden. Dabei kann eine Activity Fragments auch dynamisch laden und austauschen. 
 
-Auf diese Weise kann die App später einfach um die Unterstützung von Tablets erweitert werden.
-
+So konnte der Hauptbereich der Anwendung, der sich je nach ausgewähltem Menüeintrag im Navigation Drawer ändert, implementiert werden. Dieser ist im XML-Layout leer. Es wird dann zur Laufzeit ein passendes Fragment geladen. 
+Wenn kein Stream angelegt ist, wird das \enquote{NoStreamView}-Fragment angezeigt. Wenn jedoch ein Stream existiert und ausgewählt wurde, wird das \enquote{StreamView}-Fragment geladen.
