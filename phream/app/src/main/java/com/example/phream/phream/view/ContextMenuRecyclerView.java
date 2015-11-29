@@ -10,7 +10,7 @@ public class ContextMenuRecyclerView extends android.support.v7.widget.RecyclerV
     private RecyclerContextMenuInfo mContextMenuInfo;
 
 
-
+    // constructors
     public ContextMenuRecyclerView(Context context) {
         super(context);
     }
@@ -23,11 +23,13 @@ public class ContextMenuRecyclerView extends android.support.v7.widget.RecyclerV
         super(context, attrs, defStyle);
     }
 
+    // returns item which gots long pressed
     @Override
     protected ContextMenu.ContextMenuInfo getContextMenuInfo() {
         return mContextMenuInfo;
     }
 
+    // save item which gots long pressed
     @Override
     public boolean showContextMenuForChild(View originalView) {
         final int longPressPosition = getChildAdapterPosition(originalView);
@@ -39,6 +41,7 @@ public class ContextMenuRecyclerView extends android.support.v7.widget.RecyclerV
         return false;
     }
 
+    // inner class which stores information about the item which gots long pressed
     public static class RecyclerContextMenuInfo implements ContextMenu.ContextMenuInfo {
 
         public RecyclerContextMenuInfo(int position, long id) {

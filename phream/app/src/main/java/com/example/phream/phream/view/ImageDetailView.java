@@ -29,10 +29,7 @@ import com.example.phream.phream.R;
 
 import java.io.File;
 
-/**
- * An example full-screen activity that shows and hides the system UI (i.e.
- * status bar and navigation/system bar) with user interaction.
- */
+
 public class ImageDetailView extends AppCompatActivity {
     /**
      * Whether or not the system UI should be auto-hidden after
@@ -52,6 +49,7 @@ public class ImageDetailView extends AppCompatActivity {
      */
     private static final int UI_ANIMATION_DELAY = 300;
 
+    // variables
     private View mContentView;
     private View mControlsView;
     private boolean mVisible;
@@ -63,6 +61,7 @@ public class ImageDetailView extends AppCompatActivity {
         setContentView(R.layout.activity_image_detail_view);
 
         mVisible = true;
+        // find views
         mControlsView = findViewById(R.id.fullscreen_content_controls);
         mContentView = findViewById(R.id.fullscreen_content);
 
@@ -76,11 +75,13 @@ public class ImageDetailView extends AppCompatActivity {
             }
         });
 
+        // get Intent extras
         Intent intent = getIntent();
         imageUri = intent.getStringExtra("ImagePath");
 
         ImageView imageView = (ImageView) findViewById(R.id.fullscreen_content);
 
+        // compute image and show it
         BitmapWorkerTask task = new BitmapWorkerTask(imageView, imageUri, 512, 512);
         task.execute();
     }
@@ -91,6 +92,7 @@ public class ImageDetailView extends AppCompatActivity {
         MenuInflater inflater = getMenuInflater();
         inflater.inflate(R.menu.menu_image_detail_view, menu);
 
+        // create share provider
         MenuItem shareItem = menu.findItem(R.id.action_share);
         ShareActionProvider myShareActionProvider =
                 (ShareActionProvider) MenuItemCompat.getActionProvider(shareItem);
@@ -145,7 +147,6 @@ public class ImageDetailView extends AppCompatActivity {
         switch (item.getItemId()) {
             case R.id.export_gallery:
                 exportToGallery();
-
                 return true;
             default:
                 return super.onOptionsItemSelected(item);
@@ -162,6 +163,7 @@ public class ImageDetailView extends AppCompatActivity {
                         AsyncTask<File, Integer, Boolean> copyprocess = new AsyncTask<File, Integer, Boolean>() {
                             @Override
                             protected Boolean doInBackground(File... params) {
+                                // create bitmap and export it
                                 BitmapFactory.Options bmOptions = new BitmapFactory.Options();
                                 Bitmap bitmap = BitmapFactory.decodeFile(imageUri, bmOptions);
                                 CapturePhotoUtils export = new CapturePhotoUtils();

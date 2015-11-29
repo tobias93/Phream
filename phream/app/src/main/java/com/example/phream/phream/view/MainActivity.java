@@ -128,6 +128,7 @@ public class MainActivity extends AppCompatActivity implements StreamView.OnFrag
         builder.setMessage(R.string.main_deletestream_title)
                 .setPositiveButton(R.string.main_deletestream_ok, new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialog, int id) {
+                        // delete stream and all pictures
                         StreamSelectionView s = (StreamSelectionView) getSupportFragmentManager().findFragmentById(R.id.activity_main_navigation);
                         s.deleteStream(stream);
                         StreamView sv = (StreamView) getSupportFragmentManager().findFragmentById(R.id.activity_main_main_view_container);

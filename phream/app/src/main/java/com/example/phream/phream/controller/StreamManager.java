@@ -107,6 +107,10 @@ public class StreamManager {
         updater.execute(stream);
     }
 
+    /**
+     * Deletes a stream
+     * @param stream
+     */
     public void deleteStream(final com.example.phream.phream.model.Stream stream) {
         AsyncTask<com.example.phream.phream.model.Stream, Integer, Boolean> deleter = new AsyncTask<com.example.phream.phream.model.Stream, Integer, Boolean>() {
             @Override

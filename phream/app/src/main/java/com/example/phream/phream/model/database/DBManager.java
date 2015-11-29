@@ -14,6 +14,7 @@ public class DBManager {
         DBManager.context = context.getApplicationContext();
     }
 
+    // returns a db connection
     public static synchronized SQLiteDatabase getDB() throws NullPointerException
     {
         if (db == null)

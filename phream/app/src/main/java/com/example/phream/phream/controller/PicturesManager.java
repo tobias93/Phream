@@ -18,10 +18,12 @@ import java.io.OutputStream;
 
 public class PicturesManager {
 
+    // variables
     private IPicturesCallback callback = null;
     private Stream stream = null;
     private Picture[] pictures = null;
 
+    // constructor
     public PicturesManager(Stream stream) {
         this.stream = stream;
     }

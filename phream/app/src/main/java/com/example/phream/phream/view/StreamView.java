@@ -84,6 +84,7 @@ public class StreamView extends Fragment implements IPicturesCallback {
         myStream = stream;
     }
 
+    // delegates the deleteAll event
     public void deleteAllPictures(){
         picturesManager.deleteAllPictures();
     }
@@ -183,10 +184,12 @@ public class StreamView extends Fragment implements IPicturesCallback {
     @Override
     public boolean onContextItemSelected(MenuItem item) {
 
+        // get information about the item which was clicked
         ContextMenuRecyclerView.RecyclerContextMenuInfo info = (ContextMenuRecyclerView.RecyclerContextMenuInfo) item.getMenuInfo();
 
         Picture picture = picturesManager.getPicture(info.position);
 
+        // Check which item was clicked
         if (item.getTitle() == getString(R.string.card_context_menu_rename)) {
             renameImage(picture);
 
@@ -199,6 +202,7 @@ public class StreamView extends Fragment implements IPicturesCallback {
         return false;
     }
 
+    // Export method
     private void exportToGallery(final Picture picture) {
         // Use the Builder class for convenient dialog construction
         AlertDialog.Builder builder = new AlertDialog.Builder(getActivity(), R.style.AlertDialogTheme);
@@ -208,6 +212,7 @@ public class StreamView extends Fragment implements IPicturesCallback {
                         AsyncTask<File, Integer, Boolean> copyprocess = new AsyncTask<File, Integer, Boolean>() {
                             @Override
                             protected Boolean doInBackground(File... params) {
+                                // create bitmap and export it
                                 BitmapFactory.Options bmOptions = new BitmapFactory.Options();
                                 Bitmap bitmap = BitmapFactory.decodeFile(picture.getFilepath(), bmOptions);
                                 CapturePhotoUtils export = new CapturePhotoUtils();
@@ -231,6 +236,7 @@ public class StreamView extends Fragment implements IPicturesCallback {
         builder.show();
     }
 
+    // Delete a image
     private void deleteImage(final Picture picture) {
         // Use the Builder class for convenient dialog construction
         AlertDialog.Builder builder = new AlertDialog.Builder(getActivity(), R.style.AlertDialogTheme);
@@ -248,7 +254,9 @@ public class StreamView extends Fragment implements IPicturesCallback {
         builder.show();
     }
 
-    private void renameImage(final Picture picture) {    // Ask for pictures title
+
+    // Renames a image
+    private void renameImage(final Picture picture) {
         // Input field for the name of the picture
         final EditText pictureNameEditText = new EditText(getActivity());
         pictureNameEditText.setHint(R.string.card_context_menu_rename_title);
@@ -328,6 +336,7 @@ public class StreamView extends Fragment implements IPicturesCallback {
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
 
+        // Check result code then start required methods
         if (resultCode != Activity.RESULT_OK) return;
 
         if (requestCode == PICK_CAMERA_REQUEST) {
@@ -339,13 +348,12 @@ public class StreamView extends Fragment implements IPicturesCallback {
         }
     }
 
-    //---- Stream actions --------------------------------------------------------------------------
-
 
     //---- Picture list management -----------------------------------------------------------------
 
     @Override
     public void onPicturesListUpdated(Picture[] pictures) {
+        // Update view
         mAdapter = new RecyclerViewAdapter(pictures);
         mRecyclerView.swapAdapter(mAdapter, false);
 
@@ -353,7 +361,7 @@ public class StreamView extends Fragment implements IPicturesCallback {
 
     @Override
     public void onPictureCreated(Picture picture) {
-
+        // At this version do nothing
     }
 
     @Override
@@ -363,7 +371,7 @@ public class StreamView extends Fragment implements IPicturesCallback {
 
     @Override
     public void onPictureDeleted() {
-
+        // At this version do nothing
     }
 
     @Override
@@ -373,7 +381,7 @@ public class StreamView extends Fragment implements IPicturesCallback {
 
     @Override
     public void onPictureUpdated() {
-
+        // At this version do nothing
     }
 
     @Override
@@ -387,6 +395,7 @@ public class StreamView extends Fragment implements IPicturesCallback {
      * Start the gallery intent
      */
     public void openGallery(View v) {
+        // Different versions of SDK requires diffrent intents...
         if (Build.VERSION.SDK_INT < 19) {
             Intent intent = new Intent();
             intent.setType("image/*");
@@ -399,10 +408,6 @@ public class StreamView extends Fragment implements IPicturesCallback {
             startActivityForResult(intent, GALLERY_KITKAT_INTENT_CALLED);
         }
 
-//        Intent intent = new Intent();
-//        intent.setType("image/*");
-//        intent.setAction(Intent.ACTION_GET_CONTENT);
-//        startActivityForResult(Intent.createChooser(intent, getResources().getString(R.string.main_select_image_gallery)), GALLERY_PRE_KITKAT_INTENT_CALLED);
     }
 
     /**
@@ -413,10 +418,10 @@ public class StreamView extends Fragment implements IPicturesCallback {
         // Ensure that there's a camera activity to handle the intent
         if (takePictureIntent.resolveActivity(getActivity().getPackageManager()) != null) {
             // Create the File where the photo should go
-
             File photoFile = new File(imagePathNameGenerator());
             takenPhotoPath = photoFile.getAbsolutePath();
 
+            // start camera intent
             takePictureIntent.putExtra(MediaStore.EXTRA_OUTPUT,
                     Uri.fromFile(photoFile));
             startActivityForResult(takePictureIntent, PICK_CAMERA_REQUEST);
@@ -459,7 +464,7 @@ public class StreamView extends Fragment implements IPicturesCallback {
 
     }
 
-
+    // import image from gallery
     private void importGalleryImage(int buildVersion, Intent data) {
         if (null == data) return;
         final Uri pictureUri = data.getData();
@@ -493,15 +498,6 @@ public class StreamView extends Fragment implements IPicturesCallback {
 
         dialogBuilder.setView(pictureNameEditText);
         dialogBuilder.show();
-    }
-
-    // Get the MediaUri of Internal/External Storage for Media
-    private Uri getMediaUri() {
-        String state = Environment.getExternalStorageState();
-        if (!state.equalsIgnoreCase(Environment.MEDIA_MOUNTED))
-            return MediaStore.Images.Media.INTERNAL_CONTENT_URI;
-
-        return MediaStore.Images.Media.EXTERNAL_CONTENT_URI;
     }
 
     /**

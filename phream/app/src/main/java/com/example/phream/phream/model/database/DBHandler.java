@@ -13,7 +13,7 @@ import com.example.phream.phream.model.database.Tables.TblStream;
 
 public class DBHandler extends SQLiteOpenHelper {
 
-    // Construktor
+    // Constructor
     public DBHandler(Context context) {
         super(context, Database.DATABASE_NAME, null, Database.DATABASE_VERSION);
     }
