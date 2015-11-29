@@ -4,7 +4,6 @@ import android.content.ContentResolver;
 import android.database.sqlite.SQLiteDatabase;
 import android.os.AsyncTask;
 
-import com.example.phream.phream.model.IPicturesCallback;
 import com.example.phream.phream.model.Picture;
 import com.example.phream.phream.model.Stream;
 import com.example.phream.phream.model.database.DBManager;

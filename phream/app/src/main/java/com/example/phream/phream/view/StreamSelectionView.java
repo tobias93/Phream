@@ -15,7 +15,8 @@ import android.widget.EditText;
 
 import com.example.phream.phream.R;
 import com.example.phream.phream.controller.StreamManager;
-import com.example.phream.phream.model.IStreamsCallback;
+import com.example.phream.phream.controller.IStreamsCallback;
+
 import com.example.phream.phream.model.Stream;
 import com.example.phream.phream.model.database.DBManager;
 
