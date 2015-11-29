@@ -3,7 +3,6 @@ package com.example.phream.phream.controller;
 import android.content.ContentResolver;
 import android.database.sqlite.SQLiteDatabase;
 import android.os.AsyncTask;
-import android.util.Log;
 
 import com.example.phream.phream.model.IPicturesCallback;
 import com.example.phream.phream.model.Picture;
@@ -250,8 +249,6 @@ public class PicturesManager {
      */
     public void copyImage(InputStream in, File dst) throws IOException {
         OutputStream out = new FileOutputStream(dst);
-
-        Log.e("PhotopathCopyed:", dst.getAbsolutePath());
 
         // Transfer bytes from in to out
         byte[] buf = new byte[1024];

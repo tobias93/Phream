@@ -22,8 +22,8 @@ import android.view.View;
 import android.widget.ImageView;
 
 import com.example.phream.phream.BitmapWorkerTask;
-import com.example.phream.phream.R;
 import com.example.phream.phream.CapturePhotoUtils;
+import com.example.phream.phream.R;
 
 import java.io.File;
 

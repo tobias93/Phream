@@ -29,11 +29,11 @@ import android.view.ViewGroup;
 import android.widget.EditText;
 import android.widget.Toast;
 
-import com.example.phream.phream.R;
 import com.example.phream.phream.CapturePhotoUtils;
+import com.example.phream.phream.R;
+import com.example.phream.phream.controller.PicturesManager;
 import com.example.phream.phream.model.IPicturesCallback;
 import com.example.phream.phream.model.Picture;
-import com.example.phream.phream.controller.PicturesManager;
 import com.example.phream.phream.model.Stream;
 import com.example.phream.phream.model.database.DBManager;
 
@@ -425,8 +425,6 @@ public class StreamView extends Fragment implements IPicturesCallback {
         if (takenPhotoPath == null) {
             return;
         }
-
-        Log.e("Photopath:", takenPhotoPath);
 
         // Ask for pictures title
         // Input field for the name of the picture

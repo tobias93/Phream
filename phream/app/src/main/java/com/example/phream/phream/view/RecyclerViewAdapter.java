@@ -12,8 +12,8 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.example.phream.phream.BitmapWorkerTask;
-import com.example.phream.phream.model.Picture;
 import com.example.phream.phream.R;
+import com.example.phream.phream.model.Picture;
 
 import java.text.SimpleDateFormat;
 import java.util.Date;
